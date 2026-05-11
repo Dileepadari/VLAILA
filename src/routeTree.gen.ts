@@ -9,16 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as OutreachRouteImport } from './routes/outreach'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NmeictRouteImport } from './routes/nmeict'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LabsLabIdRouteImport } from './routes/labs.$labId'
+import { Route as DashboardProgressRouteImport } from './routes/dashboard.progress'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
+import { Route as DashboardAssignmentsRouteImport } from './routes/dashboard.assignments'
 import { Route as BroadAreasAreaRouteImport } from './routes/broad-areas.$area'
 import { Route as LabsLabIdExperimentsExpIdRouteImport } from './routes/labs.$labId.experiments.$expId'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
@@ -29,9 +41,24 @@ const OutreachRoute = OutreachRouteImport.update({
   path: '/outreach',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NmeictRoute = NmeictRouteImport.update({
   id: '/nmeict',
   path: '/nmeict',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -54,6 +81,21 @@ const LabsLabIdRoute = LabsLabIdRouteImport.update({
   path: '/labs/$labId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardProgressRoute = DashboardProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAssignmentsRoute = DashboardAssignmentsRouteImport.update({
+  id: '/assignments',
+  path: '/assignments',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const BroadAreasAreaRoute = BroadAreasAreaRouteImport.update({
   id: '/broad-areas/$area',
   path: '/broad-areas/$area',
@@ -70,10 +112,17 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
+  '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/signup': typeof SignupRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/dashboard/assignments': typeof DashboardAssignmentsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/progress': typeof DashboardProgressRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -81,10 +130,17 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
+  '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/signup': typeof SignupRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/dashboard/assignments': typeof DashboardAssignmentsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/progress': typeof DashboardProgressRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -93,10 +149,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
+  '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/signup': typeof SignupRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/dashboard/assignments': typeof DashboardAssignmentsRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/progress': typeof DashboardProgressRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -106,10 +169,17 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/dashboard'
+    | '/login'
     | '/nmeict'
+    | '/onboarding'
     | '/outreach'
     | '/partners'
+    | '/signup'
     | '/broad-areas/$area'
+    | '/dashboard/assignments'
+    | '/dashboard/notifications'
+    | '/dashboard/progress'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   fileRoutesByTo: FileRoutesByTo
@@ -117,10 +187,17 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/dashboard'
+    | '/login'
     | '/nmeict'
+    | '/onboarding'
     | '/outreach'
     | '/partners'
+    | '/signup'
     | '/broad-areas/$area'
+    | '/dashboard/assignments'
+    | '/dashboard/notifications'
+    | '/dashboard/progress'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   id:
@@ -128,10 +205,17 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/dashboard'
+    | '/login'
     | '/nmeict'
+    | '/onboarding'
     | '/outreach'
     | '/partners'
+    | '/signup'
     | '/broad-areas/$area'
+    | '/dashboard/assignments'
+    | '/dashboard/notifications'
+    | '/dashboard/progress'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   fileRoutesById: FileRoutesById
@@ -140,15 +224,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  LoginRoute: typeof LoginRoute
   NmeictRoute: typeof NmeictRoute
+  OnboardingRoute: typeof OnboardingRoute
   OutreachRoute: typeof OutreachRoute
   PartnersRoute: typeof PartnersRoute
+  SignupRoute: typeof SignupRoute
   BroadAreasAreaRoute: typeof BroadAreasAreaRoute
   LabsLabIdRoute: typeof LabsLabIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/partners': {
       id: '/partners'
       path: '/partners'
@@ -163,11 +258,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OutreachRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nmeict': {
       id: '/nmeict'
       path: '/nmeict'
       fullPath: '/nmeict'
       preLoaderRoute: typeof NmeictRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -198,6 +314,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabsLabIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/progress': {
+      id: '/dashboard/progress'
+      path: '/progress'
+      fullPath: '/dashboard/progress'
+      preLoaderRoute: typeof DashboardProgressRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/assignments': {
+      id: '/dashboard/assignments'
+      path: '/assignments'
+      fullPath: '/dashboard/assignments'
+      preLoaderRoute: typeof DashboardAssignmentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/broad-areas/$area': {
       id: '/broad-areas/$area'
       path: '/broad-areas/$area'
@@ -215,6 +352,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardAssignmentsRoute: typeof DashboardAssignmentsRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardProgressRoute: typeof DashboardProgressRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAssignmentsRoute: DashboardAssignmentsRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardProgressRoute: DashboardProgressRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 interface LabsLabIdRouteChildren {
   LabsLabIdExperimentsExpIdRoute: typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -231,9 +384,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  LoginRoute: LoginRoute,
   NmeictRoute: NmeictRoute,
+  OnboardingRoute: OnboardingRoute,
   OutreachRoute: OutreachRoute,
   PartnersRoute: PartnersRoute,
+  SignupRoute: SignupRoute,
   BroadAreasAreaRoute: BroadAreasAreaRoute,
   LabsLabIdRoute: LabsLabIdRouteWithChildren,
 }
