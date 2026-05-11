@@ -15,6 +15,9 @@ import { Route as NmeictRouteImport } from './routes/nmeict'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LabsLabIdRouteImport } from './routes/labs.$labId'
+import { Route as BroadAreasAreaRouteImport } from './routes/broad-areas.$area'
+import { Route as LabsLabIdExperimentsExpIdRouteImport } from './routes/labs.$labId.experiments.$expId'
 
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
@@ -46,6 +49,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabsLabIdRoute = LabsLabIdRouteImport.update({
+  id: '/labs/$labId',
+  path: '/labs/$labId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BroadAreasAreaRoute = BroadAreasAreaRouteImport.update({
+  id: '/broad-areas/$area',
+  path: '/broad-areas/$area',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabsLabIdExperimentsExpIdRoute =
+  LabsLabIdExperimentsExpIdRouteImport.update({
+    id: '/experiments/$expId',
+    path: '/experiments/$expId',
+    getParentRoute: () => LabsLabIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +73,9 @@ export interface FileRoutesByFullPath {
   '/nmeict': typeof NmeictRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/labs/$labId': typeof LabsLabIdRouteWithChildren
+  '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +84,9 @@ export interface FileRoutesByTo {
   '/nmeict': typeof NmeictRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/labs/$labId': typeof LabsLabIdRouteWithChildren
+  '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +96,33 @@ export interface FileRoutesById {
   '/nmeict': typeof NmeictRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
+  '/broad-areas/$area': typeof BroadAreasAreaRoute
+  '/labs/$labId': typeof LabsLabIdRouteWithChildren
+  '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/nmeict' | '/outreach' | '/partners'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/nmeict'
+    | '/outreach'
+    | '/partners'
+    | '/broad-areas/$area'
+    | '/labs/$labId'
+    | '/labs/$labId/experiments/$expId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/nmeict' | '/outreach' | '/partners'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/nmeict'
+    | '/outreach'
+    | '/partners'
+    | '/broad-areas/$area'
+    | '/labs/$labId'
+    | '/labs/$labId/experiments/$expId'
   id:
     | '__root__'
     | '/'
@@ -85,6 +131,9 @@ export interface FileRouteTypes {
     | '/nmeict'
     | '/outreach'
     | '/partners'
+    | '/broad-areas/$area'
+    | '/labs/$labId'
+    | '/labs/$labId/experiments/$expId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +143,8 @@ export interface RootRouteChildren {
   NmeictRoute: typeof NmeictRoute
   OutreachRoute: typeof OutreachRoute
   PartnersRoute: typeof PartnersRoute
+  BroadAreasAreaRoute: typeof BroadAreasAreaRoute
+  LabsLabIdRoute: typeof LabsLabIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -140,8 +191,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/labs/$labId': {
+      id: '/labs/$labId'
+      path: '/labs/$labId'
+      fullPath: '/labs/$labId'
+      preLoaderRoute: typeof LabsLabIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/broad-areas/$area': {
+      id: '/broad-areas/$area'
+      path: '/broad-areas/$area'
+      fullPath: '/broad-areas/$area'
+      preLoaderRoute: typeof BroadAreasAreaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/labs/$labId/experiments/$expId': {
+      id: '/labs/$labId/experiments/$expId'
+      path: '/experiments/$expId'
+      fullPath: '/labs/$labId/experiments/$expId'
+      preLoaderRoute: typeof LabsLabIdExperimentsExpIdRouteImport
+      parentRoute: typeof LabsLabIdRoute
+    }
   }
 }
+
+interface LabsLabIdRouteChildren {
+  LabsLabIdExperimentsExpIdRoute: typeof LabsLabIdExperimentsExpIdRoute
+}
+
+const LabsLabIdRouteChildren: LabsLabIdRouteChildren = {
+  LabsLabIdExperimentsExpIdRoute: LabsLabIdExperimentsExpIdRoute,
+}
+
+const LabsLabIdRouteWithChildren = LabsLabIdRoute._addFileChildren(
+  LabsLabIdRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -150,6 +234,8 @@ const rootRouteChildren: RootRouteChildren = {
   NmeictRoute: NmeictRoute,
   OutreachRoute: OutreachRoute,
   PartnersRoute: PartnersRoute,
+  BroadAreasAreaRoute: BroadAreasAreaRoute,
+  LabsLabIdRoute: LabsLabIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
