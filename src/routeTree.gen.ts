@@ -15,15 +15,27 @@ import { Route as OutreachRouteImport } from './routes/outreach'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NmeictRouteImport } from './routes/nmeict'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as FacultyRouteImport } from './routes/faculty'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LabsLabIdRouteImport } from './routes/labs.$labId'
+import { Route as FacultyStudentsRouteImport } from './routes/faculty.students'
+import { Route as FacultyQaRouteImport } from './routes/faculty.qa'
+import { Route as FacultyHintsRouteImport } from './routes/faculty.hints'
+import { Route as FacultyClassesRouteImport } from './routes/faculty.classes'
+import { Route as FacultyAssignmentsRouteImport } from './routes/faculty.assignments'
+import { Route as FacultyAnalyticsRouteImport } from './routes/faculty.analytics'
 import { Route as DashboardProgressRouteImport } from './routes/dashboard.progress'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
 import { Route as DashboardAssignmentsRouteImport } from './routes/dashboard.assignments'
 import { Route as BroadAreasAreaRouteImport } from './routes/broad-areas.$area'
+import { Route as AdminTrendingRouteImport } from './routes/admin.trending'
+import { Route as AdminStrugglingRouteImport } from './routes/admin.struggling'
+import { Route as AdminQueryRouteImport } from './routes/admin.query'
+import { Route as AdminHealthRouteImport } from './routes/admin.health'
 import { Route as LabsLabIdExperimentsExpIdRouteImport } from './routes/labs.$labId.experiments.$expId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -56,6 +68,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FacultyRoute = FacultyRouteImport.update({
+  id: '/faculty',
+  path: '/faculty',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -64,6 +81,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -80,6 +102,36 @@ const LabsLabIdRoute = LabsLabIdRouteImport.update({
   id: '/labs/$labId',
   path: '/labs/$labId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const FacultyStudentsRoute = FacultyStudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyQaRoute = FacultyQaRouteImport.update({
+  id: '/qa',
+  path: '/qa',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyHintsRoute = FacultyHintsRouteImport.update({
+  id: '/hints',
+  path: '/hints',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyClassesRoute = FacultyClassesRouteImport.update({
+  id: '/classes',
+  path: '/classes',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyAssignmentsRoute = FacultyAssignmentsRouteImport.update({
+  id: '/assignments',
+  path: '/assignments',
+  getParentRoute: () => FacultyRoute,
+} as any)
+const FacultyAnalyticsRoute = FacultyAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => FacultyRoute,
 } as any)
 const DashboardProgressRoute = DashboardProgressRouteImport.update({
   id: '/progress',
@@ -101,6 +153,26 @@ const BroadAreasAreaRoute = BroadAreasAreaRouteImport.update({
   path: '/broad-areas/$area',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTrendingRoute = AdminTrendingRouteImport.update({
+  id: '/trending',
+  path: '/trending',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStrugglingRoute = AdminStrugglingRouteImport.update({
+  id: '/struggling',
+  path: '/struggling',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQueryRoute = AdminQueryRouteImport.update({
+  id: '/query',
+  path: '/query',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHealthRoute = AdminHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => AdminRoute,
+} as any)
 const LabsLabIdExperimentsExpIdRoute =
   LabsLabIdExperimentsExpIdRouteImport.update({
     id: '/experiments/$expId',
@@ -111,36 +183,60 @@ const LabsLabIdExperimentsExpIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/faculty': typeof FacultyRouteWithChildren
   '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
   '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
   '/signup': typeof SignupRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/query': typeof AdminQueryRoute
+  '/admin/struggling': typeof AdminStrugglingRoute
+  '/admin/trending': typeof AdminTrendingRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/faculty/analytics': typeof FacultyAnalyticsRoute
+  '/faculty/assignments': typeof FacultyAssignmentsRoute
+  '/faculty/classes': typeof FacultyClassesRoute
+  '/faculty/hints': typeof FacultyHintsRoute
+  '/faculty/qa': typeof FacultyQaRoute
+  '/faculty/students': typeof FacultyStudentsRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/faculty': typeof FacultyRouteWithChildren
   '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
   '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
   '/signup': typeof SignupRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/query': typeof AdminQueryRoute
+  '/admin/struggling': typeof AdminStrugglingRoute
+  '/admin/trending': typeof AdminTrendingRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/faculty/analytics': typeof FacultyAnalyticsRoute
+  '/faculty/assignments': typeof FacultyAssignmentsRoute
+  '/faculty/classes': typeof FacultyClassesRoute
+  '/faculty/hints': typeof FacultyHintsRoute
+  '/faculty/qa': typeof FacultyQaRoute
+  '/faculty/students': typeof FacultyStudentsRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -148,18 +244,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/faculty': typeof FacultyRouteWithChildren
   '/login': typeof LoginRoute
   '/nmeict': typeof NmeictRoute
   '/onboarding': typeof OnboardingRoute
   '/outreach': typeof OutreachRoute
   '/partners': typeof PartnersRoute
   '/signup': typeof SignupRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/query': typeof AdminQueryRoute
+  '/admin/struggling': typeof AdminStrugglingRoute
+  '/admin/trending': typeof AdminTrendingRoute
   '/broad-areas/$area': typeof BroadAreasAreaRoute
   '/dashboard/assignments': typeof DashboardAssignmentsRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/faculty/analytics': typeof FacultyAnalyticsRoute
+  '/faculty/assignments': typeof FacultyAssignmentsRoute
+  '/faculty/classes': typeof FacultyClassesRoute
+  '/faculty/hints': typeof FacultyHintsRoute
+  '/faculty/qa': typeof FacultyQaRoute
+  '/faculty/students': typeof FacultyStudentsRoute
   '/labs/$labId': typeof LabsLabIdRouteWithChildren
   '/labs/$labId/experiments/$expId': typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -168,54 +276,90 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/contact'
     | '/dashboard'
+    | '/faculty'
     | '/login'
     | '/nmeict'
     | '/onboarding'
     | '/outreach'
     | '/partners'
     | '/signup'
+    | '/admin/health'
+    | '/admin/query'
+    | '/admin/struggling'
+    | '/admin/trending'
     | '/broad-areas/$area'
     | '/dashboard/assignments'
     | '/dashboard/notifications'
     | '/dashboard/progress'
+    | '/faculty/analytics'
+    | '/faculty/assignments'
+    | '/faculty/classes'
+    | '/faculty/hints'
+    | '/faculty/qa'
+    | '/faculty/students'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/contact'
     | '/dashboard'
+    | '/faculty'
     | '/login'
     | '/nmeict'
     | '/onboarding'
     | '/outreach'
     | '/partners'
     | '/signup'
+    | '/admin/health'
+    | '/admin/query'
+    | '/admin/struggling'
+    | '/admin/trending'
     | '/broad-areas/$area'
     | '/dashboard/assignments'
     | '/dashboard/notifications'
     | '/dashboard/progress'
+    | '/faculty/analytics'
+    | '/faculty/assignments'
+    | '/faculty/classes'
+    | '/faculty/hints'
+    | '/faculty/qa'
+    | '/faculty/students'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/contact'
     | '/dashboard'
+    | '/faculty'
     | '/login'
     | '/nmeict'
     | '/onboarding'
     | '/outreach'
     | '/partners'
     | '/signup'
+    | '/admin/health'
+    | '/admin/query'
+    | '/admin/struggling'
+    | '/admin/trending'
     | '/broad-areas/$area'
     | '/dashboard/assignments'
     | '/dashboard/notifications'
     | '/dashboard/progress'
+    | '/faculty/analytics'
+    | '/faculty/assignments'
+    | '/faculty/classes'
+    | '/faculty/hints'
+    | '/faculty/qa'
+    | '/faculty/students'
     | '/labs/$labId'
     | '/labs/$labId/experiments/$expId'
   fileRoutesById: FileRoutesById
@@ -223,8 +367,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  FacultyRoute: typeof FacultyRouteWithChildren
   LoginRoute: typeof LoginRoute
   NmeictRoute: typeof NmeictRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -279,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faculty': {
+      id: '/faculty'
+      path: '/faculty'
+      fullPath: '/faculty'
+      preLoaderRoute: typeof FacultyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -291,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -313,6 +473,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/labs/$labId'
       preLoaderRoute: typeof LabsLabIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/faculty/students': {
+      id: '/faculty/students'
+      path: '/students'
+      fullPath: '/faculty/students'
+      preLoaderRoute: typeof FacultyStudentsRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/qa': {
+      id: '/faculty/qa'
+      path: '/qa'
+      fullPath: '/faculty/qa'
+      preLoaderRoute: typeof FacultyQaRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/hints': {
+      id: '/faculty/hints'
+      path: '/hints'
+      fullPath: '/faculty/hints'
+      preLoaderRoute: typeof FacultyHintsRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/classes': {
+      id: '/faculty/classes'
+      path: '/classes'
+      fullPath: '/faculty/classes'
+      preLoaderRoute: typeof FacultyClassesRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/assignments': {
+      id: '/faculty/assignments'
+      path: '/assignments'
+      fullPath: '/faculty/assignments'
+      preLoaderRoute: typeof FacultyAssignmentsRouteImport
+      parentRoute: typeof FacultyRoute
+    }
+    '/faculty/analytics': {
+      id: '/faculty/analytics'
+      path: '/analytics'
+      fullPath: '/faculty/analytics'
+      preLoaderRoute: typeof FacultyAnalyticsRouteImport
+      parentRoute: typeof FacultyRoute
     }
     '/dashboard/progress': {
       id: '/dashboard/progress'
@@ -342,6 +544,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BroadAreasAreaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/trending': {
+      id: '/admin/trending'
+      path: '/trending'
+      fullPath: '/admin/trending'
+      preLoaderRoute: typeof AdminTrendingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/struggling': {
+      id: '/admin/struggling'
+      path: '/struggling'
+      fullPath: '/admin/struggling'
+      preLoaderRoute: typeof AdminStrugglingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/query': {
+      id: '/admin/query'
+      path: '/query'
+      fullPath: '/admin/query'
+      preLoaderRoute: typeof AdminQueryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/health': {
+      id: '/admin/health'
+      path: '/health'
+      fullPath: '/admin/health'
+      preLoaderRoute: typeof AdminHealthRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/labs/$labId/experiments/$expId': {
       id: '/labs/$labId/experiments/$expId'
       path: '/experiments/$expId'
@@ -351,6 +581,22 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminHealthRoute: typeof AdminHealthRoute
+  AdminQueryRoute: typeof AdminQueryRoute
+  AdminStrugglingRoute: typeof AdminStrugglingRoute
+  AdminTrendingRoute: typeof AdminTrendingRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminHealthRoute: AdminHealthRoute,
+  AdminQueryRoute: AdminQueryRoute,
+  AdminStrugglingRoute: AdminStrugglingRoute,
+  AdminTrendingRoute: AdminTrendingRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DashboardRouteChildren {
   DashboardAssignmentsRoute: typeof DashboardAssignmentsRoute
@@ -368,6 +614,27 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface FacultyRouteChildren {
+  FacultyAnalyticsRoute: typeof FacultyAnalyticsRoute
+  FacultyAssignmentsRoute: typeof FacultyAssignmentsRoute
+  FacultyClassesRoute: typeof FacultyClassesRoute
+  FacultyHintsRoute: typeof FacultyHintsRoute
+  FacultyQaRoute: typeof FacultyQaRoute
+  FacultyStudentsRoute: typeof FacultyStudentsRoute
+}
+
+const FacultyRouteChildren: FacultyRouteChildren = {
+  FacultyAnalyticsRoute: FacultyAnalyticsRoute,
+  FacultyAssignmentsRoute: FacultyAssignmentsRoute,
+  FacultyClassesRoute: FacultyClassesRoute,
+  FacultyHintsRoute: FacultyHintsRoute,
+  FacultyQaRoute: FacultyQaRoute,
+  FacultyStudentsRoute: FacultyStudentsRoute,
+}
+
+const FacultyRouteWithChildren =
+  FacultyRoute._addFileChildren(FacultyRouteChildren)
+
 interface LabsLabIdRouteChildren {
   LabsLabIdExperimentsExpIdRoute: typeof LabsLabIdExperimentsExpIdRoute
 }
@@ -383,8 +650,10 @@ const LabsLabIdRouteWithChildren = LabsLabIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  FacultyRoute: FacultyRouteWithChildren,
   LoginRoute: LoginRoute,
   NmeictRoute: NmeictRoute,
   OnboardingRoute: OnboardingRoute,
