@@ -1,0 +1,315 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vlaila.vlabs.ac.in/schema/experiment.schema.json",
+  "title": "VLAILA Experiment Knowledge Base Entry",
+  "description": "Ground truth for one Virtual Labs experiment. Everything VLAILA knows about an experiment lives here: the correct procedure, what counts as an error, the theory corpus used for grounded Q&A, and the quiz bank. Authored by a domain expert; never inferred by a model.",
+  "type": "object",
+  "required": [
+    "kb_version",
+    "experiment_id",
+    "lab_id",
+    "title",
+    "origin",
+    "discipline",
+    "institute",
+    "aim",
+    "steps",
+    "errors",
+    "theory_chunks",
+    "quiz_bank"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kb_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version this entry targets."
+    },
+    "experiment_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Matches <meta name=\"experiment-short-name\"> on the live experiment page."
+    },
+    "lab_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Stable slug for the parent lab."
+    },
+    "title": { "type": "string", "minLength": 3 },
+    "origin": {
+      "type": "string",
+      "format": "uri",
+      "description": "Live lab origin, e.g. https://pp-iiith.vlabs.ac.in. Used with experiment_id as the auto-lookup key so the embedded widget needs no configuration."
+    },
+    "discipline": {
+      "type": "string",
+      "enum": [
+        "Electronics and Communication Engineering",
+        "Computer Science and Engineering",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Chemical Engineering",
+        "Biotechnology and Biomedical Engineering",
+        "Civil Engineering",
+        "Physical Sciences",
+        "Chemical Sciences",
+        "Design Engineering"
+      ]
+    },
+    "institute": { "type": "string", "description": "Developing institute code, e.g. IIITH, IITR." },
+    "reviewed_by": { "type": "string", "description": "Domain reviewer sign-off." },
+    "reviewed_on": { "type": "string", "format": "date" },
+    "estimated_minutes": { "type": "integer", "minimum": 1 },
+    "aim": { "type": "string", "minLength": 10 },
+    "learning_objectives": { "type": "array", "items": { "type": "string" } },
+
+    "tasks": {
+      "type": "array",
+      "description": "Ordered task pages, matching <meta name=\"task-name\"> on each page. Most labs use the classic eight (Aim, Theory, Pretest, Procedure, Simulation, Posttest, References, Feedback), but learning-unit labs such as ds1-iiith define their own (Demo, Practice, Exercise, Quiz, ...), so any string is accepted.",
+      "items": { "type": "string", "minLength": 1 },
+      "default": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"]
+    },
+
+    "prerequisites": {
+      "type": "array",
+      "description": "Experiments or concepts a student should have met first. Surfaced as a soft pre-flight check, never a hard block.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "why"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "why": { "type": "string", "description": "One line: what breaks without it." },
+          "experiment_ref": { "type": "string", "description": "Optional experiment_id of the prerequisite lab exercise." }
+        }
+      }
+    },
+
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The correct procedure, in order. Step order defines what 'out of sequence' means.",
+      "items": {
+        "type": "object",
+        "required": ["id", "order", "task", "title", "hints"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "order": { "type": "integer", "minimum": 1 },
+          "task": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Must appear in tasks[]. Matched against <meta name=\"task-name\"> to know which page the step lives on."
+          },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "requires": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "Step ids that must be completed first."
+          },
+          "optional": { "type": "boolean", "default": false },
+          "milestone": {
+            "type": "boolean",
+            "default": false,
+            "description": "Completing this is a good moment for a CONCEPT reinforcement prompt."
+          },
+          "detect": { "$ref": "#/definitions/detector" },
+          "expected_dwell_seconds": {
+            "type": "integer",
+            "description": "Below this, the student likely skimmed rather than read. Used for gentle HINTs, never WARNs."
+          },
+          "stuck_after_seconds": {
+            "type": "integer",
+            "default": 45,
+            "description": "No qualifying interaction for this long on the active step => student may be stuck."
+          },
+          "hints": {
+            "type": "object",
+            "required": ["nudge", "specific"],
+            "additionalProperties": false,
+            "description": "Three escalation levels. Level 1 asks, level 2 tells, level 3 shows.",
+            "properties": {
+              "nudge": { "type": "string", "maxLength": 220 },
+              "specific": { "type": "string", "maxLength": 400 },
+              "interactive": {
+                "type": "object",
+                "required": ["highlight", "text"],
+                "additionalProperties": false,
+                "properties": {
+                  "highlight": { "type": "string", "description": "CSS selector to ring in the live UI." },
+                  "frame": { "$ref": "#/definitions/frame" },
+                  "text": { "type": "string", "maxLength": 220 }
+                }
+              }
+            }
+          },
+          "concept": {
+            "type": "string",
+            "description": "2-3 sentence 'why did this happen' micro-lesson offered at milestones."
+          },
+          "concept_ref": { "type": "string", "description": "id from concepts[]" }
+        }
+      }
+    },
+
+    "errors": {
+      "type": "array",
+      "description": "Authored error patterns. Matched deterministically by the rules engine - no model involved, so these never fire spuriously.",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "when", "message"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "severity": {
+            "type": "string",
+            "enum": ["fatal", "recoverable"],
+            "description": "fatal = cannot obtain valid results without correcting; recoverable = can proceed but results may vary. A pedagogical judgement, so it is authored, not inferred."
+          },
+          "when": { "$ref": "#/definitions/condition" },
+          "message": { "type": "string", "maxLength": 400 },
+          "correction_step": { "type": "string", "description": "Step id the student should go to." },
+          "concept": { "type": "string", "description": "Optional deeper explanation behind 'Why?'." },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1, "default": 1 }
+        }
+      }
+    },
+
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+
+    "common_misconceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["belief", "correction"],
+        "additionalProperties": false,
+        "properties": {
+          "belief": { "type": "string" },
+          "correction": { "type": "string" }
+        }
+      }
+    },
+
+    "theory_chunks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Retrieval corpus for experiment-scoped Q&A. Grounded in the live lab's own Theory/Procedure pages. The retriever never sees chunks from another experiment.",
+      "items": {
+        "type": "object",
+        "required": ["id", "heading", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "heading": { "type": "string" },
+          "text": { "type": "string", "minLength": 40 },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "source": { "type": "string", "description": "URL of the live page this was drawn from." }
+        }
+      }
+    },
+
+    "quiz_bank": {
+      "type": "array",
+      "minItems": 3,
+      "description": "Source for the post-experiment 3-question reflection quiz. Answers are authored and verified, never model-generated, so feedback is always correct.",
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "options", "answer_index", "explanation"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "options": { "type": "array", "minItems": 2, "maxItems": 6, "items": { "type": "string" } },
+          "answer_index": { "type": "integer", "minimum": 0 },
+          "explanation": { "type": "string" },
+          "concept_ref": { "type": "string" },
+          "difficulty": { "type": "string", "enum": ["beginner", "intermediate", "advanced"], "default": "beginner" }
+        }
+      }
+    },
+
+    "references": { "type": "array", "items": { "type": "string" } }
+  },
+
+  "definitions": {
+    "frame": {
+      "type": "string",
+      "description": "Where the selector lives. 'host' = the experiment page itself; 'sim' = the same-origin simulator iframe (#fraDisabled); 'sim:<name>' = a nested simulator frame.",
+      "default": "host"
+    },
+    "detector": {
+      "type": "object",
+      "description": "How the Screen Observer recognises this step being performed.",
+      "required": ["action"],
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["click", "input", "change", "select", "upload", "navigate", "dwell", "submit", "canvas"]
+        },
+        "selector": { "type": "string" },
+        "frame": { "$ref": "#/definitions/frame" },
+        "task": {
+          "type": "string",
+          "description": "For action=navigate: the task page whose arrival satisfies this step."
+        },
+        "value_min": { "type": "number" },
+        "value_max": { "type": "number" },
+        "value_pattern": { "type": "string", "description": "Regex the value must match." },
+        "value_in": { "type": "array", "items": { "type": "string" } },
+        "count": { "type": "integer", "minimum": 1, "default": 1, "description": "Occurrences needed to complete." }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "description": "All present keys must hold (logical AND). Absent keys are ignored.",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["click", "input", "change", "select", "upload", "navigate", "dwell", "submit", "canvas"]
+        },
+        "selector": { "type": "string" },
+        "frame": { "$ref": "#/definitions/frame" },
+        "on_task": { "type": "string", "description": "Only fires while this task page is open." },
+        "unless_completed": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fires only if NONE of these step ids are complete - the out-of-order detector."
+        },
+        "after_completed": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fires only if ALL of these step ids are complete."
+        },
+        "value_out_of_range": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "min": { "type": "number" }, "max": { "type": "number" } }
+        },
+        "value_equals": { "type": "string" },
+        "repeat_count": {
+          "type": "integer",
+          "minimum": 2,
+          "description": "Fires only after the same action repeats this many times - the thrashing detector."
+        },
+        "idle_seconds": { "type": "integer", "description": "Fires after this long with no qualifying interaction." }
+      }
+    }
+  }
+}

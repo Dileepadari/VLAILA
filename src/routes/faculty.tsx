@@ -15,7 +15,7 @@ function FacultyLayout() {
   ];
   return (
     <PageLayout>
-      <div className="max-w-7xl mx-auto px-4 py-6 grid md:grid-cols-[220px_1fr] gap-6">
+      <div className="console-scope max-w-7xl mx-auto px-4 py-6 grid md:grid-cols-[220px_1fr] gap-6">
         <aside className="bg-white border rounded p-3 text-sm h-fit">
           <div className="font-semibold text-vlabs-blue px-2 py-1 mb-1">FACULTY</div>
           {items.map(([to, l]) => <Link key={to} to={to} className="block px-2 py-1.5 rounded hover:bg-muted" activeOptions={{ exact: true }} activeProps={{ className: "bg-accent text-vlabs-blue font-semibold" }}>{l}</Link>)}

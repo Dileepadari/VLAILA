@@ -1,39 +1,59 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageLayout } from "@/components/vlabs/PageLayout";
+import { InnerPage, ContactRail } from "@/components/vlabs/InnerPage";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — Virtual Labs" }, { name: "description", content: "About Virtual Labs and its mission." }] }),
-  component: () => (
-    <PageLayout>
-      <Banner title="About Virtual Labs" />
-      <div className="max-w-5xl mx-auto px-4 py-10 prose prose-sm">
-        <h2 className="text-vlabs-blue text-2xl font-bold mb-4">Our Mission</h2>
-        <p>Virtual Labs is an initiative of the Ministry of Education, Government of India, under the National Mission on Education through Information and Communication Technology (NMEICT). The project aims to provide remote-access to simulation-based labs in various disciplines of Science and Engineering.</p>
-        <p>The Virtual Labs project addresses the need for cost-effective, scalable laboratory access to students across India regardless of their location. Over <strong>1,500+ experiments</strong> are available across 12 participating institutes.</p>
-        <h3 className="text-vlabs-blue font-semibold mt-6">Why Virtual Labs?</h3>
-        <ul>
-          <li>Remote access to laboratory experiments</li>
-          <li>Self-paced learning environment</li>
-          <li>Wide variety of experiments across disciplines</li>
-          <li>Cost-effective alternative for under-resourced institutes</li>
-          <li>Now enhanced with VLAILA — an AI Lab Assistant</li>
-        </ul>
-      </div>
-    </PageLayout>
-  ),
+  head: () => ({ meta: [{ title: "About VLAB — Virtual Labs" }] }),
+  component: About,
 });
 
-export function Banner({ title, crumbs }: { title: string; crumbs?: string[] }) {
+/** Copy, headings and imagery transcribed from https://www.vlab.co.in/about-us. */
+function About() {
   return (
-    <>
-      <div className="bg-vlabs-blue text-white">
-        <div className="max-w-7xl mx-auto px-4 py-4 text-xl font-semibold">{title}</div>
+    <InnerPage title="About VLAB" breadcrumb="About Us" rail={<ContactRail />}>
+      <div className="obj-heading-inner">Overview</div>
+      <div className="obj-text-inner">
+        <p>
+          Virtual Labs project is an initiative of Ministry of Education (MoE), Government of India
+          under the aegis of National Mission on Education through Information and Communication
+          Technology (NMEICT). This project is a consortium activity of twelve participating
+          institutes and IIT Delhi is coordinating institute. It is a paradigm shift in ICT-based
+          education. For the first time, such an initiative has been taken-up in
+          remote&#8208;experimentation. Under Virtual Labs project, over 175 Virtual Labs consisting
+          of approximately 1590+ web-enabled experiments were designed for remote-operation and
+          viewing.
+        </p>
+        <p>
+          <i>The intended beneficiaries of the projects are:</i>
+        </p>
+        <ul>
+          <li>
+            All students and Faculty Members of Science and Engineering Colleges who do not have
+            access to good lab&#8208;facilities and/or instruments.
+          </li>
+          <li>
+            High&#8208;school students, whose inquisitiveness will be triggered, possibly motivating
+            them to take up higher&#8208;studies. Researchers in different institutes who can
+            collaborate and share resources.
+          </li>
+          <li>
+            Different engineering colleges who can benefit from the content and related teaching
+            resources.
+          </li>
+        </ul>
+        {/* The source wraps the list above in a <p>; splitting it leaves this
+            empty paragraph behind, which is 18px of the column's height. */}
+        <p />
+        <p style={{ marginTop: -16 }}>
+          Virtual Labs do not require any additional infrastructural setup for conducting
+          experiments at user premises. The simulations-based experiments can be accessed remotely
+          via internet.
+        </p>
       </div>
-      {crumbs && (
-        <div className="max-w-7xl mx-auto px-4 py-2 text-sm text-muted-foreground">
-          {crumbs.map((c, i) => <span key={i}>{i > 0 && " » "}{c}</span>)}
-        </div>
-      )}
-    </>
+      <div className="about-img">
+        <img src="/vl/images/about.png" className="img-responsive" alt="" />
+      </div>
+      <br />
+      <br />
+    </InnerPage>
   );
 }

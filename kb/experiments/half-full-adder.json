@@ -1,0 +1,386 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "half-full-adder",
+  "lab_id": "digital-electronics-iitr",
+  "title": "Construction of half/full adder using XOR and NAND gates and verification of its operation",
+  "origin": "https://de-iitr.vlabs.ac.in",
+  "discipline": "Electronics and Communication Engineering",
+  "institute": "IITR",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 40,
+  "aim": "To verify the truth table of the half adder and the full adder using XOR and NAND gates, and to analyse the working of each circuit with the help of LEDs in the simulator.",
+  "learning_objectives": [
+    "Derive Sum = A XOR B and Carry = A AND B for the half adder from its truth table.",
+    "Explain why a half adder cannot be chained and what the full adder adds.",
+    "Verify each row of the truth table experimentally rather than by recall."
+  ],
+  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+
+  "prerequisites": [
+    {
+      "id": "logic-gates",
+      "title": "Basic logic gates and truth tables",
+      "why": "The adder is built from XOR, AND and NAND. Without those truth tables the circuit is unreadable."
+    },
+    {
+      "id": "boolean-simplification",
+      "title": "Boolean algebra and K-maps",
+      "why": "The Sum and Carry expressions come out of a K-map simplification; without it the gate choice looks arbitrary."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-theory",
+      "order": 1,
+      "task": "Theory",
+      "title": "Read the theory: half adder vs full adder",
+      "detect": { "action": "navigate", "task": "Theory" },
+      "expected_dwell_seconds": 90,
+      "milestone": true,
+      "hints": {
+        "nudge": "Start with Theory — the K-map derivation is what makes the gate layout make sense.",
+        "specific": "Theory derives Sum = A'B + AB' (an XOR) and Carry = AB (an AND) from the half-adder truth table, then shows why a third input is needed to chain adders."
+      },
+      "concept_ref": "half-adder"
+    },
+    {
+      "id": "open-simulator",
+      "order": 2,
+      "task": "Simulation",
+      "title": "Open the simulator and choose Half Adder",
+      "requires": ["read-theory"],
+      "detect": { "action": "click", "selector": "a[href*='Simulator']", "frame": "sim" },
+      "hints": {
+        "nudge": "Pick 'Half Adder' to start — build up to the full adder afterwards.",
+        "specific": "The Simulation tab offers Half Adder and Full Adder. Start with Half Adder; the full adder is two half adders plus an OR gate, so the order matters."
+      }
+    },
+    {
+      "id": "connect-supply",
+      "order": 3,
+      "task": "Simulation",
+      "title": "Connect the +5V supply",
+      "description": "Nothing in the circuit responds until it is powered.",
+      "requires": ["open-simulator"],
+      "detect": { "action": "click", "selector": "#Supply", "frame": "sim:half_adder" },
+      "stuck_after_seconds": 30,
+      "hints": {
+        "nudge": "The circuit has no power yet — connect the +5V supply first.",
+        "specific": "Click the supply switch to connect +5V. Until you do, toggling the input switches will not change the LEDs, and the circuit will look broken.",
+        "interactive": {
+          "highlight": "#Supply",
+          "frame": "sim:half_adder",
+          "text": "Connect the +5V supply here."
+        }
+      },
+      "concept": "Every logic gate needs a supply rail to produce a valid HIGH. With no supply the outputs float and the LEDs stay dark regardless of what the inputs do."
+    },
+    {
+      "id": "record-baseline",
+      "order": 4,
+      "task": "Simulation",
+      "title": "Press ADD to record the baseline state",
+      "requires": ["connect-supply"],
+      "detect": { "action": "click", "selector": "#button", "frame": "sim:half_adder" },
+      "hints": {
+        "nudge": "Press ADD once now to capture the starting row of the table.",
+        "specific": "The procedure asks you to press ADD before touching the switches, so the A=0, B=0 row is recorded first. The table is built row by row from what you press.",
+        "interactive": { "highlight": "#button", "frame": "sim:half_adder", "text": "Press ADD to log the current state." }
+      }
+    },
+    {
+      "id": "set-inputs",
+      "order": 5,
+      "task": "Simulation",
+      "title": "Set inputs A and B",
+      "requires": ["connect-supply"],
+      "detect": { "action": "click", "selector": "#A, #B", "frame": "sim:half_adder", "count": 1 },
+      "hints": {
+        "nudge": "Toggle switches A and B to choose the input combination you want to test.",
+        "specific": "Click switch A and/or switch B to set the combination. Watch the Sum and Carry LEDs change as you do — that is the circuit responding in real time.",
+        "interactive": { "highlight": "#A", "frame": "sim:half_adder", "text": "Switch A toggles the first input bit." }
+      },
+      "concept_ref": "half-adder"
+    },
+    {
+      "id": "log-row",
+      "order": 6,
+      "task": "Simulation",
+      "title": "Press ADD to log this input/output row",
+      "requires": ["set-inputs"],
+      "detect": { "action": "click", "selector": "#button", "frame": "sim:half_adder", "count": 2 },
+      "hints": {
+        "nudge": "Press ADD again to record this combination in the table.",
+        "specific": "Each ADD press appends the current A, B, Sum and Carry values as a row. You need all four combinations (00, 01, 10, 11) to have verified the truth table."
+      }
+    },
+    {
+      "id": "complete-truth-table",
+      "order": 7,
+      "task": "Simulation",
+      "title": "Cover all four input combinations",
+      "requires": ["log-row"],
+      "detect": { "action": "click", "selector": "#button", "frame": "sim:half_adder", "count": 5 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Two more combinations to go for a complete truth table.",
+        "specific": "Repeat set-inputs then ADD until all four rows (00, 01, 10, 11) are in the table. Verification means every row, not a representative sample."
+      },
+      "concept": "The carry only goes high on 1+1. That single row is the entire reason a half adder cannot be chained: it can produce a carry but has no input to receive one."
+    },
+    {
+      "id": "print-results",
+      "order": 8,
+      "task": "Simulation",
+      "title": "Print the completed observation table",
+      "requires": ["complete-truth-table"],
+      "optional": true,
+      "detect": { "action": "click", "selector": "#pr", "frame": "sim:half_adder" },
+      "hints": {
+        "nudge": "Use Print to capture your table for your lab record.",
+        "specific": "The Print button renders the completed observation table. Do it after all four rows are logged, not partway through."
+      }
+    },
+    {
+      "id": "full-adder",
+      "order": 9,
+      "task": "Simulation",
+      "title": "Repeat for the full adder",
+      "requires": ["complete-truth-table"],
+      "detect": { "action": "click", "selector": "a[href*='Simulator1']", "frame": "sim" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Now try the full adder — same method, one extra input.",
+        "specific": "The full adder adds Cin, so there are eight combinations instead of four. Same procedure: supply, ADD baseline, set inputs, ADD.",
+        "interactive": { "highlight": "a[href*='Simulator1']", "frame": "sim", "text": "Full Adder simulator." }
+      },
+      "concept_ref": "full-adder"
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "inputs-before-supply",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#A, #B",
+        "frame": "sim:half_adder",
+        "unless_completed": ["connect-supply"]
+      },
+      "message": "The +5V supply is not connected, so the LEDs will not respond however you set A and B. Connect the supply first.",
+      "correction_step": "connect-supply",
+      "concept": "Without a supply rail the gate outputs float rather than driving a defined logic level, so the circuit appears dead rather than wrong."
+    },
+    {
+      "id": "add-before-supply",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#button",
+        "frame": "sim:half_adder",
+        "unless_completed": ["connect-supply"]
+      },
+      "message": "You are logging a row from an unpowered circuit — the outputs recorded will be meaningless. Connect +5V, then start the table again.",
+      "correction_step": "connect-supply"
+    },
+    {
+      "id": "print-incomplete-table",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#pr",
+        "frame": "sim:half_adder",
+        "unless_completed": ["complete-truth-table"]
+      },
+      "message": "Your table does not have all four input combinations yet. Printing now gives you a partial verification.",
+      "correction_step": "complete-truth-table",
+      "confidence": 0.85
+    },
+    {
+      "id": "full-adder-first",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "a[href*='Simulator1']",
+        "frame": "sim",
+        "unless_completed": ["complete-truth-table"]
+      },
+      "message": "Jumping to the full adder before finishing the half adder makes the extra carry input harder to interpret — the full adder is literally built from two half adders.",
+      "correction_step": "complete-truth-table",
+      "confidence": 0.8
+    },
+    {
+      "id": "switch-thrashing",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#A, #B",
+        "frame": "sim:half_adder",
+        "repeat_count": 8
+      },
+      "message": "You are toggling the switches a lot without logging. Set a combination, read the Sum and Carry LEDs, then press ADD to record it.",
+      "correction_step": "log-row",
+      "confidence": 0.7
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "half-adder",
+      "name": "Half adder",
+      "summary": "A combinational circuit adding two bits A and B, producing Sum = A XOR B and Carry = A AND B. It cannot accept an incoming carry, which is exactly why it is 'half'."
+    },
+    {
+      "id": "full-adder",
+      "name": "Full adder",
+      "summary": "Adds three bits: A, B and Cin. Sum = A XOR B XOR Cin, Cout = AB + Cin(A XOR B). Built from two half adders and an OR gate, and chainable into a ripple-carry adder."
+    },
+    {
+      "id": "nand-universality",
+      "name": "NAND as a universal gate",
+      "summary": "Any Boolean function can be built from NAND alone, which is why the full adder here uses NAND: a single gate type simplifies fabrication and cuts propagation-delay variability."
+    },
+    {
+      "id": "ripple-carry",
+      "name": "Ripple-carry propagation",
+      "summary": "Chaining full adders makes each stage wait for the previous carry. The delay accumulates linearly with word width, which is the motivation for carry-lookahead adders."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "The half adder is just a simpler full adder that works the same way.",
+      "correction": "It is missing a functional input. A half adder physically cannot receive a carry, so it can only ever be the least-significant stage."
+    },
+    {
+      "belief": "Sum and Carry are computed one after the other.",
+      "correction": "Both are produced in parallel by separate gates from the same inputs. The propagation delay is one gate depth, not two."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-intro",
+      "heading": "Adders in digital circuits",
+      "text": "Adders are digital circuits that carry out addition of numbers and are a key component of the arithmetic logic unit. Adders can be constructed for most numerical representations including BCD, Excess-3, Gray code and binary; binary addition is the most frequently performed task. Apart from addition, adders are also used in digital applications such as table index calculation and address decoding.",
+      "tags": ["introduction", "alu", "applications"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/theory.html"
+    },
+    {
+      "id": "tc-half-adder",
+      "heading": "Half adder",
+      "text": "The half adder is a combinational circuit that performs simple addition of two binary numbers. Taking A and B as the two bits to be added, the sum output of the binary addition is identical to an Ex-OR operation while the carry output is identical to an AND operation. K-map simplification gives Sum = A B' + A' B and Carry = AB. It has no provision for an incoming carry, so it can only be used as the least significant stage of a multi-bit adder.",
+      "tags": ["half adder", "xor", "and", "kmap", "sum", "carry"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/theory.html"
+    },
+    {
+      "id": "tc-full-adder",
+      "heading": "Full adder",
+      "text": "The full adder adds three one-bit numbers: two operand bits A and B, and a carry-in Cin. It produces a Sum and a carry-out Cout. Sum = A XOR B XOR Cin and Cout = AB + Cin(A XOR B). A full adder can be constructed from two half adders and an OR gate, and full adders chained together form a ripple-carry adder capable of adding multi-bit numbers.",
+      "tags": ["full adder", "carry in", "cascade", "ripple"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/theory.html"
+    },
+    {
+      "id": "tc-procedure-sim1",
+      "heading": "Simulator 1 procedure",
+      "text": "Connect the supply (+5V) to the circuit. First press the ADD button to add the basic state of your output to the given table. Press the switches to select the required inputs A and B. Press ADD to add your inputs and outputs to the table. Repeat setting inputs and pressing ADD for each remaining state. Press PRINT after completing your simulation to get your results, and press RESET whenever you want to refresh the simulator.",
+      "tags": ["procedure", "simulator", "add", "print", "reset", "supply"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/procedure.html"
+    },
+    {
+      "id": "tc-procedure-sim2",
+      "heading": "Simulator 2 procedure",
+      "text": "Enter the Boolean inputs A and B. Enter the Boolean output for your corresponding inputs. Click the Circuit button to check the circuit diagram for the half adder. Click the Check button to verify your output. Click Print to get a printout of the truth table, and Reset to clear inputs and outputs.",
+      "tags": ["procedure", "simulator 2", "check", "circuit"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/procedure.html"
+    },
+    {
+      "id": "tc-nand",
+      "heading": "Why NAND gates",
+      "text": "NAND is a universal gate: any Boolean function can be realised using NAND gates alone. Implementing the adder in NAND means a single gate type across the whole circuit, which simplifies fabrication and gives more uniform propagation delay than mixing gate families.",
+      "tags": ["nand", "universal gate", "implementation"],
+      "source": "https://de-iitr.vlabs.ac.in/exp/half-full-adder/theory.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "For a half adder, the Sum output is equivalent to which single gate operation on A and B?",
+      "options": ["AND", "OR", "XOR", "NAND"],
+      "answer_index": 2,
+      "explanation": "Sum = A'B + AB', which is exactly XOR. The Carry output is the AND.",
+      "concept_ref": "half-adder",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "question": "In the half adder truth table, for which input combination is Carry equal to 1?",
+      "options": ["A=0, B=0", "A=0, B=1", "A=1, B=0", "A=1, B=1"],
+      "answer_index": 3,
+      "explanation": "Carry = AB, so it is high only when both inputs are 1 — the one case where the result needs two bits.",
+      "concept_ref": "half-adder",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "question": "What does a full adder have that a half adder does not?",
+      "options": [
+        "A second output",
+        "A carry-in input",
+        "A clock input",
+        "An enable line"
+      ],
+      "answer_index": 1,
+      "explanation": "The carry-in is the whole difference. It is what lets full adders be chained into a multi-bit ripple-carry adder.",
+      "concept_ref": "full-adder",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q4",
+      "question": "Why is the +5V supply step listed before any input switching in the procedure?",
+      "options": [
+        "It resets the observation table",
+        "Gate outputs cannot drive a defined logic level without a supply rail, so the LEDs would not respond",
+        "It selects between half and full adder mode",
+        "It is only needed for the Print function"
+      ],
+      "answer_index": 1,
+      "explanation": "With no supply the outputs float. Toggling A and B would change nothing visible, which reads as a broken simulator rather than a missing step.",
+      "concept_ref": "half-adder",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "A full adder is built from two half adders plus which additional gate?",
+      "options": ["AND", "OR", "XOR", "NOT"],
+      "answer_index": 1,
+      "explanation": "The two half-adder carries are combined with an OR gate to form Cout — a carry from either stage produces a carry out.",
+      "concept_ref": "full-adder",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q6",
+      "question": "In a 32-bit ripple-carry adder, why does worst-case delay grow with word width?",
+      "options": [
+        "Each stage needs more gates as bit position increases",
+        "Each stage must wait for the carry produced by the stage below it",
+        "The supply voltage drops across the chain",
+        "XOR gates are slower than AND gates"
+      ],
+      "answer_index": 1,
+      "explanation": "The carry ripples sequentially through every stage, so worst-case delay scales linearly with width. Carry-lookahead exists precisely to break this dependency.",
+      "concept_ref": "ripple-carry",
+      "difficulty": "advanced"
+    }
+  ],
+
+  "references": [
+    "Morris Mano, M. Digital Design.",
+    "Floyd, T. L. Digital Fundamentals.",
+    "https://de-iitr.vlabs.ac.in/exp/half-full-adder/"
+  ]
+}

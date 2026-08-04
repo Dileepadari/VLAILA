@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+/* The live Virtual Labs theme, transcribed from the platform's own CSS. */
+@import "./vlabs-theme.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -42,17 +44,19 @@
   --color-vlabs-green: var(--vlabs-green);
   --color-vlabs-bg: var(--vlabs-bg);
   --color-vlabs-footer: var(--vlabs-footer);
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Geist', 'Inter', system-ui, sans-serif;
+  /* The live site runs Arial at 12px and steps blocks up from there. */
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: Arial, Helvetica, sans-serif;
 }
 
 :root {
   --radius: 0.5rem;
   /* Virtual Labs palette */
-  --vlabs-navy: oklch(0.30 0.07 245);     /* #0a3d62-ish header */
-  --vlabs-blue: oklch(0.46 0.13 240);     /* #0B6493 */
-  --vlabs-cyan: oklch(0.62 0.13 230);     /* #3298CA */
-  --vlabs-orange: oklch(0.73 0.17 50);    /* orange divider */
+  /* Exact values from vlab.co.in/css/main.css. */
+  --vlabs-navy: #02263c;                  /* top strip + footer */
+  --vlabs-blue: #00446d;                  /* nav bar, primary */
+  --vlabs-cyan: #337ab7;                  /* links */
+  --vlabs-orange: #f15822;                /* the signature accent */
   --vlabs-amber: oklch(0.85 0.17 85);
   --vlabs-rose: oklch(0.65 0.20 25);
   --vlabs-green: oklch(0.65 0.16 150);
@@ -110,11 +114,12 @@
 @layer base {
   * { border-color: var(--color-border); }
   body {
-    background-color: var(--color-vlabs-bg);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
+    background-color: #fff;
+    color: #464646;
+    font: 12px Arial, Helvetica, sans-serif;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: normal; }
+  h1 { margin: 0 !important; }
 }
 
 /* Vlabs signature divider */

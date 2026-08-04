@@ -1,0 +1,429 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "bubble-sort",
+  "lab_id": "data-structures-1-iiith",
+  "title": "Bubble Sort",
+  "origin": "https://ds1-iiith.vlabs.ac.in",
+  "discipline": "Computer Science and Engineering",
+  "institute": "IIITH",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 60,
+  "aim": "Given an unsorted array of numbers, generate a sorted array by applying Bubble Sort; optimise the algorithm for better performance; and reason about its time complexity by counting the operations in each iteration.",
+  "learning_objectives": [
+    "Trace bubble sort pass by pass and predict the array state after each pass.",
+    "Explain why the largest unsorted element is guaranteed to be in place after each pass.",
+    "Derive the O(n^2) comparison count and the best case O(n) for the optimised variant.",
+    "Justify why bubble sort is a stable comparison sort."
+  ],
+  "tasks": [
+    "Aim",
+    "Basic Concept",
+    "Algorithm",
+    "Demo",
+    "Practice",
+    "Exercise",
+    "Quiz",
+    "Analysis",
+    "Optimized Bubble Sort",
+    "Code Assessment",
+    "Feedback"
+  ],
+
+  "prerequisites": [
+    {
+      "id": "arrays",
+      "title": "Array indexing and in-place swapping",
+      "why": "Every operation in bubble sort is a compare-and-swap on adjacent indices; off-by-one confusion here makes the whole trace unreadable."
+    },
+    {
+      "id": "big-o",
+      "title": "Asymptotic notation",
+      "why": "The Analysis unit asks for O(n^2) versus O(n); without Big-O the counting exercise has no destination."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-concept",
+      "order": 1,
+      "task": "Basic Concept",
+      "title": "Read the basic concept",
+      "detect": { "action": "navigate", "task": "Basic Concept" },
+      "expected_dwell_seconds": 60,
+      "hints": {
+        "nudge": "Start with the basic concept — it is short, and the demo makes much more sense after it.",
+        "specific": "The core idea: repeatedly compare adjacent elements and swap them if they are out of order. After each full pass the largest remaining element has bubbled to its final position."
+      },
+      "concept_ref": "bubbling"
+    },
+    {
+      "id": "read-algorithm",
+      "order": 2,
+      "task": "Algorithm",
+      "title": "Read the algorithm and pseudocode",
+      "requires": ["read-concept"],
+      "detect": { "action": "navigate", "task": "Algorithm" },
+      "expected_dwell_seconds": 60,
+      "milestone": true,
+      "hints": {
+        "nudge": "Read the pseudocode before the demo so you can predict what it will do.",
+        "specific": "Two nested loops: the outer counts passes, the inner walks adjacent pairs. Note that the inner loop can stop one element earlier each pass, because the tail is already sorted."
+      },
+      "concept_ref": "loop-invariant"
+    },
+    {
+      "id": "watch-demo",
+      "order": 3,
+      "task": "Demo",
+      "title": "Watch the animated demo",
+      "requires": ["read-algorithm"],
+      "detect": { "action": "click", "selector": "#next", "frame": "sim" },
+      "stuck_after_seconds": 40,
+      "hints": {
+        "nudge": "Step through the demo — but predict each swap before you click Next.",
+        "specific": "Use Next to advance one comparison at a time and Pause to stop the animation. The interval control changes the speed. Watching passively teaches far less than predicting each step first.",
+        "interactive": { "highlight": "#next", "frame": "sim", "text": "Advance one comparison at a time." }
+      },
+      "concept": "Each pass guarantees exactly one more element is in its final position. That is the loop invariant, and it is why the algorithm terminates after at most n-1 passes."
+    },
+    {
+      "id": "complete-demo-pass",
+      "order": 4,
+      "task": "Demo",
+      "title": "Follow at least one complete pass",
+      "requires": ["watch-demo"],
+      "detect": { "action": "click", "selector": "#next", "frame": "sim", "count": 6 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Keep stepping until the end of a full pass — the payoff is at the boundary.",
+        "specific": "At the end of a pass, note that the last element is now the maximum and never moves again. That single observation is the loop invariant made visible."
+      },
+      "concept_ref": "loop-invariant"
+    },
+    {
+      "id": "practice-swap",
+      "order": 5,
+      "task": "Practice",
+      "title": "Drive the sort yourself in Practice",
+      "requires": ["complete-demo-pass"],
+      "detect": { "action": "click", "selector": "#swap, #next", "frame": "sim" },
+      "hints": {
+        "nudge": "Now you decide: swap or move on?",
+        "specific": "For each highlighted pair choose Swap if they are out of order, or Next if they are already correct. Practice gives feedback, so wrong choices are cheap here.",
+        "interactive": { "highlight": "#swap", "frame": "sim", "text": "Swap this pair if they are out of order." }
+      },
+      "concept": "Bubble sort only ever compares adjacent elements. That restriction is exactly what makes it stable, and also what makes it slow."
+    },
+    {
+      "id": "practice-complete",
+      "order": 6,
+      "task": "Practice",
+      "title": "Complete a practice run",
+      "requires": ["practice-swap"],
+      "detect": { "action": "click", "selector": "#swap, #next", "frame": "sim", "count": 8 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Carry it through to a fully sorted array.",
+        "specific": "Finish the run. Reset gives you a fresh array if you want a second attempt with different values."
+      }
+    },
+    {
+      "id": "start-exercise",
+      "order": 7,
+      "task": "Exercise",
+      "title": "Start the graded exercise",
+      "requires": ["practice-complete"],
+      "detect": { "action": "click", "selector": "#start", "frame": "sim" },
+      "hints": {
+        "nudge": "Ready for the graded version? Practice first if you are unsure.",
+        "specific": "The Exercise is the assessed variant of Practice. Undo is available, but the goal is to get each decision right the first time."
+      }
+    },
+    {
+      "id": "exercise-complete",
+      "order": 8,
+      "task": "Exercise",
+      "title": "Complete the exercise",
+      "requires": ["start-exercise"],
+      "detect": { "action": "click", "selector": "#swap, #next", "frame": "sim", "count": 10 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Work through each comparison in turn.",
+        "specific": "At each highlighted pair decide swap or skip. If you get stuck, Undo steps back one decision rather than restarting the whole run."
+      }
+    },
+    {
+      "id": "read-analysis",
+      "order": 9,
+      "task": "Analysis",
+      "title": "Work through the complexity analysis",
+      "requires": ["exercise-complete"],
+      "detect": { "action": "navigate", "task": "Analysis" },
+      "expected_dwell_seconds": 90,
+      "milestone": true,
+      "hints": {
+        "nudge": "Now count the operations you just performed — that is where the O(n^2) comes from.",
+        "specific": "Pass 1 does n-1 comparisons, pass 2 does n-2, and so on. Summing gives n(n-1)/2, hence O(n^2). The Analysis unit also covers space complexity and stability."
+      },
+      "concept_ref": "complexity"
+    },
+    {
+      "id": "optimized-variant",
+      "order": 10,
+      "task": "Optimized Bubble Sort",
+      "title": "Study the optimised variant",
+      "requires": ["read-analysis"],
+      "detect": { "action": "navigate", "task": "Optimized Bubble Sort" },
+      "milestone": true,
+      "hints": {
+        "nudge": "One flag turns the best case from O(n^2) into O(n) — see how.",
+        "specific": "Track whether any swap occurred during a pass. If a full pass completes with no swaps the array is already sorted and you can stop, giving O(n) on already-sorted input.",
+        "interactive": { "highlight": "a[href*='optimized']", "frame": "host", "text": "The optimised variant." }
+      },
+      "concept": "The early-exit flag changes only the best case. Worst and average cases stay O(n^2), because a single element far from its position still forces a full set of passes.",
+      "concept_ref": "optimisation"
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "demo-before-algorithm",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Demo",
+        "unless_completed": ["read-algorithm"]
+      },
+      "message": "You jumped to the demo before the algorithm. Watching the animation without the pseudocode tends to leave you recognising the pattern rather than able to reproduce it.",
+      "correction_step": "read-algorithm",
+      "confidence": 0.8
+    },
+    {
+      "id": "exercise-before-practice",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Exercise",
+        "unless_completed": ["practice-complete"]
+      },
+      "message": "The Exercise is assessed and Practice is not. Practice gives you the same decisions with immediate feedback and no cost — worth doing first.",
+      "correction_step": "practice-swap",
+      "confidence": 0.85
+    },
+    {
+      "id": "demo-clicking-through",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#next",
+        "frame": "sim",
+        "repeat_count": 12
+      },
+      "message": "You are advancing quickly. Try pausing before each Next and predicting whether this pair will swap — the prediction is where the learning happens.",
+      "correction_step": "watch-demo",
+      "confidence": 0.7
+    },
+    {
+      "id": "reset-thrashing",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#reset",
+        "frame": "sim",
+        "repeat_count": 3
+      },
+      "message": "Restarting repeatedly usually means a step is unclear rather than the array being unlucky. Want me to walk through what the current comparison is asking?",
+      "correction_step": "practice-swap",
+      "confidence": 0.75
+    },
+    {
+      "id": "analysis-without-running",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Analysis",
+        "unless_completed": ["complete-demo-pass"]
+      },
+      "message": "The Analysis asks you to count operations you have not performed yet. Run at least one pass of the demo first so the counting has something concrete behind it.",
+      "correction_step": "watch-demo",
+      "confidence": 0.8
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "bubbling",
+      "name": "Why it is called bubbling",
+      "summary": "In each pass, comparing and swapping adjacent out-of-order pairs carries the largest remaining element steadily rightward, like a bubble rising. After k passes the last k elements are in final position."
+    },
+    {
+      "id": "loop-invariant",
+      "name": "The loop invariant",
+      "summary": "After pass k the last k elements are the k largest, in sorted order, and never move again. This guarantees termination after at most n-1 passes and lets the inner loop shrink by one each pass."
+    },
+    {
+      "id": "complexity",
+      "name": "Time and space complexity",
+      "summary": "Comparisons total (n-1) + (n-2) + ... + 1 = n(n-1)/2, so O(n^2) in the worst and average cases. Space is O(1) since sorting is in place. Swaps are also O(n^2) in the worst case, which matters when writes are expensive."
+    },
+    {
+      "id": "stability",
+      "name": "Stability",
+      "summary": "Bubble sort is stable: it only swaps strictly out-of-order adjacent pairs, so equal elements never cross. Stability is what lets you sort by one key and then another without destroying the first ordering."
+    },
+    {
+      "id": "optimisation",
+      "name": "Early-exit optimisation",
+      "summary": "Track whether any swap happened during a pass. A pass with no swaps means the array is sorted, so you can stop. Best case becomes O(n); worst and average stay O(n^2)."
+    },
+    {
+      "id": "comparison-sorts",
+      "name": "Against other comparison sorts",
+      "summary": "Merge sort and heap sort are O(n log n) and beat bubble sort on anything but tiny or nearly-sorted inputs. Bubble sort earns its place as a teaching algorithm and as a cheap check on nearly-sorted data."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "One pass sorts the array.",
+      "correction": "One pass places exactly one element — the largest remaining — in its final position. You need up to n-1 passes."
+    },
+    {
+      "belief": "The early-exit flag makes bubble sort O(n).",
+      "correction": "Only in the best case, when the input is already sorted. Worst and average cases remain O(n^2)."
+    },
+    {
+      "belief": "Bubble sort is unstable because it swaps a lot.",
+      "correction": "It swaps only strictly out-of-order adjacent pairs, so equal elements never pass each other. It is stable."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-objectives",
+      "heading": "Learning objectives",
+      "text": "In this experiment you will: given an unsorted array of numbers, generate a sorted array by applying bubble sort; optimise the bubble sort algorithm to achieve better performance; demonstrate knowledge of the time complexity of bubble sort by counting the number of operations involved in each iteration; and compare bubble sort with other sorting algorithms, recognising it as a stable comparison sorting algorithm. The estimated time for the experiment is one hour.",
+      "tags": ["objectives", "overview", "scope"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/"
+    },
+    {
+      "id": "tc-concept",
+      "heading": "The basic idea",
+      "text": "Bubble sort repeatedly steps through the list, compares each pair of adjacent elements, and swaps them if they are in the wrong order. The pass is repeated until no swaps are needed, which means the list is sorted. The algorithm gets its name because smaller or larger elements bubble to the top of the list with each pass. Because it only ever compares adjacent items, it is a comparison sort operating entirely in place.",
+      "tags": ["concept", "adjacent", "swap", "passes"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/bubble-sort/basic-concept.html"
+    },
+    {
+      "id": "tc-algorithm",
+      "heading": "Algorithm",
+      "text": "For i from 0 to n-1: for j from 0 to n-i-2: if A[j] > A[j+1] then swap A[j] and A[j+1]. The outer loop counts passes and the inner loop walks adjacent pairs. The inner bound shrinks by one each pass because after pass i the last i elements are already in their final sorted positions.",
+      "tags": ["algorithm", "pseudocode", "nested loops", "bounds"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/bubble-sort/bsalgo.html"
+    },
+    {
+      "id": "tc-complexity",
+      "heading": "Time and space complexity",
+      "text": "The first pass performs n-1 comparisons, the second n-2, and so on, giving a total of n(n-1)/2 comparisons. Time complexity is therefore O(n^2) in both the worst and average cases. With the early-exit optimisation the best case, an already-sorted array, is O(n) because a single pass with no swaps terminates the algorithm. Space complexity is O(1) since the sort is performed in place with only a constant amount of extra storage.",
+      "tags": ["complexity", "big o", "quadratic", "space", "best case"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/analysis/time-and-space-complexity-of-bubble-sort.html"
+    },
+    {
+      "id": "tc-stability",
+      "heading": "Stability",
+      "text": "Bubble sort is a stable sorting algorithm. A swap occurs only when a strict inequality holds between adjacent elements, so two equal elements are never exchanged and their relative order is preserved. Stability matters when records are sorted on a secondary key first and a primary key second, since the secondary ordering survives within groups of equal primary keys.",
+      "tags": ["stability", "stable sort", "equal elements", "secondary key"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/analysis/stability-of-bubble-sort.html"
+    },
+    {
+      "id": "tc-comparison",
+      "heading": "Comparison with other algorithms",
+      "text": "Bubble sort is outperformed by O(n log n) algorithms such as merge sort, heap sort and quicksort on all but the smallest or nearly sorted inputs. Insertion sort, while also O(n^2), typically performs fewer writes and is preferred in practice for small arrays. Bubble sort's value is pedagogical, and as a cheap detector of already-sorted data when the early-exit optimisation is applied.",
+      "tags": ["comparison", "merge sort", "insertion sort", "quicksort", "practice"],
+      "source": "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/analysis/comparison-with-other-algorithms.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "After the first complete pass of bubble sort on an unsorted array, what is guaranteed?",
+      "options": [
+        "The array is sorted",
+        "The smallest element is at index 0",
+        "The largest element is at the last index",
+        "Half the array is sorted"
+      ],
+      "answer_index": 2,
+      "explanation": "Each pass carries the largest remaining element to the end. That is the loop invariant and the reason at most n-1 passes are needed.",
+      "concept_ref": "loop-invariant",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "question": "What is the worst-case time complexity of bubble sort?",
+      "options": ["O(n)", "O(n log n)", "O(n^2)", "O(2^n)"],
+      "answer_index": 2,
+      "explanation": "Comparisons total n(n-1)/2, which is O(n^2).",
+      "concept_ref": "complexity",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "question": "The optimised bubble sort improves which case, and to what?",
+      "options": [
+        "Worst case, to O(n log n)",
+        "Best case, to O(n)",
+        "Average case, to O(n log n)",
+        "Space complexity, to O(log n)"
+      ],
+      "answer_index": 1,
+      "explanation": "The swap flag lets an already-sorted array exit after one pass, giving O(n) best case. Worst and average remain O(n^2).",
+      "concept_ref": "optimisation",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q4",
+      "question": "Why is bubble sort considered stable?",
+      "options": [
+        "It always takes the same amount of time",
+        "It never swaps equal adjacent elements, so their relative order is preserved",
+        "It uses O(1) extra space",
+        "It never modifies the original array"
+      ],
+      "answer_index": 1,
+      "explanation": "Swaps happen only under a strict inequality, so equal elements never cross. Stability is about preserving relative order of equal keys, not about running time.",
+      "concept_ref": "stability",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "How many comparisons does standard bubble sort make on an array of 5 elements?",
+      "options": ["5", "10", "20", "25"],
+      "answer_index": 1,
+      "explanation": "n(n-1)/2 = 5 x 4 / 2 = 10 comparisons: 4 + 3 + 2 + 1.",
+      "concept_ref": "complexity",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q6",
+      "question": "An array is already sorted except that the smallest element sits at the very end. How does the optimised version perform?",
+      "options": [
+        "O(n), because the early-exit flag triggers immediately",
+        "Still O(n^2), because that element must travel the whole array one position per pass",
+        "O(log n)",
+        "It fails to sort correctly"
+      ],
+      "answer_index": 1,
+      "explanation": "A small element at the end moves left only one position per pass, so it needs roughly n passes. This is the classic 'turtle' case, and it is why the optimisation only helps the best case.",
+      "concept_ref": "optimisation",
+      "difficulty": "advanced"
+    }
+  ],
+
+  "references": [
+    "Cormen, Leiserson, Rivest & Stein. Introduction to Algorithms.",
+    "Knuth, D. E. The Art of Computer Programming, Volume 3: Sorting and Searching.",
+    "https://ds1-iiith.vlabs.ac.in/exp/bubble-sort/"
+  ]
+}

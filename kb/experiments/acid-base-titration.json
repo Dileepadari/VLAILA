@@ -1,0 +1,411 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "acid-base-titration",
+  "lab_id": "inorganic-chemistry-amrita",
+  "title": "Acid Base Titration",
+  "origin": "https://inoc-amrt.vlabs.ac.in",
+  "discipline": "Chemical Sciences",
+  "institute": "AMRITA",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 35,
+  "aim": "To determine the concentration of an acid or base solution by titrating it against a standard solution of known normality, using an appropriate indicator to detect the end point.",
+  "learning_objectives": [
+    "Select an indicator whose transition range brackets the equivalence-point pH of the chosen acid-base pair.",
+    "Distinguish the end point from the equivalence point and explain why they differ.",
+    "Apply N1V1 = N2V2 to compute an unknown normality from titre volume."
+  ],
+  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+
+  "prerequisites": [
+    {
+      "id": "normality",
+      "title": "Normality and equivalent weight",
+      "why": "N1V1 = N2V2 is meaningless without knowing what a gram-equivalent is; students who only know molarity get factor-of-n errors on polyprotic acids."
+    },
+    {
+      "id": "ph-scale",
+      "title": "pH and the strong/weak distinction",
+      "why": "Indicator choice depends entirely on where the equivalence-point pH sits, which depends on whether each partner is strong or weak."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-theory",
+      "order": 1,
+      "task": "Theory",
+      "title": "Read the theory on titration and indicators",
+      "detect": { "action": "navigate", "task": "Theory" },
+      "expected_dwell_seconds": 90,
+      "milestone": true,
+      "hints": {
+        "nudge": "Read Theory first — indicator choice is the one decision in this experiment that can silently ruin the result.",
+        "specific": "Theory covers the conditions a reaction must satisfy to serve as a titration, the difference between end point and equivalence point, and how indicators signal completion."
+      },
+      "concept_ref": "end-vs-equivalence"
+    },
+    {
+      "id": "choose-titrant",
+      "order": 2,
+      "task": "Simulation",
+      "title": "Choose the titrant",
+      "description": "The standard solution of known normality that goes in the burette.",
+      "detect": { "action": "change", "selector": "#titrateLabel md-select, md-select", "frame": "sim" },
+      "stuck_after_seconds": 40,
+      "hints": {
+        "nudge": "Start by picking your titrant from the dropdown.",
+        "specific": "The titrant is the solution of known normality delivered from the burette. Select it first — the indicator you need later depends on this choice.",
+        "interactive": { "highlight": "#titrateLabel", "frame": "sim", "text": "Choose the titrant here." }
+      },
+      "concept": "The titrant must be a standard solution: its normality is known accurately, so it becomes the reference against which the unknown is measured."
+    },
+    {
+      "id": "choose-titrate",
+      "order": 3,
+      "task": "Simulation",
+      "title": "Choose the titrate (analyte)",
+      "requires": ["choose-titrant"],
+      "detect": { "action": "change", "selector": "#selectCathode ~ md-content md-select, md-select", "frame": "sim" },
+      "hints": {
+        "nudge": "Now select the solution being analysed — the titrate.",
+        "specific": "The titrate is the solution in the conical flask whose concentration you are determining. Its acid/base strength together with the titrant's fixes the equivalence-point pH.",
+        "interactive": { "highlight": "#selectCathode", "frame": "sim", "text": "Choose the titrate here." }
+      },
+      "concept_ref": "equivalence-ph"
+    },
+    {
+      "id": "set-normality",
+      "order": 4,
+      "task": "Simulation",
+      "title": "Set the normality of the titrate",
+      "requires": ["choose-titrate"],
+      "detect": { "action": "change", "selector": "md-slider", "frame": "sim", "value_min": 0.1, "value_max": 2 },
+      "hints": {
+        "nudge": "Set the normality using the slider.",
+        "specific": "Normality is in gram-equivalents per litre and the slider spans 0.1 to 2 N. Note the value — you will need it in N1V1 = N2V2."
+      }
+    },
+    {
+      "id": "set-volume",
+      "order": 5,
+      "task": "Simulation",
+      "title": "Set the volume to be pipetted out",
+      "requires": ["set-normality"],
+      "detect": { "action": "change", "selector": "md-slider", "frame": "sim", "count": 2 },
+      "hints": {
+        "nudge": "Choose how much titrate to pipette into the flask.",
+        "specific": "This is V2 in N1V1 = N2V2. Record it now; the titre volume you read off the burette at the end point is V1."
+      }
+    },
+    {
+      "id": "select-indicator",
+      "order": 6,
+      "task": "Simulation",
+      "title": "Select the indicator",
+      "requires": ["choose-titrate"],
+      "detect": { "action": "change", "selector": "md-select", "frame": "sim", "count": 3 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Pick your indicator — this is the choice that decides whether your end point is meaningful.",
+        "specific": "Match the indicator's transition range to the equivalence-point pH. Phenolphthalein (8.3-10.0) suits strong base titrations; methyl orange (3.1-4.4) suits strong acid ones.",
+        "interactive": { "highlight": "md-select", "frame": "sim", "text": "Indicator selection." }
+      },
+      "concept": "An indicator is itself a weak acid or base whose conjugate forms differ in colour. It flips over its own transition range, so it only reports the equivalence point honestly if that range brackets the equivalence pH.",
+      "concept_ref": "indicator-choice"
+    },
+    {
+      "id": "start-titration",
+      "order": 7,
+      "task": "Simulation",
+      "title": "Start the titration",
+      "requires": ["select-indicator"],
+      "detect": { "action": "click", "selector": "#startExp", "frame": "sim" },
+      "hints": {
+        "nudge": "Everything is set — start the titration.",
+        "specific": "Titrant now flows from the burette. Watch the flask: the colour change marks the end point, and the burette reading at that instant is your titre.",
+        "interactive": { "highlight": "#startExp", "frame": "sim", "text": "Start the titration." }
+      }
+    },
+    {
+      "id": "observe-endpoint",
+      "order": 8,
+      "task": "Simulation",
+      "title": "Note the end point at the colour change",
+      "requires": ["start-titration"],
+      "detect": { "action": "dwell", "selector": "#demoCanvas", "frame": "sim" },
+      "expected_dwell_seconds": 10,
+      "milestone": true,
+      "hints": {
+        "nudge": "Watch for the first permanent colour change — that is your end point.",
+        "specific": "The end point is the first colour change that persists on swirling. Read the burette there. A fleeting flash that fades is not the end point."
+      },
+      "concept": "Near the equivalence point pH swings by several units for a single drop, which is why the colour flips so abruptly. That steepness is what makes the technique precise at all.",
+      "concept_ref": "end-vs-equivalence"
+    },
+    {
+      "id": "calculate-normality",
+      "order": 9,
+      "task": "Simulation",
+      "title": "Calculate the unknown normality",
+      "requires": ["observe-endpoint"],
+      "detect": { "action": "click", "selector": "#result", "frame": "sim" },
+      "hints": {
+        "nudge": "Now apply N1V1 = N2V2 with your titre volume.",
+        "specific": "Rearrange to N1 = N2V2 / V1. Then mass = (equivalent weight x normality x volume) / 1000 gives the amount of substance present."
+      },
+      "concept_ref": "normality-calc"
+    },
+    {
+      "id": "repeat-for-concordance",
+      "order": 10,
+      "task": "Simulation",
+      "title": "Repeat for concordant readings",
+      "requires": ["calculate-normality"],
+      "optional": true,
+      "detect": { "action": "click", "selector": "#reset", "frame": "sim" },
+      "hints": {
+        "nudge": "One titration is a data point, not a result — repeat it.",
+        "specific": "Real practice takes readings until two agree within 0.1 mL. A single titre carries no estimate of its own uncertainty."
+      }
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "start-without-indicator",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#startExp",
+        "frame": "sim",
+        "unless_completed": ["select-indicator"]
+      },
+      "message": "No indicator selected. Without one there is no colour change, so you have no way to detect the end point at all.",
+      "correction_step": "select-indicator",
+      "concept": "The end point is defined by a physical change in the solution. With no indicator the titration runs past equivalence with nothing to signal it."
+    },
+    {
+      "id": "start-without-titrate",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#startExp",
+        "frame": "sim",
+        "unless_completed": ["choose-titrate"]
+      },
+      "message": "You have not chosen a titrate yet — there is nothing in the flask to titrate against.",
+      "correction_step": "choose-titrate"
+    },
+    {
+      "id": "no-volume-recorded",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#result",
+        "frame": "sim",
+        "unless_completed": ["set-volume"]
+      },
+      "message": "You are calculating without a recorded pipette volume. N1V1 = N2V2 needs V2, so the result will not be meaningful.",
+      "correction_step": "set-volume",
+      "confidence": 0.9
+    },
+    {
+      "id": "endpoint-rushed",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#result",
+        "frame": "sim",
+        "after_completed": ["start-titration"],
+        "unless_completed": ["observe-endpoint"]
+      },
+      "message": "You jumped to the result without watching for the colour change. The end point reading is the entire measurement in this experiment.",
+      "correction_step": "observe-endpoint",
+      "confidence": 0.75
+    },
+    {
+      "id": "sim-before-theory",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Simulation",
+        "unless_completed": ["read-theory"]
+      },
+      "message": "Heads up — you have skipped Theory, and indicator selection is about to matter. Choosing the wrong indicator gives a confident-looking but wrong answer.",
+      "correction_step": "read-theory",
+      "confidence": 0.85
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "end-vs-equivalence",
+      "name": "End point vs equivalence point",
+      "summary": "The equivalence point is where titrant added is stoichiometrically equal to analyte present — a thermodynamic fact. The end point is where the indicator visibly changes — an experimental observation, usually a slight excess past equivalence. Good indicator choice makes the gap fall inside experimental error."
+    },
+    {
+      "id": "indicator-choice",
+      "name": "Indicator selection",
+      "summary": "An indicator is a weak acid or base whose acid and conjugate-base forms have different colours. Its transition range must bracket the equivalence-point pH: phenolphthalein (8.3-10.0) for strong-base equivalence above 7, methyl orange (3.1-4.4) for strong-acid equivalence below 7."
+    },
+    {
+      "id": "equivalence-ph",
+      "name": "Equivalence pH depends on the pair",
+      "summary": "Strong acid + strong base gives equivalence at pH 7. Weak acid + strong base lands above 7 because the conjugate base hydrolyses. Strong acid + weak base lands below 7. The pair chosen therefore determines the indicator."
+    },
+    {
+      "id": "normality-calc",
+      "name": "N1V1 = N2V2",
+      "summary": "At equivalence the gram-equivalents of titrant equal those of titrate. Mass of substance follows as (equivalent weight x normality x volume) / 1000."
+    },
+    {
+      "id": "titration-conditions",
+      "name": "When a reaction can be a titration",
+      "summary": "It must be fast, proceed stoichiometrically, have a sufficiently large negative free energy change to go to completion, and offer some detectable way to observe completion."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "The end point and the equivalence point are the same thing.",
+      "correction": "The end point is detected only after a slight excess of titrant. With a well-chosen indicator the difference falls within experimental error, but they are conceptually distinct."
+    },
+    {
+      "belief": "Any indicator works as long as it changes colour.",
+      "correction": "The transition range must bracket the equivalence pH. Methyl orange on a weak acid / strong base titration flips far too early and understates the titre."
+    },
+    {
+      "belief": "Normality and molarity are interchangeable.",
+      "correction": "Normality = molarity x n, where n is equivalents per mole. For H2SO4, 1 M is 2 N — ignoring this halves your answer."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-titration",
+      "heading": "What titration is",
+      "text": "The word titration comes from the Latin titulus, meaning inscription or title. Titration means the determination of the concentration of a solution. The standard solution is usually added from a graduated vessel called a burette. The process of adding standard solution until the reaction is just complete is termed titration, and the substance to be determined is said to be titrated.",
+      "tags": ["definition", "burette", "standard solution"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/theory.html"
+    },
+    {
+      "id": "tc-conditions",
+      "heading": "Conditions for a reaction to serve as a titration",
+      "text": "Not all chemical reactions can be used as titrations. A reaction can serve as the basis of a titration procedure only if the reaction is fast, it proceeds stoichiometrically, the change in free energy during the reaction is sufficiently large for spontaneity, and there is some way to detect the completion of the reaction.",
+      "tags": ["conditions", "requirements", "stoichiometry", "free energy"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/theory.html"
+    },
+    {
+      "id": "tc-endpoint",
+      "heading": "End point and equivalence point",
+      "text": "A stage which shows the completion of a particular reaction is known as the end point. The equivalence point is the stage at which the amount of reagent added is exactly and stoichiometrically equivalent to the amount of the reacting substance in the titrated solution. The end point is detected by some physical change produced by the solution, usually by the addition of an auxiliary reagent known as an indicator. The end point and the equivalence point may not be identical; the end point is usually detected only after adding a slight excess of titrant, and in many cases the difference falls within experimental error.",
+      "tags": ["end point", "equivalence point", "indicator", "error"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/theory.html"
+    },
+    {
+      "id": "tc-indicator",
+      "heading": "Indicators",
+      "text": "An indicator is a chemical reagent used to recognise the attainment of the end point in a titration. It is typically itself a weak acid or weak base whose protonated and deprotonated forms have different colours, so it changes colour over a characteristic pH range. Phenolphthalein transitions around pH 8.3 to 10.0 and methyl orange around pH 3.1 to 4.4.",
+      "tags": ["indicator", "phenolphthalein", "methyl orange", "ph range"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/theory.html"
+    },
+    {
+      "id": "tc-procedure",
+      "heading": "Procedure",
+      "text": "Choose the titrant. Choose the titrate. Select the normality of the titrate. Choose the volume of the liquid to be pipetted out. Select the indicator. Start the titration. The end point is noted at the colour change of the solution. From the final reading, the normality of the titrant can be calculated using N1V1 = N2V2. After finding the normality, the amount of the given substance in the whole of the given solution is calculated as mass = equivalent weight x normality x volume / 1000.",
+      "tags": ["procedure", "steps", "calculation", "normality"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/procedure.html"
+    },
+    {
+      "id": "tc-lab-practice",
+      "heading": "Real laboratory practice",
+      "text": "Always wear a lab coat and gloves in the laboratory and switch on the exhaust fan. Ensure all chemicals and reagents required are available before starting. Clean all working apparatus with chromic acid and distilled water and ensure it is free from water droplets, since residual water dilutes the solution and biases the titre. Calibrate the electronic balance before taking measurements.",
+      "tags": ["safety", "apparatus", "practice", "calibration"],
+      "source": "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/procedure.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "What is the essential difference between the end point and the equivalence point?",
+      "options": [
+        "They are the same thing under different names",
+        "Equivalence is the stoichiometric point; end point is where the indicator visibly changes, usually just after",
+        "End point applies to acids and equivalence to bases",
+        "Equivalence is measured with a pH meter and end point with a burette"
+      ],
+      "answer_index": 1,
+      "explanation": "Equivalence is a stoichiometric fact; the end point is an observation that typically requires a slight excess of titrant to become visible.",
+      "concept_ref": "end-vs-equivalence",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "question": "Which of these is NOT a requirement for a reaction to serve as a titration?",
+      "options": [
+        "The reaction must be fast",
+        "It must proceed stoichiometrically",
+        "It must be exothermic",
+        "There must be a way to detect completion"
+      ],
+      "answer_index": 2,
+      "explanation": "The requirement is a sufficiently large negative free-energy change for spontaneity, not that the reaction release heat specifically.",
+      "concept_ref": "titration-conditions",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q3",
+      "question": "For a weak acid titrated with a strong base, which indicator is appropriate?",
+      "options": ["Methyl orange", "Phenolphthalein", "Either works equally well", "No indicator is needed"],
+      "answer_index": 1,
+      "explanation": "Equivalence lands above pH 7 because the conjugate base hydrolyses. Phenolphthalein's 8.3-10.0 range brackets it; methyl orange flips far too early.",
+      "concept_ref": "indicator-choice",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q4",
+      "question": "25.0 mL of an acid requires 20.0 mL of 0.5 N NaOH to reach the end point. What is the acid's normality?",
+      "options": ["0.4 N", "0.5 N", "0.625 N", "1.0 N"],
+      "answer_index": 0,
+      "explanation": "N1V1 = N2V2, so N_acid = (0.5 x 20.0) / 25.0 = 0.4 N.",
+      "concept_ref": "normality-calc",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "Why must the conical flask be free of water droplets before the titration?",
+      "options": [
+        "Water reacts with the indicator",
+        "It dilutes the analyte and shifts the titre reading",
+        "Water changes the burette calibration",
+        "It affects the colour of the glass"
+      ],
+      "answer_index": 1,
+      "explanation": "Residual water changes the analyte concentration in the flask, biasing the volume of titrant required and therefore the computed normality.",
+      "concept_ref": "normality-calc",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "q6",
+      "question": "Why does the indicator flip colour so abruptly rather than fading gradually?",
+      "options": [
+        "The indicator decomposes at the end point",
+        "pH changes by several units for a single drop near equivalence",
+        "The stirring rate increases",
+        "The temperature rises sharply"
+      ],
+      "answer_index": 1,
+      "explanation": "The titration curve is nearly vertical near equivalence, so one drop carries the solution straight through the indicator's whole transition range. That steepness is what makes the technique precise.",
+      "concept_ref": "end-vs-equivalence",
+      "difficulty": "advanced"
+    }
+  ],
+
+  "references": [
+    "Vogel, A. I. A Textbook of Quantitative Inorganic Analysis.",
+    "Skoog, West, Holler & Crouch. Fundamentals of Analytical Chemistry.",
+    "https://inoc-amrt.vlabs.ac.in/exp/acid-base-titration/"
+  ]
+}

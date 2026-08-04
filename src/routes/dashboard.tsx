@@ -22,7 +22,7 @@ function DashboardLayout() {
 
   return (
     <PageLayout>
-      <div className="max-w-7xl mx-auto px-4 py-6 grid md:grid-cols-[220px_1fr] gap-6">
+      <div className="console-scope max-w-7xl mx-auto px-4 py-6 grid md:grid-cols-[220px_1fr] gap-6">
         <aside className="bg-white border rounded p-3 text-sm h-fit">
           <div className="font-semibold text-vlabs-blue px-2 py-1 mb-1">{role.toUpperCase()}</div>
           {items.map(([to, label]) => (

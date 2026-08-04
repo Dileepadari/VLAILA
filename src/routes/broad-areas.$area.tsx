@@ -1,12 +1,21 @@
+/**
+ * Broad-area lab listing.
+ *
+ * Reproduces the live page's row layout element for element: a `row row-flex
+ * labs` block per lab, with the grey title cell carrying the lab name in
+ * purple above the Reference Books / Syllabus Mapping disclosures, and the
+ * dark institute cell on the right. Both disclosure panels are hidden until
+ * toggled, as they are on vlab.co.in.
+ */
+
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PageLayout } from "@/components/vlabs/PageLayout";
-import { Banner } from "./about";
+import { useState } from "react";
+import { InnerPage, ContactRail } from "@/components/vlabs/InnerPage";
 import { BROAD_AREAS, LABS } from "@/lib/mock-data";
-import { ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/broad-areas/$area")({
   head: ({ params }) => {
-    const a = BROAD_AREAS.find(x => x.slug === params.area);
+    const a = BROAD_AREAS.find((x) => x.slug === params.area);
     return { meta: [{ title: `${a?.name ?? "Broad Area"} — Virtual Labs` }] };
   },
   component: AreaPage,
@@ -14,37 +23,111 @@ export const Route = createFileRoute("/broad-areas/$area")({
 
 function AreaPage() {
   const { area } = Route.useParams();
-  const a = BROAD_AREAS.find(x => x.slug === area);
+  const a = BROAD_AREAS.find((x) => x.slug === area);
   if (!a) throw notFound();
-  const labs = LABS.filter(l => l.area === area);
-  // pad with placeholder labs
-  const display = labs.length ? labs : [{ id: "intro", name: `${a.name} — Coming soon`, institute: "TBA", area } as any];
+
+  const labs = LABS.filter((l) => l.area === area);
+
   return (
-    <PageLayout>
-      <Banner title={a.name} crumbs={["Home", "Broad Areas of Virtual Labs"]} />
-      <div className="max-w-6xl mx-auto px-4 py-8 grid md:grid-cols-[1fr_280px] gap-6">
-        <div className="space-y-3">
-          {display.map((l) => (
-            <Link key={l.id} to="/labs/$labId" params={{ labId: l.id }} className="bg-white border rounded flex items-stretch hover:shadow-md transition">
-              <div className="flex-1 p-4">
-                <div className="text-vlabs-blue font-semibold">{l.name} {labs.length === 0 ? "" : "(New)"}</div>
-                <div className="flex gap-3 mt-2 text-xs text-vlabs-orange">
-                  <span className="flex items-center gap-1">Reference Books <ChevronDown className="w-3 h-3" /></span>
-                  <span className="flex items-center gap-1">Syllabus Mapping <ChevronDown className="w-3 h-3" /></span>
-                </div>
-              </div>
-              <div className="bg-muted-foreground/80 text-white grid place-items-center w-32 text-sm font-semibold">{l.institute}</div>
-            </Link>
-          ))}
-          {labs.length > 0 && (
-            <a href="#" className="text-vlabs-blue inline-flex items-center gap-2 mt-4">👉 Click here for related NPTEL video lectures</a>
-          )}
+    <InnerPage title={a.name} breadcrumb="Broad Areas of Virtual Labs" rail={<ContactRail />}>
+      {labs.length ? (
+        labs.map((lab) => <LabRow key={lab.id} lab={lab} />)
+      ) : (
+        <div className="row row-flex labs">
+          <div className="col-md-9 col-sm-9 col-xs-12 lab-col-1">
+            <div className="content">
+              <h4>Labs for this area are being migrated</h4>
+            </div>
+          </div>
+          <div className="col-md-3 col-sm-3 col-xs-12 lab-col-2">
+            <div className="content" style={{ textAlign: "center" }}>
+              <h4>Various institutes</h4>
+            </div>
+          </div>
         </div>
-        <aside className="bg-white border rounded p-4">
-          <div className="font-semibold border-b pb-2 mb-2">Announcements</div>
-          <p className="text-sm text-muted-foreground">* Various projects/ICT initiatives of the Ministry of Education are available — <span className="vlabs-link">click here for more details</span>.</p>
-        </aside>
+      )}
+
+      <p className="hlh" style={{ paddingBottom: 0 }}>
+        <a href="#nptel">
+          Click here for related NPTEL video lectures
+        </a>
+      </p>
+    </InnerPage>
+  );
+}
+
+function LabRow({ lab }: { lab: (typeof LABS)[number] }) {
+  const [open, setOpen] = useState<"books" | "syllabus" | null>(null);
+  const toggleStyle = {
+    background: "none",
+    border: 0,
+    color: "inherit",
+    font: "inherit",
+    padding: 0,
+    cursor: "pointer",
+  };
+
+  return (
+    <div className="row row-flex labs">
+      <div className="col-md-9 col-sm-9 col-xs-12 lab-col-1">
+        <div className="content">
+          <Link to="/labs/$labId" params={{ labId: lab.id }}>
+            <h4 style={{ color: "#430079" }}>{lab.name}</h4>
+          </Link>
+        </div>
+        <div className="row row-flex">
+          <div className="col-md-12 col-sm-12 col-xs-12 ref-main-div">
+            <div className="content">
+              <div className="row ref-div">
+                <button
+                  className="ref-book"
+                  style={toggleStyle}
+                  onClick={() => setOpen(open === "books" ? null : "books")}
+                  aria-expanded={open === "books"}
+                >
+                  {" "}
+                  Reference Books <i className="fa fa-chevron-down ref-icon" />
+                </button>
+                <button
+                  className="syll-map"
+                  style={toggleStyle}
+                  onClick={() => setOpen(open === "syllabus" ? null : "syllabus")}
+                  aria-expanded={open === "syllabus"}
+                >
+                  Syllabus Mapping <i className="fa fa-chevron-down syll-icon" />
+                </button>
+              </div>
+            </div>
+            {open === "books" && (
+              <div className="ref-book-detail" style={{ display: "block" }}>
+                <p>Reference Books</p>
+                <ol>
+                  {lab.experiments.slice(0, 2).map((e) => (
+                    <li key={e.id}>Standard text covering {e.name}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            {open === "syllabus" && (
+              <div className="syll-map-detail" style={{ display: "block" }}>
+                <p>Syllabus Mapping</p>
+                <ol>
+                  <li>{lab.courseAlignment}</li>
+                </ol>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </PageLayout>
+      <div className="col-md-3 col-sm-3 col-xs-12 lab-col-2">
+        <div className="content" style={{ textAlign: "center" }}>
+          <h4>
+            <Link to="/labs/$labId" params={{ labId: lab.id }}>
+              {lab.institute}
+            </Link>
+          </h4>
+        </div>
+      </div>
+    </div>
   );
 }

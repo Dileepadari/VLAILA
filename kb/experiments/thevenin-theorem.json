@@ -1,0 +1,404 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "thevenin-theorem",
+  "lab_id": "basic-electrical-engineering-iitk",
+  "title": "Verification of Superposition and Thevenin's Theorem",
+  "origin": "https://bee-iitk.vlabs.ac.in",
+  "discipline": "Electrical Engineering",
+  "institute": "IITK",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 30,
+  "aim": "To verify the superposition theorem and Thevenin's theorem experimentally by comparing measured circuit responses against values predicted from the reduced equivalent circuits.",
+  "learning_objectives": [
+    "Reduce a two-source resistive network to its Thevenin equivalent (Vth in series with Rth).",
+    "Apply superposition correctly, including the treatment of suppressed sources.",
+    "Recognise the linearity assumption both theorems depend on."
+  ],
+  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+
+  "prerequisites": [
+    {
+      "id": "ohms-law",
+      "title": "Ohm's law and series/parallel reduction",
+      "why": "Rth is found by reducing the network with sources suppressed; without series/parallel fluency the reduction is guesswork."
+    },
+    {
+      "id": "kvl-kcl",
+      "title": "Kirchhoff's voltage and current laws",
+      "why": "Both theorems are consequences of KVL/KCL plus linearity; they look like magic without that grounding."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-theory",
+      "order": 1,
+      "task": "Theory",
+      "title": "Read the statements of both theorems",
+      "detect": { "action": "navigate", "task": "Theory" },
+      "expected_dwell_seconds": 75,
+      "milestone": true,
+      "hints": {
+        "nudge": "Read Theory first — both theorems rest on the same linearity assumption, and that is the part worth understanding.",
+        "specific": "Superposition: the response to several excitations equals the sum of responses to each individually. Thevenin: any linear bilateral circuit reduces to one voltage source in series with one impedance, as seen from a chosen pair of terminals."
+      },
+      "concept_ref": "linearity"
+    },
+    {
+      "id": "open-thevenin-sim",
+      "order": 2,
+      "task": "Simulation",
+      "title": "Open the Thevenin simulator",
+      "requires": ["read-theory"],
+      "detect": { "action": "click", "selector": "a[href*='thevenin']", "frame": "sim" },
+      "hints": {
+        "nudge": "Choose the Thevenin Theorem simulator to begin.",
+        "specific": "The Simulation tab offers Thevenin and Superposition. Either order works, but keep the same component values across both so you can compare results directly."
+      }
+    },
+    {
+      "id": "set-r1",
+      "order": 3,
+      "task": "Simulation",
+      "title": "Enter R1",
+      "requires": ["open-thevenin-sim"],
+      "detect": { "action": "input", "selector": "#r1", "frame": "sim:thevenin", "value_min": 1 },
+      "stuck_after_seconds": 30,
+      "hints": {
+        "nudge": "Enter a value for R1 to start defining the network.",
+        "specific": "Type a positive resistance in ohms for R1. Values in the 100-1000 ohm range keep currents in a readable range.",
+        "interactive": { "highlight": "#r1", "frame": "sim:thevenin", "text": "R1 goes here." }
+      }
+    },
+    {
+      "id": "set-r2",
+      "order": 4,
+      "task": "Simulation",
+      "title": "Enter R2",
+      "requires": ["set-r1"],
+      "detect": { "action": "input", "selector": "#r2", "frame": "sim:thevenin", "value_min": 1 },
+      "hints": {
+        "nudge": "Now R2.",
+        "specific": "Enter R2 in ohms. R1 and R2 together form the divider that sets Vth."
+      }
+    },
+    {
+      "id": "set-r3",
+      "order": 5,
+      "task": "Simulation",
+      "title": "Enter R3 (the load)",
+      "requires": ["set-r2"],
+      "detect": { "action": "input", "selector": "#r3", "frame": "sim:thevenin", "value_min": 1 },
+      "hints": {
+        "nudge": "R3 is the load branch — the part you will replace with the equivalent.",
+        "specific": "R3 is the load across the terminals of interest. Thevenin's power is that you can swap it for any other value and reuse the same Vth and Rth."
+      },
+      "concept": "The Thevenin equivalent is defined relative to a specific terminal pair. Change which branch you call the load and both Vth and Rth change."
+    },
+    {
+      "id": "set-v1",
+      "order": 6,
+      "task": "Simulation",
+      "title": "Enter source V1",
+      "requires": ["set-r3"],
+      "detect": { "action": "input", "selector": "#v1", "frame": "sim:thevenin" },
+      "hints": {
+        "nudge": "Set the first source voltage.",
+        "specific": "Enter V1 in volts. Sign matters — a negative value reverses the source polarity and changes the direction of its contribution."
+      }
+    },
+    {
+      "id": "set-v2",
+      "order": 7,
+      "task": "Simulation",
+      "title": "Enter source V2",
+      "requires": ["set-v1"],
+      "detect": { "action": "input", "selector": "#v2", "frame": "sim:thevenin" },
+      "milestone": true,
+      "hints": {
+        "nudge": "One more source and the network is fully specified.",
+        "specific": "Enter V2. With two independent sources you can now compare the direct solution against both superposition and the Thevenin reduction."
+      }
+    },
+    {
+      "id": "compute-result",
+      "order": 8,
+      "task": "Simulation",
+      "title": "Compute and record the result",
+      "requires": ["set-v2"],
+      "detect": { "action": "click", "selector": "#result, button[type='submit']", "frame": "sim:thevenin" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Run it — then predict the answer yourself before you look.",
+        "specific": "Before reading the result, compute Vth by removing the load and finding the open-circuit voltage, then Rth by shorting the voltage sources and reducing. Verification means your prediction matching, not just the simulator producing a number."
+      },
+      "concept": "Verification is a comparison between two independent routes to the same quantity. Reading the simulator's output without predicting it first is observation, not verification.",
+      "concept_ref": "thevenin"
+    },
+    {
+      "id": "vary-load",
+      "order": 9,
+      "task": "Simulation",
+      "title": "Change the load and re-verify",
+      "requires": ["compute-result"],
+      "optional": true,
+      "detect": { "action": "input", "selector": "#r3", "frame": "sim:thevenin", "count": 2 },
+      "hints": {
+        "nudge": "Change only R3 and re-run — Vth and Rth should not move.",
+        "specific": "This is the practical payoff of Thevenin: the equivalent is independent of the load. Vary R3 across several values and confirm Vth and Rth stay put while the load current changes."
+      },
+      "concept_ref": "thevenin"
+    },
+    {
+      "id": "superposition-check",
+      "order": 10,
+      "task": "Simulation",
+      "title": "Verify superposition with the same values",
+      "requires": ["compute-result"],
+      "detect": { "action": "click", "selector": "a[href*='superposition']", "frame": "sim" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Now check superposition using the same component values.",
+        "specific": "Suppress V2 (replace with a short) and find the response to V1 alone, then the reverse, then add. The sum should equal the response with both sources active.",
+        "interactive": { "highlight": "a[href*='superposition']", "frame": "sim", "text": "Superposition simulator." }
+      },
+      "concept_ref": "superposition"
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "negative-resistance",
+      "severity": "fatal",
+      "when": {
+        "action": "input",
+        "selector": "#r1, #r2, #r3",
+        "frame": "sim:thevenin",
+        "value_out_of_range": { "min": 0.0001 }
+      },
+      "message": "Resistance must be positive. A zero or negative value makes the network non-physical and the equivalent undefined.",
+      "correction_step": "set-r1",
+      "concept": "A zero-ohm branch short-circuits the terminals, so Vth collapses to zero; a negative resistance is an active element and breaks the passivity these theorems assume."
+    },
+    {
+      "id": "compute-before-values",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#result, button[type='submit']",
+        "frame": "sim:thevenin",
+        "unless_completed": ["set-v2"]
+      },
+      "message": "The network is not fully specified yet — fill in all three resistances and both source voltages before computing.",
+      "correction_step": "set-r1"
+    },
+    {
+      "id": "superposition-first",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "a[href*='superposition']",
+        "frame": "sim",
+        "unless_completed": ["compute-result"]
+      },
+      "message": "You can start with superposition, but running Thevenin on the same values first makes the comparison between the two much sharper.",
+      "correction_step": "compute-result",
+      "confidence": 0.65
+    },
+    {
+      "id": "value-thrashing",
+      "severity": "recoverable",
+      "when": {
+        "action": "input",
+        "selector": "#r1, #r2, #r3, #v1, #v2",
+        "frame": "sim:thevenin",
+        "repeat_count": 10
+      },
+      "message": "You are changing values repeatedly without computing. Fix one set, predict the answer on paper, then run it — that is what makes this a verification.",
+      "correction_step": "compute-result",
+      "confidence": 0.7
+    },
+    {
+      "id": "sim-before-theory",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Simulation",
+        "unless_completed": ["read-theory"]
+      },
+      "message": "Without the Theory section this becomes a form-filling exercise. The verification only means something if you predict Vth and Rth yourself first.",
+      "correction_step": "read-theory",
+      "confidence": 0.85
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "thevenin",
+      "name": "Thevenin's theorem",
+      "summary": "Any linear bilateral network, viewed from a chosen terminal pair, behaves identically to a single voltage source Vth in series with a single impedance Rth. Vth is the open-circuit voltage at those terminals; Rth is the resistance looking back in with all independent sources suppressed."
+    },
+    {
+      "id": "superposition",
+      "name": "Superposition theorem",
+      "summary": "In a linear circuit the response to several independent excitations equals the sum of the responses to each acting alone, with the others suppressed — voltage sources shorted, current sources opened."
+    },
+    {
+      "id": "linearity",
+      "name": "Linearity is the precondition",
+      "summary": "Both theorems follow from linearity and bilaterality. Introduce a diode, a transistor in a nonlinear region, or a saturating core and both fail immediately."
+    },
+    {
+      "id": "source-suppression",
+      "name": "Suppressing sources correctly",
+      "summary": "An ideal voltage source is suppressed by replacing it with a short (its internal resistance), an ideal current source by an open. Removing a voltage source by deleting the branch is the single most common error in this experiment."
+    },
+    {
+      "id": "max-power",
+      "name": "Why the equivalent is useful",
+      "summary": "With Vth and Rth known, any load response follows without re-solving the network — and maximum power transfer occurs at R_load = Rth, which is only obvious once the circuit is in Thevenin form."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "To suppress a voltage source you remove it from the circuit.",
+      "correction": "You replace it with a short circuit. Opening the branch changes the network topology and gives the wrong Rth."
+    },
+    {
+      "belief": "Superposition works for power as well as voltage and current.",
+      "correction": "Power is quadratic in current, so it does not superpose. Sum the currents first, then compute power from the total."
+    },
+    {
+      "belief": "The Thevenin equivalent is a property of the circuit.",
+      "correction": "It is a property of the circuit as seen from one specific terminal pair. A different pair gives a different Vth and Rth."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-superposition",
+      "heading": "Superposition theorem",
+      "text": "The superposition theorem states that the response of a linear circuit to an arbitrary number of excitations is equal to the sum of the responses to each individual excitation. To verify it: remove all sources except one and measure the response of the circuit to that excitation, repeat for each remaining source, then add the results of each measurement to obtain the total response. Compare that sum to the actual response of the circuit with all excitations present; if they agree, the theorem is verified.",
+      "tags": ["superposition", "verification", "linear", "procedure"],
+      "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/procedure.html"
+    },
+    {
+      "id": "tc-thevenin",
+      "heading": "Thevenin's theorem",
+      "text": "Thevenin's theorem states that any linear, bilateral circuit can be replaced by a single voltage source in series with an impedance, giving the same response as the original circuit for any load. To verify it: simplify the circuit to its Thevenin equivalent, measure the voltage of the equivalent source and the value of the series impedance, connect a load across the terminals and measure the response, then compare against the response of the original circuit to the same load.",
+      "tags": ["thevenin", "equivalent", "verification", "load"],
+      "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/procedure.html"
+    },
+    {
+      "id": "tc-finding-vth",
+      "heading": "Finding Vth and Rth",
+      "text": "Vth is the open-circuit voltage measured across the terminals of interest with the load removed. Rth is the resistance seen looking back into the network from those terminals with all independent sources suppressed: ideal voltage sources replaced by short circuits and ideal current sources replaced by open circuits. Dependent sources must be retained, and Rth is then found by applying a test source.",
+      "tags": ["vth", "rth", "open circuit", "suppression", "dependent sources"],
+      "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/theory.html"
+    },
+    {
+      "id": "tc-linearity",
+      "heading": "The linearity requirement",
+      "text": "Both theorems apply only to linear, bilateral networks — those whose element relationships obey superposition and behave identically for current in either direction. Resistors, ideal sources, and linear inductors and capacitors qualify. Diodes, transistors outside a small-signal region, and saturating magnetic elements do not, and applying either theorem to them gives wrong answers.",
+      "tags": ["linearity", "bilateral", "limitations", "assumptions"],
+      "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/theory.html"
+    },
+    {
+      "id": "tc-application",
+      "heading": "Why reduce a circuit at all",
+      "text": "Once a network is in Thevenin form, the response to any load follows from a single voltage divider rather than a full re-solution of the network. This makes repeated load analysis trivial and makes the maximum power transfer condition, load resistance equal to Rth, immediately visible.",
+      "tags": ["application", "maximum power transfer", "load analysis"],
+      "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/theory.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "To find Rth, how should an ideal independent voltage source be treated?",
+      "options": [
+        "Removed from the circuit, leaving an open",
+        "Replaced by a short circuit",
+        "Left in place at its rated voltage",
+        "Replaced by a 1-ohm resistor"
+      ],
+      "answer_index": 1,
+      "explanation": "An ideal voltage source has zero internal resistance, so suppressing it means replacing it with a short. Opening the branch changes the topology and gives a wrong Rth.",
+      "concept_ref": "source-suppression",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "question": "Vth is defined as which measured quantity?",
+      "options": [
+        "The voltage across the load with the load connected",
+        "The open-circuit voltage at the terminals with the load removed",
+        "The sum of all source voltages",
+        "The short-circuit current times R3"
+      ],
+      "answer_index": 1,
+      "explanation": "Vth is the open-circuit terminal voltage. Measuring it with the load still attached gives the divided voltage, not Vth.",
+      "concept_ref": "thevenin",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "question": "Superposition cannot be applied directly to which quantity?",
+      "options": ["Branch current", "Node voltage", "Power dissipated in a resistor", "Terminal voltage"],
+      "answer_index": 2,
+      "explanation": "Power depends on the square of current, so it is not a linear function of the sources. Add the currents first, then compute power from the total.",
+      "concept_ref": "superposition",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q4",
+      "question": "You double the load resistance R3 and re-run. What should happen to Vth and Rth?",
+      "options": [
+        "Both double",
+        "Both stay the same",
+        "Vth stays the same, Rth doubles",
+        "Vth doubles, Rth stays the same"
+      ],
+      "answer_index": 1,
+      "explanation": "The Thevenin equivalent describes the network as seen from the terminals and is independent of what is connected across them. Only the load current and load voltage change.",
+      "concept_ref": "thevenin",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "Why does neither theorem apply to a circuit containing a forward-biased diode?",
+      "options": [
+        "The diode dissipates too much power",
+        "The diode is nonlinear, so responses do not add",
+        "Diodes have no defined resistance",
+        "The theorems only apply to AC circuits"
+      ],
+      "answer_index": 1,
+      "explanation": "Both theorems are consequences of linearity. A diode's exponential I-V relation breaks additivity, so superposition and Thevenin reduction both fail.",
+      "concept_ref": "linearity",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "q6",
+      "question": "With the circuit in Thevenin form, maximum power is delivered to the load when",
+      "options": [
+        "R_load is as small as possible",
+        "R_load equals Rth",
+        "R_load is as large as possible",
+        "R_load equals R1 + R2"
+      ],
+      "answer_index": 1,
+      "explanation": "Maximum power transfer occurs at R_load = Rth. The result is hard to see in the original network and immediate once the circuit is reduced.",
+      "concept_ref": "max-power",
+      "difficulty": "advanced"
+    }
+  ],
+
+  "references": [
+    "Boylestad, R. L. Introductory Circuit Analysis.",
+    "Hayt, Kemmerly & Durbin. Engineering Circuit Analysis.",
+    "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/"
+  ]
+}

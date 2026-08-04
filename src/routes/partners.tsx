@@ -1,20 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageLayout } from "@/components/vlabs/PageLayout";
-import { Banner } from "./about";
+import { InnerPage, ContactRail } from "@/components/vlabs/InnerPage";
+import { INSTITUTES } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/partners")({
   head: () => ({ meta: [{ title: "Participating Institutes — Virtual Labs" }] }),
-  component: () => (
-    <PageLayout>
-      <Banner title="Participating Institutes" />
-      <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-4">
-        {["IIT Delhi", "IIT Bombay", "IIT Kharagpur", "IIT Kanpur", "IIT Madras", "IIT Guwahati", "IIT Roorkee", "IIIT Hyderabad", "NITK Surathkal", "COEP Pune", "AMU Aligarh", "Dayalbagh Educational Institute"].map(n => (
-          <div key={n} className="bg-white border rounded p-4 text-center">
-            <div className="w-16 h-16 mx-auto rounded-full bg-vlabs-blue text-white grid place-items-center font-bold mb-2">{n.split(" ").map(w => w[0]).slice(0,2).join("")}</div>
-            <div className="text-sm font-semibold">{n}</div>
+  component: Partners,
+});
+
+/**
+ * Layout from https://www.vlab.co.in/participating-institutes: a four-per-row
+ * grid of crests, each a submit button posting the institute's nodal-centre
+ * code. The button styling is the live page's own inline reset.
+ */
+function Partners() {
+  const rows: (typeof INSTITUTES)[] = [];
+  for (let i = 0; i < INSTITUTES.length; i += 4) rows.push(INSTITUTES.slice(i, i + 4));
+
+  return (
+    <InnerPage title="Participating Institutes" breadcrumb="Participating Institutes" rail={<ContactRail />}>
+      <div className="obj-heading-inner">Participating Institutes</div>
+      <div className="obj-text-inner">
+        {rows.map((row, i) => (
+          <div className="row" key={i}>
+            {row.map((inst) => (
+              <div className="col-md-3 col-xs-6" style={{ marginBottom: 20 }} key={inst.img}>
+                <center>
+                  <button
+                    type="button"
+                    style={{ border: "none", outline: "none", background: "none" }}
+                  >
+                    <img
+                      src={`/vl/Inst_logo/${inst.img}`}
+                      style={{ width: 90, height: 90 }}
+                      alt=""
+                    />
+                    <br />
+                    <b>{inst.name}</b>
+                  </button>
+                </center>
+              </div>
+            ))}
           </div>
         ))}
       </div>
-    </PageLayout>
-  ),
-});
+    </InnerPage>
+  );
+}

@@ -1,66 +1,115 @@
+/**
+ * Lab landing page, on the *.vlabs.ac.in lab template.
+ *
+ * The live template splits a lab across separate pages -- Introduction,
+ * Objective, List of experiments, Target Audience, Course Alignment, Feedback
+ * -- each with the sidebar highlighting the current one. That is reproduced
+ * with a `page` search param so the URLs stay shareable.
+ */
+
 import { createFileRoute, Link, Outlet, notFound, useLocation } from "@tanstack/react-router";
-import { PageLayout } from "@/components/vlabs/PageLayout";
-import { LABS } from "@/lib/mock-data";
+import { LabShell, type LabNavItem } from "@/components/vlabs/LabShell";
+import { BROAD_AREAS, LABS } from "@/lib/mock-data";
+
+const PAGES = [
+  "introduction",
+  "objective",
+  "experiments",
+  "audience",
+  "alignment",
+  "feedback",
+] as const;
+
+type LabPage = (typeof PAGES)[number];
+
+const PAGE_LABELS: Record<LabPage, string> = {
+  introduction: "Introduction",
+  objective: "Objective",
+  experiments: "List of experiments",
+  audience: "Target Audience",
+  alignment: "Course Alignment",
+  feedback: "Feedback",
+};
 
 export const Route = createFileRoute("/labs/$labId")({
+  head: ({ params }) => {
+    const lab = LABS.find((l) => l.id === params.labId);
+    return { meta: [{ title: lab ? `${lab.name} — Virtual Labs` : "Virtual Labs" }] };
+  },
+  validateSearch: (search: Record<string, unknown>): { page?: LabPage } => {
+    const page = search.page as LabPage | undefined;
+    return page && PAGES.includes(page) ? { page } : {};
+  },
   component: LabLayout,
 });
 
 function LabLayout() {
   const { labId } = Route.useParams();
-  const lab = LABS.find(l => l.id === labId);
+  const { page = "introduction" } = Route.useSearch();
+  const lab = LABS.find((l) => l.id === labId);
   if (!lab) throw notFound();
-  const loc = useLocation();
-  const isExperiment = loc.pathname.includes("/experiments/");
-  if (isExperiment) return <Outlet />;
-  return (
-    <PageLayout>
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="text-vlabs-blue text-xl font-semibold mb-4">{lab.area === "computer-science" ? "Computer Science and Engineering" : lab.area}</div>
-        <div className="grid md:grid-cols-[200px_1fr] gap-6">
-          <aside className="space-y-1 text-sm border-l-2 border-vlabs-orange pl-3">
-            {[
-              ["", "Introduction"],
-              ["objective", "Objective"],
-              ["experiments", "List of experiments"],
-              ["audience", "Target Audience"],
-              ["alignment", "Course Alignment"],
-              ["feedback", "Feedback"],
-            ].map(([h, label]) => (
-              <a key={label} href={`#${h}`} className="block py-1 hover:text-vlabs-orange">{label}</a>
-            ))}
-          </aside>
-          <div className="space-y-8 text-sm">
-            <h1 className="text-2xl text-vlabs-cyan font-bold text-center">{lab.name.replace(" Lab", "")}</h1>
-            <Section id="" title="Introduction">{lab.intro}</Section>
-            <Section id="objective" title="Objective">{lab.objective}</Section>
-            <div id="experiments">
-              <h3 className="font-semibold text-base mb-2">List of experiments</h3>
-              <ol className="space-y-2">
-                {lab.experiments.map((e, i) => (
-                  <li key={e.id}>{i + 1}. <Link to="/labs/$labId/experiments/$expId" params={{ labId: lab.id, expId: e.id }} className="vlabs-link font-medium">{e.name}</Link> <span className="text-vlabs-amber">{"★".repeat(Math.round(e.rating))}</span></li>
-                ))}
-              </ol>
-            </div>
-            <Section id="audience" title="Target Audience">{lab.audience}</Section>
-            <Section id="alignment" title="Course Alignment">{lab.courseAlignment}</Section>
-            <div id="feedback" className="bg-white border rounded p-4">
-              <h3 className="font-semibold mb-2">Feedback</h3>
-              <textarea rows={3} className="w-full border rounded p-2 text-sm" placeholder="Your feedback helps us improve this lab..." />
-              <button className="mt-2 bg-vlabs-blue text-white px-4 py-1.5 rounded text-sm">Submit</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </PageLayout>
-  );
-}
 
-function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+  const loc = useLocation();
+  // The experiment route renders its own copy of the shell.
+  if (loc.pathname.includes("/experiments/")) return <Outlet />;
+
+  const area = BROAD_AREAS.find((a) => a.slug === lab.area);
+
+  const nav: LabNavItem[] = PAGES.map((p) => ({
+    label: PAGE_LABELS[p],
+    to: "/labs/$labId",
+    params: { labId },
+    search: { page: p },
+    current: p === page,
+  }));
+
   return (
-    <div id={id}>
-      <h3 className="font-semibold text-base mb-2">{title}</h3>
-      <p className="text-muted-foreground">{children}</p>
-    </div>
+    <LabShell
+      crumbs={[
+        {
+          label: area?.name ?? lab.area,
+          to: "/broad-areas/$area",
+          params: { area: lab.area },
+        },
+        { label: lab.name },
+      ]}
+      nav={nav}
+    >
+      <div className="text-center fix-spacing">
+        <h2>{lab.name}</h2>
+      </div>
+
+      {page === "introduction" && <p>{lab.intro}</p>}
+      {page === "objective" && <p>{lab.objective}</p>}
+      {page === "audience" && <p>{lab.audience}</p>}
+      {page === "alignment" && <p>{lab.courseAlignment}</p>}
+
+      {page === "experiments" && (
+        <ol>
+          {lab.experiments.map((e) => (
+            <li key={e.id}>
+              <Link to="/labs/$labId/experiments/$expId" params={{ labId: lab.id, expId: e.id }}>
+                {e.name}
+              </Link>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {page === "feedback" && (
+        <>
+          <p>
+            Your feedback helps the lab authors improve this content. Tell us what worked and what
+            did not.
+          </p>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <textarea rows={5} className="form-control mb-3" placeholder="Your feedback…" />
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        </>
+      )}
+    </LabShell>
   );
 }

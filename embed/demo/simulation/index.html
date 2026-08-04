@@ -1,0 +1,141 @@
+<!doctype html>
+<!--
+  Replica of the inner simulator, same-origin inside iframe#fraDisabled.
+
+  Element ids match the live simulator exactly (#protonopiaBtn, #tritanopiaBtn,
+  #colorblindBtn, #imageCanvas, #imageFile, .image-thumbnail), because those are
+  the selectors the knowledge base entry targets. The filters use the same
+  colour matrices as the real experiment.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Open Sans', -apple-system, Segoe UI, Roboto, sans-serif;
+      margin: 0; padding: 18px; background: #fff; color: #212529;
+    }
+    h1 { font-size: 1.5rem; text-align: center; margin: 0 0 16px; }
+    .thumbnails-container { max-width: 560px; margin: 0 auto; }
+    .thumbnail-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+    .image-thumbnail {
+      aspect-ratio: 4/3; border-radius: 4px; cursor: pointer;
+      border: 3px solid transparent; transition: border-color .15s;
+    }
+    .image-thumbnail:hover { border-color: #adb5bd; }
+    .image-thumbnail.selected { border-color: #f0932b; }
+    #canvas { margin-top: 20px; text-align: center; }
+    #imageCanvas {
+      width: 320px; height: 240px; border-radius: 6px;
+      border: 1px solid #dee2e6; background: #f1f3f5;
+      display: inline-block;
+    }
+    #controls { margin-top: 14px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .v-button {
+      background: #3298CA; color: #fff; border: none; border-radius: 4px;
+      padding: 8px 16px; font-size: 14px; cursor: pointer;
+    }
+    .v-button:hover { background: #0B6493; }
+    .v-button.active { background: #f0932b; }
+    .file-row { margin-top: 22px; text-align: center; font-size: 14px; }
+    .empty { color: #868e96; font-size: 13px; text-align: center; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="v-collapsible-instruction-container v-instruction-container">
+    <div id="instruction-title" class="v-collapsible is-size-5">
+      Instructions for Using the Colour Blindness Simulator
+    </div>
+  </div>
+
+  <center><h1>Color Blindness Simulator</h1></center>
+
+  <div class="thumbnails-container">
+    <div class="thumbnail-row">
+      <div class="image-thumbnail" data-name="decor"       style="background:linear-gradient(135deg,#ff8c42,#ffd166)"></div>
+      <div class="image-thumbnail" data-name="indian-flag" style="background:linear-gradient(180deg,#ff9933 33%,#ffffff 33% 66%,#138808 66%)"></div>
+      <div class="image-thumbnail" data-name="holi"        style="background:linear-gradient(135deg,#ef476f,#ffd166)"></div>
+      <div class="image-thumbnail" data-name="paddy"       style="background:linear-gradient(135deg,#ffd166,#06d6a0)"></div>
+    </div>
+    <div class="thumbnail-row">
+      <div class="image-thumbnail" data-name="colorblind-test" style="background:radial-gradient(circle,#ef476f 0%,#06d6a0 60%,#118ab2 100%)"></div>
+      <div class="image-thumbnail" data-name="rainbow"      style="background:conic-gradient(from 0deg,#ef476f,#ffd166,#06d6a0,#118ab2,#7209b7,#ef476f)"></div>
+      <div class="image-thumbnail" data-name="elephant"     style="background:linear-gradient(135deg,#868e96,#495057)"></div>
+      <div class="image-thumbnail" data-name="trafficlight" style="background:linear-gradient(180deg,#dc2626 33%,#facc15 33% 66%,#16a34a 66%)"></div>
+    </div>
+  </div>
+
+  <div id="canvas">
+    <center><div id="imageCanvas"></div></center>
+    <p class="empty" id="empty">No image selected yet.</p>
+    <div id="controls">
+      <button class="v-button" id="protonopiaBtn">Protonopia</button>
+      <button class="v-button" id="tritanopiaBtn">Tritanopia</button>
+      <button class="v-button" id="colorblindBtn">Color Blind</button>
+    </div>
+  </div>
+
+  <div class="file-row">
+    <h3>Select an Image from Your System:</h3>
+    <input type="file" id="imageFile" accept="image/*">
+  </div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="f-protan"><feColorMatrix values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/></filter>
+      <filter id="f-tritan"><feColorMatrix values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/></filter>
+    </defs>
+  </svg>
+
+  <script>
+    var canvas = document.getElementById('imageCanvas');
+    var empty = document.getElementById('empty');
+    var picked = null;
+
+    document.querySelectorAll('.image-thumbnail').forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        document.querySelectorAll('.image-thumbnail').forEach(function (t) {
+          t.classList.remove('selected');
+        });
+        thumb.classList.add('selected');
+        picked = thumb;
+        canvas.style.background = thumb.style.background;
+        canvas.style.filter = 'none';
+        empty.textContent = 'Showing: ' + thumb.dataset.name + ' (normal vision)';
+        setActive(null);
+      });
+    });
+
+    function setActive(id) {
+      ['protonopiaBtn', 'tritanopiaBtn', 'colorblindBtn'].forEach(function (b) {
+        document.getElementById(b).classList.toggle('active', b === id);
+      });
+    }
+
+    function applyFilter(id, css, label) {
+      document.getElementById(id).addEventListener('click', function () {
+        // Deliberately does nothing visible with no image loaded -- exactly
+        // like the real simulator, which is why VLAILA's warning matters.
+        if (!picked) return;
+        canvas.style.filter = css;
+        empty.textContent = 'Showing: ' + picked.dataset.name + ' (' + label + ')';
+        setActive(id);
+      });
+    }
+
+    applyFilter('protonopiaBtn', 'url(#f-protan)', 'protanopia');
+    applyFilter('tritanopiaBtn', 'url(#f-tritan)', 'tritanopia');
+    applyFilter('colorblindBtn', 'grayscale(1)', 'total colour blindness');
+
+    document.getElementById('imageFile').addEventListener('change', function (e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      var url = URL.createObjectURL(file);
+      canvas.style.background = 'url(' + url + ') center/cover';
+      picked = { dataset: { name: file.name } };
+      empty.textContent = 'Showing: ' + file.name + ' (normal vision)';
+    });
+  </script>
+</body>
+</html>

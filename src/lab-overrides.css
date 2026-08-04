@@ -1,0 +1,83 @@
+/**
+ * Loaded last on lab-template routes, after Bootstrap 5 and vlabs-style.css.
+ *
+ * Same job as vlabs-overrides.css does for the portal: put back what
+ * Tailwind's preflight resets and the lab template never restores. The live
+ * lab pages load only Bootstrap 5 and their own stylesheet, so images, lists
+ * and containers sit at Bootstrap's defaults there.
+ */
+
+/* Tailwind emits a `.container` utility; Bootstrap 5's has no max-width to
+   override it with at every breakpoint. */
+.container,
+.container-fluid {
+  max-width: none;
+}
+
+/* Preflight sets `img { display: block; max-width: 100% }`. Bootstrap 5's
+   reboot only sets vertical-align, so the display change would survive. */
+img {
+  display: inline;
+}
+
+/* Preflight zeroes list padding and markers; Bootstrap 5's reboot sets only
+   margins, leaving content lists without their hanging indent. */
+.vlabs-page-content ul,
+.vlabs-page-content ol {
+  padding-left: 2rem;
+}
+.vlabs-page-content ul {
+  list-style: disc;
+}
+.vlabs-page-content ol {
+  list-style: decimal;
+}
+
+/*
+ * `markdown-body` is GitHub's class; the live pages pull it from their own
+ * bundle. These are the few rules the experiment text actually depends on.
+ */
+.markdown-body h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.markdown-body h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem;
+}
+.markdown-body p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.markdown-body pre {
+  background: #f6f8fa;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+.markdown-body code {
+  background: #f6f8fa;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+}
+.markdown-body table {
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.markdown-body table td,
+.markdown-body table th {
+  border: 1px solid #d0d7de;
+  padding: 6px 13px;
+}
+
+/* The template centres the experiment title above the body copy. */
+.fix-spacing {
+  margin-bottom: 1.5rem;
+}

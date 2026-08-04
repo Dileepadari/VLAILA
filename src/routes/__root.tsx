@@ -4,11 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import vlabsOverridesCss from "../vlabs-overrides.css?url";
+import labOverridesCss from "../lab-overrides.css?url";
 import { RoleProvider } from "@/lib/role";
 
 function NotFoundComponent() {
@@ -73,20 +76,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Virtual Labs AI Lab Assistant" },
-      { name: "description", content: "Virtual Labs AI Lab Assistant" },
-      { name: "author", content: "internal" },
-      { property: "og:title", content: "Virtual Labs AI Lab Assistant" },
-      { property: "og:description", content: "Virtual Labs AI Lab Assistant" },
+      { title: "VLAILA — Virtual Labs AI Lab Assistant" },
+      { name: "description", content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India." },
+      { name: "author", content: "Virtual Labs" },
+      { property: "og:title", content: "VLAILA — Virtual Labs AI Lab Assistant" },
+      { property: "og:description", content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@virtuallabs" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      /*
+       * Only what both templates share lives here. Virtual Labs runs two
+       * distinct designs -- the Bootstrap 3 portal at vlab.co.in and the
+       * Bootstrap 5 lab template at *.vlabs.ac.in -- whose grids and resets
+       * cannot coexist on one page, so RootShell picks a set per route.
+       */
+      { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: "/vl/fa/css/font-awesome.min.css" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: "/vl/images/favicon/favicon.ico" },
     ],
   }),
   shellComponent: RootShell,
@@ -95,13 +103,60 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+/**
+ * The vlab.co.in portal's own stylesheets, served verbatim from /vl/css.
+ * Tailwind is already linked ahead of these so that Bootstrap 3 wins on shared
+ * selectors and base elements; the overrides file then reconciles what
+ * Tailwind's preflight resets and Bootstrap never restores.
+ */
+function PortalStyles() {
+  return (
+    <>
+      <link rel="stylesheet" href="/vl/css/bootstrap.css" />
+      <link rel="stylesheet" href="/vl/css/main.css" />
+      <link rel="stylesheet" href="/vl/css/custom.css" />
+      <link rel="stylesheet" href="/vl/css/skdslider.css" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:400,400i,600,600i,700,700i,900,900i"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i"
+      />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" />
+      <link rel="stylesheet" href={vlabsOverridesCss} />
+    </>
+  );
+}
+
+/** The lab template's stylesheets, as served by any *.vlabs.ac.in lab. */
+function LabTemplateStyles() {
+  return (
+    <>
+      <link rel="stylesheet" href="/vlabs/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/vlabs/css/vlabs-style.css" />
+      <link rel="stylesheet" href="/vlabs/css/toast.css" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway&display=swap"
+      />
+      <link rel="stylesheet" href={labOverridesCss} />
+    </>
+  );
+}
+
 function RootShell({ children }: { children: React.ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isLabTemplate = pathname.startsWith("/labs/");
+
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        {isLabTemplate ? <LabTemplateStyles /> : <PortalStyles />}
       </head>
-      <body>
+      <body className="vlabs">
         {children}
         <Scripts />
       </body>

@@ -1,0 +1,442 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "energy-band-gap",
+  "lab_id": "basics-of-physics-iitk",
+  "title": "Energy Band Gap of a Semiconductor",
+  "origin": "https://bop-iitk.vlabs.ac.in",
+  "discipline": "Physical Sciences",
+  "institute": "IITK",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 50,
+  "aim": "To determine the energy band gap of a semiconductor by measuring the reverse saturation current of a PN junction diode as a function of temperature and extracting Eg from the slope of log10(Is) against 10^3/T.",
+  "learning_objectives": [
+    "Explain why the diode must be reverse biased for this measurement.",
+    "Linearise Is = A T^(3/2) exp(-Eg/kT) into a straight-line form and identify what the slope encodes.",
+    "Extract Eg from a measured slope and judge the result against known values for Ge and Si."
+  ],
+  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+
+  "prerequisites": [
+    {
+      "id": "band-theory",
+      "title": "Valence band, conduction band and the gap",
+      "why": "Eg is the quantity being measured; without band theory the number extracted has no physical meaning."
+    },
+    {
+      "id": "pn-junction",
+      "title": "PN junction under forward and reverse bias",
+      "why": "The entire method depends on reverse bias keeping currents small enough to avoid self-heating the junction."
+    },
+    {
+      "id": "log-plots",
+      "title": "Reading slopes from semi-log plots",
+      "why": "Eg comes out of the slope of a log-linear fit; a slope read off the wrong axes gives an Eg off by orders of magnitude."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-theory",
+      "order": 1,
+      "task": "Theory",
+      "title": "Read the theory and the working equation",
+      "detect": { "action": "navigate", "task": "Theory" },
+      "expected_dwell_seconds": 120,
+      "milestone": true,
+      "hints": {
+        "nudge": "Read Theory first — the whole experiment is a way of measuring one slope, and Theory tells you which slope.",
+        "specific": "Is = A T^(3/2) exp(-Eg/kT). Taking log10 and treating log T as roughly constant over a small temperature range gives log10(Is) = constant - 5.04 Eg x 10^3 / T. Plotting log10(Is) against 10^3/T therefore yields a straight line of slope -5.04 Eg."
+      },
+      "concept_ref": "saturation-current"
+    },
+    {
+      "id": "enable-power",
+      "order": 2,
+      "task": "Simulation",
+      "title": "Click Enable Power",
+      "requires": ["read-theory"],
+      "detect": { "action": "click", "selector": "#btn_main", "frame": "sim" },
+      "stuck_after_seconds": 30,
+      "hints": {
+        "nudge": "Start by enabling power to the apparatus.",
+        "specific": "The procedure begins with the Enable Power button. Nothing else in the simulator responds until it is on.",
+        "interactive": { "highlight": "#btn_main", "frame": "sim", "text": "Enable Power to begin." }
+      }
+    },
+    {
+      "id": "place-apparatus",
+      "order": 3,
+      "task": "Simulation",
+      "title": "Place the container, battery, ammeter and voltmeter",
+      "requires": ["enable-power"],
+      "detect": { "action": "click", "selector": "#container, #battery, #ammeter", "frame": "sim", "count": 3 },
+      "hints": {
+        "nudge": "Place each instrument on the board before wiring anything.",
+        "specific": "Click Place Container then the drawing box, then Battery, Ammeter and Voltmeter in turn — each is a two-click action: select the component, then click where it goes."
+      }
+    },
+    {
+      "id": "place-diode",
+      "order": 4,
+      "task": "Simulation",
+      "title": "Place the PN junction diode in the liquid bath",
+      "requires": ["place-apparatus"],
+      "detect": { "action": "click", "selector": "#img_therma, [id*='pn']", "frame": "sim" },
+      "hints": {
+        "nudge": "The diode goes inside the container, not on the open board.",
+        "specific": "Click the PN Junction button, then click on the liquid inside the container. The bath is what sets and holds the junction temperature — that is the independent variable of the whole experiment.",
+        "interactive": { "highlight": "#img_therma", "frame": "sim", "text": "Place the diode into the liquid bath." }
+      },
+      "concept": "The junction must sit in the bath so its temperature is known and uniform. A diode in open air is at an unknown temperature, which makes every current reading unusable."
+    },
+    {
+      "id": "complete-circuit",
+      "order": 5,
+      "task": "Simulation",
+      "title": "Add connection points and wire the circuit",
+      "requires": ["place-diode"],
+      "detect": { "action": "click", "selector": "#l1, [id^='lg']", "frame": "sim", "count": 4 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Add your connection points, then use Connect to wire them up.",
+        "specific": "Click Point and place connection points wherever a junction is needed, then Connect and click point-to-point to draw wires. Undo/Redo is there for wrong connections.",
+        "interactive": { "highlight": "#l1", "frame": "sim", "text": "Place connection points, then wire them." }
+      },
+      "concept": "The diode must end up reverse biased. In reverse bias the current is small, so the junction does not self-heat and the bath temperature is genuinely the junction temperature."
+    },
+    {
+      "id": "select-voltage",
+      "order": 6,
+      "task": "Simulation",
+      "title": "Select the reverse bias voltage",
+      "requires": ["complete-circuit"],
+      "detect": { "action": "select", "selector": "select", "frame": "sim" },
+      "hints": {
+        "nudge": "Choose your bias voltage from the dropdown.",
+        "specific": "Pick a reverse bias from the dropdown, then press the Click button to apply it. Keep the same voltage for every temperature — it must not vary across the run."
+      }
+    },
+    {
+      "id": "set-temperature",
+      "order": 7,
+      "task": "Simulation",
+      "title": "Set the bath temperature with the slider",
+      "requires": ["select-voltage"],
+      "detect": { "action": "change", "selector": "input[type='range']", "frame": "sim" },
+      "hints": {
+        "nudge": "Drag the slider to set your first temperature.",
+        "specific": "Set a temperature and allow the reading to settle. You need several well-spaced temperatures to define the line — clustered points give a slope with a large uncertainty."
+      },
+      "concept_ref": "temperature-dependence"
+    },
+    {
+      "id": "read-current",
+      "order": 8,
+      "task": "Simulation",
+      "title": "Read the reverse saturation current",
+      "requires": ["set-temperature"],
+      "detect": { "action": "click", "selector": "#current, #eg_button", "frame": "sim" },
+      "hints": {
+        "nudge": "Use Find Here to read the saturation current at this temperature.",
+        "specific": "Click Find Here to log Is for the current temperature. Each (T, Is) pair is one point on your final plot."
+      }
+    },
+    {
+      "id": "fill-observation-table",
+      "order": 9,
+      "task": "Simulation",
+      "title": "Repeat across the temperature range",
+      "requires": ["read-current"],
+      "detect": { "action": "click", "selector": "#current, #eg_button", "frame": "sim", "count": 6 },
+      "milestone": true,
+      "hints": {
+        "nudge": "Keep going — a slope from three points is not a measurement.",
+        "specific": "Repeat set-temperature then read-current until the observation table is filled. Spread the temperatures across the available range so the fitted line is well conditioned."
+      },
+      "concept": "The linearisation assumes log T is roughly constant over the range sampled. Too narrow a range makes the slope noisy; too wide and that assumption starts to break."
+    },
+    {
+      "id": "calculate-and-plot",
+      "order": 10,
+      "task": "Simulation",
+      "title": "Calculate data and draw the graph",
+      "requires": ["fill-observation-table"],
+      "detect": { "action": "click", "selector": "#calc_volt, #graph", "frame": "sim" },
+      "hints": {
+        "nudge": "Now compute the derived columns and plot.",
+        "specific": "Calculate Data produces 10^3/T and log10(Is), then Draw Graph plots them. You should see a straight line with negative slope."
+      }
+    },
+    {
+      "id": "find-slope",
+      "order": 11,
+      "task": "Simulation",
+      "title": "Find the slope from the plot",
+      "requires": ["calculate-and-plot"],
+      "detect": { "action": "click", "selector": "#eg_button, #hide_eg", "frame": "sim" },
+      "hints": {
+        "nudge": "Pick two well-separated points on the line for the slope.",
+        "specific": "Place the cursor on the plot to read the first and second coordinates, then click Find Slope. Choose points far apart along the fitted line, not two adjacent scattered data points.",
+        "interactive": { "highlight": "#eg_button", "frame": "sim", "text": "Find Slope." }
+      },
+      "concept": "Reading the slope between two adjacent data points measures the noise between them. Reading it across the full span measures the trend, which is what the physics is in."
+    },
+    {
+      "id": "compute-eg",
+      "order": 12,
+      "task": "Simulation",
+      "title": "Enter the slope and calculate Eg",
+      "requires": ["find-slope"],
+      "detect": { "action": "input", "selector": "#eg_value, #ip1", "frame": "sim" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Enter your slope and calculate — then sanity-check the answer.",
+        "specific": "Eg = |slope| / 5.04. Germanium should land near 0.7 eV and silicon near 1.1 eV. An answer far outside 0.5-1.5 eV usually means the slope was read off the wrong axes."
+      },
+      "concept": "The sanity check is part of the measurement. Knowing that Ge is 0.7 eV and Si is 1.1 eV lets you catch an axis or unit error immediately, rather than reporting a confident wrong number.",
+      "concept_ref": "band-gap"
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "action-before-power",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#container, #battery, #ammeter, #current",
+        "frame": "sim",
+        "unless_completed": ["enable-power"]
+      },
+      "message": "Power is not enabled yet, so the apparatus will not respond. Click Enable Power first.",
+      "correction_step": "enable-power"
+    },
+    {
+      "id": "read-before-circuit",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#current",
+        "frame": "sim",
+        "unless_completed": ["complete-circuit"]
+      },
+      "message": "The circuit is not complete, so there is no path for current. Any reading now would be zero regardless of temperature.",
+      "correction_step": "complete-circuit"
+    },
+    {
+      "id": "plot-with-few-points",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#graph",
+        "frame": "sim",
+        "unless_completed": ["fill-observation-table"]
+      },
+      "message": "You have only a few points so far. A slope fitted to two or three readings carries enormous uncertainty — collect more temperatures first.",
+      "correction_step": "fill-observation-table",
+      "confidence": 0.85
+    },
+    {
+      "id": "slope-before-plot",
+      "severity": "fatal",
+      "when": {
+        "action": "click",
+        "selector": "#eg_button",
+        "frame": "sim",
+        "unless_completed": ["calculate-and-plot"]
+      },
+      "message": "There is no plotted line to take a slope from yet. Run Calculate Data and Draw Graph first.",
+      "correction_step": "calculate-and-plot"
+    },
+    {
+      "id": "voltage-changed-mid-run",
+      "severity": "fatal",
+      "when": {
+        "action": "select",
+        "selector": "select",
+        "frame": "sim",
+        "after_completed": ["read-current"]
+      },
+      "message": "Changing the bias voltage partway through invalidates the readings already taken. Every point in the table must share the same reverse bias.",
+      "correction_step": "fill-observation-table",
+      "concept": "Is depends on bias as well as temperature. Mixing bias values means the plot no longer isolates the temperature dependence, and the slope stops corresponding to Eg."
+    },
+    {
+      "id": "sim-before-theory",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Simulation",
+        "unless_completed": ["read-theory"]
+      },
+      "message": "This one really needs the Theory first — without the linearised equation, the graph at the end is just a line with no interpretation.",
+      "correction_step": "read-theory",
+      "confidence": 0.9
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "band-gap",
+      "name": "Energy band gap",
+      "summary": "The energy separation between the top of the valence band and the bottom of the conduction band. Insulators run roughly 3-7 eV; semiconductors are far smaller, with germanium at about 0.7 eV and silicon at about 1.1 eV."
+    },
+    {
+      "id": "saturation-current",
+      "name": "Reverse saturation current",
+      "summary": "Under reverse bias the current is carried by thermally generated minority carriers and follows Is = A T^(3/2) exp(-Eg/kT). Its exponential temperature dependence is what makes Eg measurable from a slope."
+    },
+    {
+      "id": "temperature-dependence",
+      "name": "Why conductivity rises with temperature",
+      "summary": "At low temperature few carriers are available. Raising temperature promotes carriers across the gap and activates donor/acceptor levels. Mobility falls somewhat with temperature, but the increase in carrier count dominates, so conductivity rises overall."
+    },
+    {
+      "id": "linearisation",
+      "name": "Linearising the exponential",
+      "summary": "Taking log10 of the saturation-current relation and treating log T as constant over a small range gives log10(Is) = constant - 5.04 Eg x 10^3/T. Plotting log10(Is) against 10^3/T gives a straight line whose slope is -5.04 Eg."
+    },
+    {
+      "id": "reverse-bias-rationale",
+      "name": "Why reverse bias",
+      "summary": "In reverse bias the currents are small, so internal heating of the junction does not occur. The junction temperature therefore equals the bath temperature, which is the only reason the independent variable is trustworthy."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "A forward-biased diode would work too and give bigger, easier readings.",
+      "correction": "Forward currents self-heat the junction, so its temperature no longer matches the bath. The independent variable becomes unknown and the extracted Eg is wrong."
+    },
+    {
+      "belief": "Conductivity rises with temperature because carriers move faster.",
+      "correction": "Mobility actually falls with temperature. Conductivity rises because far more carriers are thermally promoted across the gap, and that increase dominates."
+    },
+    {
+      "belief": "Any two points on the graph give the slope.",
+      "correction": "Adjacent points mostly measure noise. Use well-separated points along the fitted line so the slope reflects the trend."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-bands",
+      "heading": "Energy gap in insulators and semiconductors",
+      "text": "In insulators the region between the highest level of the completely filled valence band and the lowest level of the allowed conduction band is very wide. This is called the energy gap, denoted Eg, and is about 3 eV to 7 eV in insulators. In semiconductors this energy gap is quite small: for germanium Eg = 0.7 eV and for silicon Eg = 1.1 eV.",
+      "tags": ["band gap", "insulator", "semiconductor", "germanium", "silicon"],
+      "source": "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/theory.html"
+    },
+    {
+      "id": "tc-temperature",
+      "heading": "Temperature dependence of conductivity",
+      "text": "In semiconductors at low temperatures there are few charge carriers available to move, so conductivity is quite low. At higher temperatures the donor or acceptor levels come into action and provide charge carriers, so conduction increases. Conductivity also depends on carrier mobility, which decreases somewhat with increasing temperature, but on average the conductivity of semiconductors rises with increasing temperature. To determine the energy gap of a semiconducting material we therefore study the variation of its conductance with temperature.",
+      "tags": ["temperature", "conductivity", "mobility", "carriers"],
+      "source": "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/theory.html"
+    },
+    {
+      "id": "tc-reverse-bias",
+      "heading": "Why reverse bias is used",
+      "text": "In reverse bias the currents flowing through the junction are quite small and internal heating of the junction does not take place. The saturated value of the reverse current for a PN junction diode is given by Is = A T^(3/2) exp(-Eg/kT), where A is a constant, Is is the saturation current in microamperes, T is the junction temperature in kelvin, Eg is the band gap in eV, and k is the Boltzmann constant in eV per kelvin.",
+      "tags": ["reverse bias", "saturation current", "equation", "self heating"],
+      "source": "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/theory.html"
+    },
+    {
+      "id": "tc-linearisation",
+      "heading": "Extracting Eg from a straight line",
+      "text": "For small changes in temperature, where log T can be treated as constant, the saturation current relation can be written as log10(Is) = constant - 5.04 Eg x 10^3 / T. A graph with 10^3/T as abscissa and log10(Is) as ordinate is therefore a straight line, and the band gap follows from the magnitude of the slope as Eg = |slope| / 5.04.",
+      "tags": ["graph", "slope", "linearisation", "calculation"],
+      "source": "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/theory.html"
+    },
+    {
+      "id": "tc-procedure",
+      "heading": "Simulator procedure",
+      "text": "Click Enable Power. Click Place Container and then click the drawing box, then place the Battery, Ammeter and Voltmeter the same way. Click PN Junction and then click on the liquid inside the container. Use Point to add connection points and Connect to join them, with Undo/Redo available for wrong connections. Select the voltage from the dropdown and press Click. Drag the slider to choose a temperature and press Find Here to get the reverse saturation current. Repeat to complete the observation table, then Calculate Data, Draw Graph, read two coordinates from the plot, Find Slope, enter the slope, and Calculate to obtain the energy band gap.",
+      "tags": ["procedure", "steps", "simulator", "slope"],
+      "source": "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/procedure.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "Why is the diode operated in reverse bias for this experiment?",
+      "options": [
+        "Reverse currents are larger and easier to measure",
+        "Reverse currents are small, so the junction does not self-heat and its temperature matches the bath",
+        "The diode is damaged by forward bias",
+        "Forward bias gives no temperature dependence"
+      ],
+      "answer_index": 1,
+      "explanation": "Self-heating would decouple the junction temperature from the bath temperature, making the independent variable unknown.",
+      "concept_ref": "reverse-bias-rationale",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q2",
+      "question": "Approximately what is the band gap of silicon?",
+      "options": ["0.1 eV", "0.7 eV", "1.1 eV", "5.0 eV"],
+      "answer_index": 2,
+      "explanation": "Silicon is about 1.1 eV; germanium is about 0.7 eV. Values in the 3-7 eV range indicate an insulator.",
+      "concept_ref": "band-gap",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "question": "What is plotted on each axis to obtain a straight line?",
+      "options": [
+        "Is against T",
+        "log10(Is) against 10^3/T",
+        "Is against 1/T^2",
+        "log10(T) against Is"
+      ],
+      "answer_index": 1,
+      "explanation": "The linearised form is log10(Is) = constant - 5.04 Eg x 10^3/T, so those axes give a straight line of slope -5.04 Eg.",
+      "concept_ref": "linearisation",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q4",
+      "question": "Your fitted line has a slope of magnitude 3.5. What is Eg?",
+      "options": ["0.69 eV", "1.76 eV", "3.5 eV", "17.6 eV"],
+      "answer_index": 0,
+      "explanation": "Eg = |slope| / 5.04 = 3.5 / 5.04 = 0.69 eV — consistent with germanium.",
+      "concept_ref": "linearisation",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "Conductivity of a semiconductor rises with temperature primarily because",
+      "options": [
+        "Carrier mobility increases",
+        "The band gap widens",
+        "Many more carriers are thermally promoted across the gap, outweighing the fall in mobility",
+        "Resistance is independent of temperature"
+      ],
+      "answer_index": 2,
+      "explanation": "Mobility actually decreases with temperature. The exponential growth in carrier concentration dominates, so net conductivity rises.",
+      "concept_ref": "temperature-dependence",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "q6",
+      "question": "You change the reverse bias voltage halfway through collecting the table. What is the consequence?",
+      "options": [
+        "Nothing, since Is is voltage-independent in saturation",
+        "The plot no longer isolates temperature dependence, so the slope no longer corresponds to Eg",
+        "The graph shifts but the slope is unaffected",
+        "Only the last point is affected"
+      ],
+      "answer_index": 1,
+      "explanation": "Every point must share the same bias for the plot to isolate the temperature dependence. Mixing bias values corrupts the slope and hence Eg.",
+      "concept_ref": "saturation-current",
+      "difficulty": "advanced"
+    }
+  ],
+
+  "references": [
+    "Kittel, C. Introduction to Solid State Physics.",
+    "Streetman, B. G. & Banerjee, S. Solid State Electronic Devices.",
+    "https://bop-iitk.vlabs.ac.in/exp/energy-band-gap/"
+  ]
+}

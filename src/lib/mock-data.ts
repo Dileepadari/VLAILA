@@ -1,22 +1,89 @@
 export type Role = "guest" | "student" | "faculty" | "admin";
 
+/**
+ * The ten broad areas, in the exact order and wording the live site lists them,
+ * with its own slugs. Lab counts are the real figures from each area page.
+ */
 export const BROAD_AREAS = [
-  { slug: "computer-science", name: "Computer Science & Engineering", color: "#0B6493", labs: 14 },
-  { slug: "electronics", name: "Electronics & Communications", color: "#3298CA", labs: 11 },
-  { slug: "electrical", name: "Electrical Engineering", color: "#1E88A8", labs: 9 },
-  { slug: "mechanical", name: "Mechanical Engineering", color: "#0E7C9C", labs: 8 },
-  { slug: "civil", name: "Civil Engineering", color: "#2E6E8C", labs: 7 },
-  { slug: "chemical", name: "Chemical Engineering", color: "#16607E", labs: 6 },
-  { slug: "biotech", name: "Biotechnology and Biomedical Engineering", color: "#3FA37A", labs: 10 },
-  { slug: "physical", name: "Physical Sciences", color: "#7E5BB0", labs: 8 },
-  { slug: "chemical-sciences", name: "Chemical Sciences", color: "#B05B7E", labs: 7 },
-  { slug: "design", name: "Design Engineering", color: "#C97A3A", labs: 5 },
+  { slug: "electronics-and-communications", name: "Electronics & Communications", labs: 32 },
+  { slug: "computer-science-and-engineering", name: "Computer Science & Engineering", labs: 43 },
+  { slug: "electrical-engineering", name: "Electrical Engineering", labs: 30 },
+  { slug: "mechanical-engineering", name: "Mechanical Engineering", labs: 24 },
+  { slug: "chemical-engineering", name: "Chemical Engineering", labs: 12 },
+  { slug: "biotechnology-and-biomedical-engineering", name: "Biotechnology and Biomedical Engineering", labs: 21 },
+  { slug: "civil-engineering", name: "Civil Engineering", labs: 17 },
+  { slug: "physical-sciences", name: "Physical Sciences", labs: 25 },
+  { slug: "chemical-sciences", name: "Chemical Sciences", labs: 15 },
+  { slug: "design-engineering", name: "Design Engineering", labs: 8 },
+];
+
+/** Participating institutes, in the order the live carousel shows them. */
+/** `img` names the crest file under public/vl/Inst_logo, as on the live site. */
+export const INSTITUTES = [
+  { name: "IIT KHARAGPUR", short: "IITKGP", img: "iit-kharagpur.png" },
+  { name: "IIT ROORKEE", short: "IITR", img: "iit-roorkee.jpg" },
+  { name: "IIT GUWAHATI", short: "IITG", img: "iit-guwahati.png" },
+  { name: "IIT DELHI", short: "IITD", img: "iit-delhi.png" },
+  { name: "IIT BOMBAY", short: "IITB", img: "iit-bombay.png" },
+  { name: "IIT KANPUR", short: "IITK", img: "iit-kanpur.png" },
+  { name: "IIIT HYDERABAD", short: "IIITH", img: "iiit-hyderabad.png" },
+  { name: "AMRITA VISHWA VIDYAPEETHAM", short: "AMRITA", img: "amrita-vishwa-vidyapeetham.png" },
+  { name: "DAYALBAGH EDUCATIONAL INSTITUTE", short: "DEI", img: "dayabagh-university.jpg" },
+  { name: "NITK SURATHKAL", short: "NITK", img: "nit-surathkal.png" },
+  { name: "COEP TECHNOLOGICAL UNIVERSITY PUNE", short: "COEP", img: "coe-pune-logo.png" },
+];
+
+/** Verbatim from the live homepage. */
+export const TESTIMONIALS = [
+  {
+    quote:
+      "One of the primary advantages associated with the utilization of Virtual Laboratory is the ability for students to engage in self-paced learning. This technology facilitates students in engaging in studying, preparing for, and doing laboratory experiments at their own convenience, regardless of time and location.",
+    by: "Dr Mohd Zubair Ansari",
+    org: "National Institute of Technology Srinagar",
+  },
+  {
+    quote:
+      "Virtual Labs are implemented in USAR, GGSIPU and are useful in understanding the theories and concepts of science or other subjects that cannot be studied alone only by textbooks. It has the great potential to enhance actual laboratory experiences. Furthermore, the best progressive learning and performance for real experiments appears when the virtual laboratory preceded paper-based practical experiments.",
+    by: "Dr. Khyati Chopra",
+    org: "USAR, GGSIPU",
+  },
+  {
+    quote:
+      "Virtual Labs is the knowledge seed for the students of the science and technology domain. Such an astonishing platform would enlighten the learning path of the students before they move to the real lab for the experiments. The students may realize the look and feel of the real lab and optimize the efforts, time, and funds involved in performing the real labs. The best part of Virtual Labs is to use it with personal comfort and convenience.",
+    by: "Dr. Pankaj K. Goswami",
+    org: "Amity University Uttar Pradesh, Lucknow",
+  },
+  {
+    quote:
+      "Virtual lab is a platform which provides an opportunity to understand the theoretical concept in very easy way with the help of simulator. Pretest and post-test feature provided make the self-assessment part easy for the students. This platform provides a wide range of experiments covering almost all kind of domain and it is very beneficial for the students.",
+    by: "Radheshyam Acholia",
+    org: "Chameli Devi Group of Institution, Indore",
+  },
+];
+
+/** Verbatim from the live homepage's announcements panel. */
+export const ANNOUNCEMENTS = [
+  {
+    text: "* Various projects/ICT initiatives of the Ministry of Education are available on the link given here. Please click here for more details.",
+    href: "https://www.education.gov.in/hi/ict-initiatives",
+    isNew: false,
+  },
+  {
+    text: "* Please click here to see the tutorial for using the Flash-based Labs through Virtual Box.",
+    href: "#flash-tutorial",
+    isNew: false,
+  },
+  {
+    text: "Find the Expression of Interest (EoI) 2026 to enroll as the Virtual Labs' Nodal Center at your institute.",
+    href: "#eoi-2026",
+    isNew: true,
+  },
 ];
 
 export const LABS = [
   {
     id: "psychological-process",
-    area: "computer-science",
+    area: "computer-science-and-engineering",
     institute: "IIIT HYDERABAD",
     name: "Psychological Process and Application in Everyday Life",
     intro: "An interdisciplinary lab exploring perception, cognition and behavior through interactive experiments.",
@@ -35,7 +102,7 @@ export const LABS = [
   },
   {
     id: "drone-tech",
-    area: "design",
+    area: "design-engineering",
     institute: "IIT DELHI",
     name: "Drone Technology Lab",
     intro: "Hands-on virtual experiments on UAV mechanics, control, and applications.",
@@ -50,7 +117,7 @@ export const LABS = [
   },
   {
     id: "vr-lab",
-    area: "design",
+    area: "design-engineering",
     institute: "IIT DELHI",
     name: "Virtual Reality (VR) Laboratory",
     intro: "Explore immersive computing concepts and stereoscopic rendering.",

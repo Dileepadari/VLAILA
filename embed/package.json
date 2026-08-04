@@ -1,0 +1,18 @@
+{
+  "name": "vlaila-embed",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zero-config VLAILA widget for Virtual Labs experiment pages",
+  "type": "module",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --dev --watch",
+    "typecheck": "tsc --noEmit",
+    "demo": "node build.mjs --dev && npx --yes serve demo -p 4173"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "typescript": "^7.0.2"
+  }
+}

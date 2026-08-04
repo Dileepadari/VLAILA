@@ -1,0 +1,46 @@
+# VLAILA local development stack.
+#
+#   docker compose up
+#
+# Brings up Postgres and the API. The API also runs standalone against SQLite
+# with no compose file at all -- see server/README.md.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: vlaila
+      POSTGRES_PASSWORD: vlaila
+      POSTGRES_DB: vlaila
+    ports:
+      - "5432:5432"
+    volumes:
+      - vlaila-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vlaila"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VLAILA_DATABASE_URL: postgresql+psycopg://vlaila:vlaila@db:5432/vlaila
+      # Defaults to the offline reasoning tier so the stack runs with no
+      # credentials. Set these to turn the model tier on.
+      VLAILA_LLM_PROVIDER: ${VLAILA_LLM_PROVIDER:-offline}
+      VLAILA_ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      VLAILA_MODEL_REASONING: ${VLAILA_MODEL_REASONING:-claude-opus-5}
+    ports:
+      - "8000:8000"
+    volumes:
+      # Live-reload the knowledge base without rebuilding the image.
+      - ./kb:/srv/kb:ro
+
+volumes:
+  vlaila-pgdata:

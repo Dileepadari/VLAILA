@@ -1,0 +1,465 @@
+{
+  "kb_version": "1.0",
+  "experiment_id": "colour-blindness",
+  "lab_id": "psychological-process",
+  "title": "Colour Blindness: How colour-blind population perceive/see colours",
+  "origin": "https://pp-iiith.vlabs.ac.in",
+  "discipline": "Design Engineering",
+  "institute": "IIITH",
+  "reviewed_by": "VLAILA authoring team",
+  "reviewed_on": "2026-08-03",
+  "estimated_minutes": 25,
+  "aim": "To simulate and understand how individuals with different forms of colour vision deficiency (CVD) perceive everyday images, and to draw design conclusions about accessible use of colour.",
+  "learning_objectives": [
+    "Distinguish protanopia, tritanopia and achromatopsia by their perceptual signature.",
+    "Predict which colour pairs collapse under each form of CVD.",
+    "Apply the finding to interface and signage design so information is never carried by hue alone."
+  ],
+  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+
+  "prerequisites": [
+    {
+      "id": "trichromacy",
+      "title": "Basic trichromatic colour vision",
+      "why": "Without knowing that normal vision uses three cone types, the simulator's transformations look arbitrary rather than mechanistic."
+    }
+  ],
+
+  "steps": [
+    {
+      "id": "read-aim",
+      "order": 1,
+      "task": "Aim",
+      "title": "Read the aim",
+      "description": "Understand what the experiment is asking you to observe.",
+      "detect": { "action": "navigate", "task": "Aim" },
+      "expected_dwell_seconds": 15,
+      "hints": {
+        "nudge": "Take a moment with the Aim — it tells you what to look for in the simulator.",
+        "specific": "The Aim section frames the whole experiment: you are comparing how the same image reads to different types of colour vision."
+      }
+    },
+    {
+      "id": "read-theory",
+      "order": 2,
+      "task": "Theory",
+      "title": "Read the theory on cone types and CVD",
+      "description": "Cover trichromacy and the three deficiency types before simulating.",
+      "detect": { "action": "navigate", "task": "Theory" },
+      "expected_dwell_seconds": 60,
+      "milestone": true,
+      "hints": {
+        "nudge": "Worth reading the Theory first — the simulator makes far more sense once you know which cone each mode removes.",
+        "specific": "Theory covers the three cone types (L/M/S) and maps each deficiency to a missing or shifted cone. Protanopia = L-cone (red), deuteranopia = M-cone (green), tritanopia = S-cone (blue)."
+      },
+      "concept_ref": "cone-types"
+    },
+    {
+      "id": "take-pretest",
+      "order": 3,
+      "task": "Pretest",
+      "title": "Attempt the pretest",
+      "description": "Establish a baseline before simulating.",
+      "optional": true,
+      "detect": { "action": "navigate", "task": "Pretest" },
+      "hints": {
+        "nudge": "The pretest is a quick baseline — no penalty for getting it wrong now.",
+        "specific": "Answer from what you remember; the point is to compare against your posttest score afterwards."
+      }
+    },
+    {
+      "id": "open-simulator",
+      "order": 4,
+      "task": "Simulation",
+      "title": "Open the simulator",
+      "requires": ["read-theory"],
+      "detect": { "action": "navigate", "task": "Simulation" },
+      "hints": {
+        "nudge": "Head to the Simulation tab when you are ready to experiment.",
+        "specific": "Open the Simulation tab from the left navigation. The simulator loads inside the page."
+      }
+    },
+    {
+      "id": "select-image",
+      "order": 5,
+      "task": "Simulation",
+      "title": "Select an image from the gallery",
+      "description": "Click any thumbnail to load it onto the canvas in normal vision.",
+      "requires": ["open-simulator"],
+      "detect": { "action": "click", "selector": ".image-thumbnail", "frame": "sim" },
+      "stuck_after_seconds": 40,
+      "hints": {
+        "nudge": "Pick one of the images above to get started.",
+        "specific": "Click any thumbnail in the gallery. The image loads onto the canvas showing normal colour vision — that is your reference before you apply any filter.",
+        "interactive": {
+          "highlight": ".thumbnail-row .image-thumbnail",
+          "frame": "sim",
+          "text": "Click any of these thumbnails to load it onto the canvas."
+        }
+      },
+      "concept": "The unfiltered image is your control condition. Without it you have nothing to compare the transformed image against, and the whole comparison collapses."
+    },
+    {
+      "id": "observe-normal",
+      "order": 6,
+      "task": "Simulation",
+      "title": "Study the image in normal vision",
+      "description": "Note which colours carry meaning before you filter them.",
+      "requires": ["select-image"],
+      "detect": { "action": "dwell", "selector": "#imageCanvas", "frame": "sim" },
+      "expected_dwell_seconds": 8,
+      "optional": true,
+      "hints": {
+        "nudge": "Before switching modes — which colours in this image are actually carrying information?",
+        "specific": "Look at the image as it is now and note the colour pairs doing the work: red vs green in traffic lights, the saffron/green bands of a flag, the dots in an Ishihara plate. Those are the pairs to watch when you filter."
+      }
+    },
+    {
+      "id": "apply-protanopia",
+      "order": 7,
+      "task": "Simulation",
+      "title": "Apply the Protanopia filter",
+      "description": "See the image as someone with red-cone deficiency does.",
+      "requires": ["select-image"],
+      "detect": { "action": "click", "selector": "#protonopiaBtn", "frame": "sim" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Try the Protanopia button and watch what happens to the reds.",
+        "specific": "Click 'Protonopia'. Reds darken sharply and drift toward olive/brown, because the long-wavelength cone that would register them is missing.",
+        "interactive": {
+          "highlight": "#protonopiaBtn",
+          "frame": "sim",
+          "text": "This one — it simulates red-cone deficiency."
+        }
+      },
+      "concept": "Protanopia removes the L-cone, so the visual system loses the signal that separates red from green. Reds also lose apparent brightness — a red warning light can read as near-black.",
+      "concept_ref": "protanopia"
+    },
+    {
+      "id": "apply-tritanopia",
+      "order": 8,
+      "task": "Simulation",
+      "title": "Apply the Tritanopia filter",
+      "requires": ["select-image"],
+      "detect": { "action": "click", "selector": "#tritanopiaBtn", "frame": "sim" },
+      "hints": {
+        "nudge": "Now try Tritanopia — it affects a completely different part of the spectrum.",
+        "specific": "Click 'Tritanopia'. Blues and yellows collapse toward each other while reds and greens stay largely intact. This is the rarest form of CVD.",
+        "interactive": {
+          "highlight": "#tritanopiaBtn",
+          "frame": "sim",
+          "text": "Tritanopia — blue-cone deficiency."
+        }
+      },
+      "concept": "Tritanopia removes the S-cone. The blue–yellow axis collapses while the red–green axis survives, which is why it looks so different from protanopia on the same image.",
+      "concept_ref": "tritanopia"
+    },
+    {
+      "id": "apply-achromatopsia",
+      "order": 9,
+      "task": "Simulation",
+      "title": "Apply total colour blindness",
+      "requires": ["select-image"],
+      "detect": { "action": "click", "selector": "#colorblindBtn", "frame": "sim" },
+      "milestone": true,
+      "hints": {
+        "nudge": "The third button shows total colour blindness — the strongest test of your design.",
+        "specific": "Click 'Color Blind' for achromatopsia: all hue is gone and only luminance remains. If information survives this view, it survives every form of CVD.",
+        "interactive": {
+          "highlight": "#colorblindBtn",
+          "frame": "sim",
+          "text": "Total colour blindness — the grayscale stress test."
+        }
+      },
+      "concept": "Achromatopsia leaves only luminance. It is the strictest accessibility check there is: anything still legible here is legible to every colour-vision type.",
+      "concept_ref": "achromatopsia"
+    },
+    {
+      "id": "upload-own",
+      "order": 10,
+      "task": "Simulation",
+      "title": "Upload your own image",
+      "description": "Test something you designed or use daily.",
+      "requires": ["apply-protanopia"],
+      "optional": true,
+      "detect": { "action": "upload", "selector": "#imageFile", "frame": "sim" },
+      "hints": {
+        "nudge": "Try it on one of your own images — a slide, a chart, an app screenshot.",
+        "specific": "Use the file picker under 'Select an Image from Your System', then re-apply each filter. Charts and dashboards are where this bites hardest.",
+        "interactive": {
+          "highlight": "#imageFile",
+          "frame": "sim",
+          "text": "Pick an image from your computer here."
+        }
+      }
+    },
+    {
+      "id": "take-posttest",
+      "order": 11,
+      "task": "Posttest",
+      "title": "Complete the posttest",
+      "requires": ["apply-protanopia"],
+      "detect": { "action": "navigate", "task": "Posttest" },
+      "milestone": true,
+      "hints": {
+        "nudge": "Ready to check your understanding? The posttest is three quick questions.",
+        "specific": "Open the Posttest tab. It asks you to identify transformed images and match each button to its deficiency — all of which you have now seen directly."
+      }
+    }
+  ],
+
+  "errors": [
+    {
+      "id": "mode-before-image",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#protonopiaBtn, #tritanopiaBtn, #colorblindBtn",
+        "frame": "sim",
+        "unless_completed": ["select-image"]
+      },
+      "message": "Pick an image first — there is nothing on the canvas for the filter to transform yet.",
+      "correction_step": "select-image",
+      "concept": "The filter is a per-pixel transform of whatever is currently on the canvas. With an empty canvas the button appears to do nothing, which reads as a broken simulator rather than a missing step."
+    },
+    {
+      "id": "no-normal-baseline",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#protonopiaBtn, #tritanopiaBtn, #colorblindBtn",
+        "frame": "sim",
+        "after_completed": ["select-image"],
+        "unless_completed": ["observe-normal"],
+        "idle_seconds": 0
+      },
+      "message": "You filtered straight away — glance at the unfiltered image first so you have something to compare against.",
+      "correction_step": "observe-normal",
+      "confidence": 0.7
+    },
+    {
+      "id": "filter-thrashing",
+      "severity": "recoverable",
+      "when": {
+        "action": "click",
+        "selector": "#protonopiaBtn, #tritanopiaBtn, #colorblindBtn",
+        "frame": "sim",
+        "repeat_count": 6
+      },
+      "message": "You are cycling through the modes quickly. Try holding on one and naming exactly which two colours have merged — that is the observation the posttest asks for.",
+      "correction_step": "observe-normal",
+      "confidence": 0.75
+    },
+    {
+      "id": "sim-before-theory",
+      "severity": "recoverable",
+      "when": {
+        "action": "navigate",
+        "on_task": "Simulation",
+        "unless_completed": ["read-theory"]
+      },
+      "message": "You skipped the Theory. The simulator still works, but the transformations will look like arbitrary colour shifts rather than specific missing cones.",
+      "correction_step": "read-theory",
+      "confidence": 0.9
+    },
+    {
+      "id": "posttest-without-simulating",
+      "severity": "fatal",
+      "when": {
+        "action": "navigate",
+        "on_task": "Posttest",
+        "unless_completed": ["apply-protanopia"]
+      },
+      "message": "The posttest asks you to identify a protanopic version of an image. You have not run the simulator yet — go back to Simulation first.",
+      "correction_step": "apply-protanopia"
+    }
+  ],
+
+  "concepts": [
+    {
+      "id": "cone-types",
+      "name": "Three cone types",
+      "summary": "Normal colour vision (trichromacy) uses L-, M- and S-cones, peaking in long, medium and short wavelengths. Every form of colour vision deficiency is one of these being absent, non-functional, or spectrally shifted."
+    },
+    {
+      "id": "protanopia",
+      "name": "Protanopia",
+      "summary": "Absence of the L-cone. Red–green discrimination fails and reds lose apparent brightness, so a red indicator can read as dark grey rather than as a warning."
+    },
+    {
+      "id": "deuteranopia",
+      "name": "Deuteranomaly / Deuteranopia",
+      "summary": "M-cone deficiency, the most common form. Affects roughly 6% of men. Red–green confusion again, but with reds retaining more of their brightness than in protanopia."
+    },
+    {
+      "id": "tritanopia",
+      "name": "Tritanopia",
+      "summary": "S-cone deficiency, extremely rare. Collapses the blue–yellow axis while leaving red–green discrimination intact."
+    },
+    {
+      "id": "achromatopsia",
+      "name": "Achromatopsia",
+      "summary": "Total colour blindness: only luminance survives. Serves as the strictest possible accessibility test for any visual design."
+    },
+    {
+      "id": "redundant-coding",
+      "name": "Redundant encoding",
+      "summary": "The design principle that follows from all of this: never let colour be the sole carrier of information. Pair it with shape, position, label or texture so meaning survives any CVD."
+    }
+  ],
+
+  "common_misconceptions": [
+    {
+      "belief": "Colour-blind people see the world in greyscale.",
+      "correction": "Only achromatopsia is greyscale, and it is very rare. The common forms confuse specific colour pairs while leaving the rest of the spectrum largely intact."
+    },
+    {
+      "belief": "Colour blindness affects men and women equally.",
+      "correction": "The common red–green forms are X-linked recessive, so they are far more frequent in men — around 8% versus 0.5%."
+    },
+    {
+      "belief": "Using a darker red fixes red–green confusion.",
+      "correction": "Changing lightness can help, but the reliable fix is redundant encoding: add a shape, label or pattern so hue is not the only signal."
+    }
+  ],
+
+  "theory_chunks": [
+    {
+      "id": "tc-prevalence",
+      "heading": "Prevalence of colour vision deficiency",
+      "text": "Colour blindness, also known as colour vision deficiency (CVD), affects roughly 1 in 12 men (8%) and 1 in 200 women (0.5%) globally. In India the figures are about 8% of men and 0.4% of women. That amounts to around 300 million people worldwide living with some form of CVD.",
+      "tags": ["prevalence", "statistics", "india"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/theory.html"
+    },
+    {
+      "id": "tc-trichromacy",
+      "heading": "How colour vision works",
+      "text": "Normal colour vision uses all three types of light-sensitive cone correctly, and is known as trichromacy. The three cone types are sensitive to long (L, red), medium (M, green) and short (S, blue) wavelengths. Colour blindness occurs when one type of cone does not work correctly, is spectrally shifted, or is absent entirely. The brain then receives a reduced or missing signal along one axis of colour space, and colours that differ only along that axis become indistinguishable.",
+      "tags": ["cones", "trichromacy", "mechanism"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/theory.html"
+    },
+    {
+      "id": "tc-types",
+      "heading": "The three main types of CVD",
+      "text": "Protanomaly and protanopia involve trouble seeing shades of red clearly, caused by an anomalous or absent L-cone. Deuteranomaly and deuteranopia involve trouble seeing shades of green, caused by an anomalous or absent M-cone; this is the most common form. Tritanomaly and tritanopia involve trouble seeing shades of blue, caused by an anomalous or absent S-cone, and are extremely rare. Achromatopsia, total colour blindness, leaves only shades of grey.",
+      "tags": ["protanopia", "deuteranopia", "tritanopia", "types"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/theory.html"
+    },
+    {
+      "id": "tc-simulator-buttons",
+      "heading": "What each simulator button does",
+      "text": "The simulator provides three transformation buttons. Protanopia simulates how the image appears to someone with red-colour blindness. Tritanopia simulates how the image appears to someone with blue-colour blindness. Color Blind simulates total colour blindness, showing the image in shades of grey. Each button re-renders whatever image is currently loaded on the canvas; the transformation applies to the loaded image only.",
+      "tags": ["simulator", "buttons", "procedure"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/simulation.html"
+    },
+    {
+      "id": "tc-procedure",
+      "heading": "Using the simulator",
+      "text": "Choose an image by clicking any thumbnail in the gallery. The selected image is displayed in its original form, as it would appear to someone with normal vision. Click one of the three colour blindness buttons to see how the image would appear under that deficiency. You may also upload your own image from your computer and repeat the process. The Try Again button reloads the simulator so you can start over with a different image.",
+      "tags": ["procedure", "steps", "upload"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/simulation/index.html"
+    },
+    {
+      "id": "tc-design",
+      "heading": "Why this matters for design",
+      "text": "Colours are an effective mode of communication that influence perception and emotion, so designs that rely on hue alone exclude a significant fraction of users. Understanding CVD helps in coming up with designs that can be used by all, ensuring equal usability and engagement. The practical rule is redundant encoding: pair every colour distinction with a second cue such as shape, position, label, or texture.",
+      "tags": ["design", "accessibility", "application"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/theory.html"
+    },
+    {
+      "id": "tc-ishihara",
+      "heading": "Ishihara plates",
+      "text": "An Ishihara plate is a circle of coloured dots containing a number picked out in dots of a confusable hue. Someone with normal trichromatic vision reads the number easily; someone with red-green deficiency sees an undifferentiated field, or a different number. The plates work precisely because they carry their information in hue alone with luminance deliberately randomised, which is the exact failure mode good design avoids.",
+      "tags": ["ishihara", "testing", "diagnosis"],
+      "source": "https://pp-iiith.vlabs.ac.in/exp/colour-blindness/theory.html"
+    }
+  ],
+
+  "quiz_bank": [
+    {
+      "id": "q1",
+      "question": "In the simulator, clicking the Tritanopia button shows you what?",
+      "options": [
+        "How someone with green-colour blindness sees the image",
+        "How someone with blue-colour blindness sees the image",
+        "How the image would look in grayscale",
+        "How someone with normal colour vision sees the image"
+      ],
+      "answer_index": 1,
+      "explanation": "Tritanopia is S-cone (blue) deficiency. The grayscale view is the separate 'Color Blind' button, which simulates achromatopsia.",
+      "concept_ref": "tritanopia",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q2",
+      "question": "Which property is associated with total colour blindness (achromatopsia)?",
+      "options": [
+        "Complete inability to perceive any colours, only shades of grey",
+        "Difficulty distinguishing specific colours such as red and green",
+        "Normal colour vision but reduced clarity of vision",
+        "Enhanced ability to see colours in dim lighting"
+      ],
+      "answer_index": 0,
+      "explanation": "Achromatopsia removes hue entirely, leaving only luminance. Confusing specific pairs is the signature of the far more common dichromacies.",
+      "concept_ref": "achromatopsia",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q3",
+      "question": "Approximately what fraction of men globally have some form of colour vision deficiency?",
+      "options": ["About 1%", "About 8%", "About 20%", "About 0.5%"],
+      "answer_index": 1,
+      "explanation": "Around 1 in 12 men, or 8%. The figure for women is about 1 in 200 because the common forms are X-linked recessive.",
+      "concept_ref": "cone-types",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "q4",
+      "question": "A dashboard uses a red line for 'over budget' and a green line for 'under budget', with no other distinguishing feature. Which change most reliably fixes it?",
+      "options": [
+        "Make the red darker and the green lighter",
+        "Add a dashed pattern to one line and label both directly",
+        "Switch to orange and blue",
+        "Increase the line thickness"
+      ],
+      "answer_index": 1,
+      "explanation": "Redundant encoding is the reliable fix — pattern plus direct labels survive every form of CVD. Adjusting lightness or hue helps some deficiencies but not all, and thickness alone carries no meaning.",
+      "concept_ref": "redundant-coding",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "q5",
+      "question": "Under protanopia, why can a red warning light become genuinely hard to notice rather than merely a different colour?",
+      "options": [
+        "The image is blurred as well as recoloured",
+        "Red loses apparent brightness because the L-cone contributing most of its luminance signal is missing",
+        "The blue-yellow axis collapses",
+        "Peripheral vision is affected"
+      ],
+      "answer_index": 1,
+      "explanation": "The L-cone contributes heavily to perceived luminance in the red region. Without it, red is not just hue-shifted, it is dimmed — so it can fail to attract attention at all.",
+      "concept_ref": "protanopia",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "q6",
+      "question": "Why is the unfiltered image worth studying before applying any filter?",
+      "options": [
+        "The simulator requires it technically",
+        "It is the control condition — without it you cannot say which distinctions were lost",
+        "It improves the rendering quality of the filter",
+        "It is needed for the upload feature to work"
+      ],
+      "answer_index": 1,
+      "explanation": "The experiment is a comparison. The unfiltered view establishes which colour pairs carried information, so you can identify exactly which ones collapse.",
+      "concept_ref": "cone-types",
+      "difficulty": "intermediate"
+    }
+  ],
+
+  "references": [
+    "Sharpe, L. T., Stockman, A., Jagle, H., & Nathans, J. (1999). Opsin genes, cone photopigments, color vision and color blindness.",
+    "Brettel, H., Vienot, F., & Mollon, J. D. (1997). Computerized simulation of color appearance for dichromats. JOSA A, 14(10), 2647-2655.",
+    "https://www.color-blindness.com/"
+  ]
+}

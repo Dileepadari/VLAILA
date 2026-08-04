@@ -1,123 +1,476 @@
-import { Link } from "@tanstack/react-router";
+/**
+ * Header and footer, reproducing www.vlab.co.in markup element for element.
+ *
+ * The class names, grid columns, inline styles and copy below are taken from
+ * the live page source, and the stylesheets that lay them out are the
+ * platform's own (served from /vl/css). Images -- the logo lock-up, the
+ * Facebook glyph, the app QR code, the Outreach mark -- are the real files
+ * rather than stand-ins, so spacing derived from intrinsic image size matches
+ * too.
+ *
+ * The only additions are the role switcher and the role-specific nav items,
+ * which is what this console exists to demonstrate. They are styled to sit
+ * inside the platform's own visual language.
+ */
+
+import { Link, useLocation } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import { useRole } from "@/lib/role";
-import { Bell, ChevronDown, Search } from "lucide-react";
-import { useState } from "react";
 import type { Role } from "@/lib/mock-data";
+
+const NAV: { to: string; label: string }[] = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About us" },
+  { to: "/outreach", label: "Outreach Portal" },
+  { to: "/partners", label: "Participating Institutes" },
+  { to: "/nmeict", label: "NMEICT" },
+  { to: "/contact", label: "Contact us" },
+];
+
+/** The live top strip prints a running date/time into #dtontop. */
+function useClock() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  return now;
+}
+
+function formatStamp(d: Date) {
+  const date = d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+  const time = d.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  return `${date} | ${time}`;
+}
+
+/**
+ * The live site pins the navy nav to the top once you scroll past the logo
+ * lock-up (Bootstrap's affix plugin adds `.affix`, and main.css fixes it to
+ * `top: 0`). A spacer takes the bar's place so the page does not jump.
+ */
+function useAffix() {
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [affixed, setAffixed] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = sentinelRef.current;
+      if (!el) return;
+      setAffixed(el.getBoundingClientRect().top <= 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return { sentinelRef, affixed };
+}
 
 export function VlabsHeader() {
   const { role, setRole, name } = useRole();
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const loc = useLocation();
+  const now = useClock();
+  const { sentinelRef, affixed } = useAffix();
+
+  const roleNav =
+    role === "faculty"
+      ? [
+          { to: "/faculty", label: "Faculty" },
+          { to: "/studio", label: "Author Studio" },
+        ]
+      : role === "admin"
+        ? [
+            { to: "/admin", label: "Admin" },
+            { to: "/studio", label: "Author Studio" },
+          ]
+        : role === "student"
+          ? [{ to: "/dashboard", label: "My Dashboard" }]
+          : [];
+
+  const items = [...NAV, ...roleNav];
+
   return (
-    <>
-      <div className="bg-vlabs-footer text-white text-xs">
-        <div className="max-w-7xl mx-auto px-4 py-1.5 flex justify-between">
-          <span>11 May, 2026 | 04:21:20 PM</span>
-          <span>Visitors: 51,141,861 · Logged in as <strong>{name}</strong> ({role})</span>
+    <section className="header">
+      <div className="container-fluid sm-hdr-top">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4 col-sm-6 col-xs-6" id="dtontop">
+              {now ? formatStamp(now) : ""}
+            </div>
+            <div className="col-md-7 col-sm-4 col-xs-4">
+              <div style={{ textAlign: "right" }}>Visitors &nbsp;52575993</div>
+            </div>
+            <div className="col-md-1 col-sm-2 col-xs-2">
+              <span style={{ float: "right" }}>
+                <a
+                  href="https://www.facebook.com/VLabsIITDelhi/"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Vlab Facebook Page"
+                >
+                  {/* Height is set inline, not via the attribute: Tailwind's
+                      preflight sets `img { height: auto }`, which outranks a
+                      presentational hint and would render this at its natural
+                      32px, making the strip taller than the live one. */}
+                  <img
+                    src="/vl/images/fb-icon.png"
+                    style={{ height: 20, marginTop: -4 }}
+                    alt=""
+                  />
+                </a>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6 flex-wrap">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-vlabs-cyan to-vlabs-blue grid place-items-center text-white font-bold text-xl">VL</div>
-            <div>
-              <div className="text-vlabs-blue font-bold text-xl leading-none">Virtual Labs</div>
-              <div className="text-[10px] text-muted-foreground">An MoE Govt of India Initiative</div>
-            </div>
-          </Link>
-          <div className="hidden md:block flex-1 text-sm">
-            <div>An Initiative of <strong>Ministry of Education</strong></div>
-            <div className="text-muted-foreground">Under the National Mission on Education through <span className="text-vlabs-rose font-semibold">ICT</span></div>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center border rounded px-2 py-1.5 text-sm">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <input placeholder="Search Lab" className="bg-transparent outline-none px-2 w-40" />
-            </div>
-            <Link to="/dashboard/notifications" className="relative p-2 rounded hover:bg-muted">
-              <Bell className="w-5 h-5 text-vlabs-blue" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-vlabs-rose" />
-            </Link>
-            <div className="relative">
-              <button onClick={() => setOpen(!open)} className="flex items-center gap-2 px-3 py-2 rounded bg-muted text-sm">
-                <span className="w-7 h-7 rounded-full bg-vlabs-blue text-white grid place-items-center text-xs font-bold">{name.split(" ").map(w => w[0]).slice(0,2).join("")}</span>
-                <span className="hidden sm:inline">{role}</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {open && (
-                <div className="absolute right-0 mt-1 bg-white border rounded shadow-lg w-56 z-50">
-                  <div className="p-3 border-b text-xs text-muted-foreground">Switch role (mock)</div>
-                  {(["student", "faculty", "admin", "guest"] as Role[]).map((r) => (
-                    <button key={r} onClick={() => { setRole(r); setOpen(false); }} className={`w-full text-left px-3 py-2 text-sm hover:bg-muted ${role===r?"bg-accent":""}`}>{r}</button>
-                  ))}
-                  <div className="border-t">
-                    <Link to="/login" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm hover:bg-muted">Login / Sign up</Link>
-                    <Link to="/onboarding" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm hover:bg-muted">Onboarding</Link>
+
+      <header className="container hdr-logo">
+        <div className="row">
+          <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+            <h1 className="logo">
+              <ul className="logo-ul">
+                <li className="logo-img">
+                  <Link to="/">
+                    <img src="/vl/images/logo.jpg" alt="Virtual Labs" />
+                  </Link>
+                  <div className="hdr-logo-border" />
+                </li>
+                <li className="logo-text">
+                  <div className="logo-text-big">An Initiative of</div>
+                  <div style={{ fontWeight: 600 }}>
+                    Ministry of Education
+                    <br />
+                    <span style={{ fontWeight: "normal" }}>
+                      Under the National Mission on Education through{" "}
+                      <span style={{ color: "red" }}>ICT</span>
+                    </span>
                   </div>
+                </li>
+              </ul>
+            </h1>
+          </div>
+          <div className="col-md-4 col-sm-4 col-xs-12 hdr-search">
+            <form className="glb_search_frm" onSubmit={(e) => e.preventDefault()}>
+              <input
+                type="text"
+                className="form-control gl-search"
+                name="search_item"
+                id="search-box"
+                placeholder="Search Lab"
+                autoComplete="off"
+              />
+              <i className="fa fa-search search-icon" />
+            </form>
+
+            {/*
+             * Console addition: view the platform as any of the four roles.
+             * Positioned out of flow so the header keeps the live site's exact
+             * 184px height rather than growing to accommodate it.
+             */}
+            <div style={{ position: "absolute", right: 15, top: 76, textAlign: "right" }}>
+              <button
+                onClick={() => setAccountOpen((v) => !v)}
+                style={{
+                  background: "none",
+                  border: "1px solid #ccc",
+                  borderRadius: 200,
+                  padding: "3px 12px",
+                  fontSize: 11,
+                  color: "#464646",
+                  cursor: "pointer",
+                }}
+              >
+                {name} · {role} ▾
+              </button>
+              {accountOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    marginTop: 4,
+                    background: "#fff",
+                    border: "1px solid #ccc",
+                    minWidth: 170,
+                    zIndex: 1000,
+                    textAlign: "left",
+                    boxShadow: "0 2px 8px rgba(0,0,0,.15)",
+                  }}
+                >
+                  <div style={{ padding: "8px 12px", fontSize: 11, color: "#888" }}>View as</div>
+                  {(["student", "faculty", "admin", "guest"] as Role[]).map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => {
+                        setRole(r);
+                        setAccountOpen(false);
+                      }}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        textAlign: "left",
+                        padding: "8px 12px",
+                        border: 0,
+                        background: role === r ? "#f3f3f3" : "transparent",
+                        fontSize: 12,
+                        cursor: "pointer",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {r}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
           </div>
         </div>
-        <nav className="bg-vlabs-blue text-white">
-          <div className="max-w-7xl mx-auto px-4 flex flex-wrap gap-1 text-sm">
-            {[
-              ["/", "HOME"],
-              ["/about", "ABOUT US"],
-              ["/outreach", "OUTREACH PORTAL"],
-              ["/partners", "PARTICIPATING INSTITUTES"],
-              ["/nmeict", "NMEICT"],
-              ["/contact", "CONTACT US"],
-              ...(role === "student" || role === "faculty" || role === "admin"
-                ? [["/dashboard", role === "student" ? "MY DASHBOARD" : role === "faculty" ? "FACULTY" : "ADMIN"]]
-                : []),
-            ].map(([to, label]) => (
-              <Link key={to} to={to} className="px-4 py-2.5 hover:bg-white/10" activeProps={{ className: "bg-white/15 font-semibold" }}>{label}</Link>
-            ))}
-          </div>
-        </nav>
-        <div className="vlabs-divider" />
       </header>
-    </>
+
+      <div ref={sentinelRef} />
+      {affixed && <div style={{ height: 42 }} />}
+      <div className={affixed ? "fix-hdr affix" : "fix-hdr"}>
+        <div
+          className="container-fluid navWrap"
+          style={{ backgroundColor: "#00446d", color: "#fff" }}
+        >
+          <div className="container">
+            <nav className="navbar desk_nav">
+              <ul className="nav navbar-nav">
+                {items.map((item) => {
+                  const active =
+                    item.to === "/" ? loc.pathname === "/" : loc.pathname.startsWith(item.to);
+                  return (
+                    <li key={item.to} className={active ? "active" : undefined}>
+                      <Link to={item.to} className={active ? "nav-selected" : undefined}>
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+            <span className="hamburger" onClick={() => setMenuOpen((v) => !v)}>
+              &#9776;
+            </span>
+            <div className="mobile_nav">
+              <div className="row">
+                <div className="col-md-12 col-xs-12">
+                  <div id="mySidenav" className="sidenav" style={{ width: menuOpen ? 250 : 0 }}>
+                    <a
+                      href="#close"
+                      className="closebtn"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMenuOpen(false);
+                      }}
+                    >
+                      &times;
+                    </a>
+                    {items.map((item) => (
+                      <Link key={item.to} to={item.to} onClick={() => setMenuOpen(false)}>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The counter strip alternates between two pairs of figures on a timer on the
+ * live site; this reproduces that swap.
+ *
+ * It appears on the home page only -- the inner pages run their footer
+ * straight after the content -- so it is exported for Home to render rather
+ * than living in the shared footer.
+ */
+export function CounterStrip() {
+  const [second, setSecond] = useState(false);
+  useEffect(() => {
+    const id = window.setInterval(() => setSecond((v) => !v), 5000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <div style={{ background: "#ddd" }}>
+      <div className="container">
+        <div className="row ftr-counter">
+          <div className="col-md-4 col-lg-4 col-xs-12 col-sm-6 ftr-logo-2">
+            <a href="https://centraloutreach.vlabs.co.in/" target="_blank" rel="noreferrer">
+              <img
+                src="/vl/images/Outreach_logo_main_1000dpi.png"
+                width="220"
+                alt="Vlabs Outreach"
+              />
+            </a>
+          </div>
+          {second ? (
+            <span className="count_2">
+              <div className="col-md-4 col-lg-4 col-xs-12 col-sm-6 ftr-counter-3">
+                NODAL CENTERS<p>1531</p>
+              </div>
+              <div className="col-md-4 col-lg-4 col-xs-12 col-sm-6 ftr-counter-4">
+                USAGE<p>4679904</p>
+              </div>
+            </span>
+          ) : (
+            <span className="count_1">
+              <div className="col-md-4 col-lg-4 col-xs-12 col-sm-6 ftr-counter-1">
+                Website PageViews<p>81330147</p>
+              </div>
+              <div className="col-md-4 col-lg-4 col-xs-12 col-sm-6 ftr-counter-2">
+                PARTICIPANTS ATTENDED<p>8560251</p>
+              </div>
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The live site parks `.toTop` off-canvas at `right: -90px` and slides it to
+ * `right: 20px` once you scroll away from the top.
+ */
+function ToTop() {
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShown(window.scrollY > 300);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div
+      className="toTop"
+      style={{ right: shown ? 20 : -90 }}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      role="button"
+      aria-label="Back to top"
+    >
+      <i className="fa fa-angle-up fa-4x" />
+    </div>
   );
 }
 
 export function VlabsFooter() {
   return (
-    <footer className="bg-vlabs-footer text-white/90 mt-12">
-      <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm">
-        <div>
-          <h3 className="font-semibold mb-3 border-b border-white/20 pb-2">Quick Links</h3>
-          <ul className="space-y-1.5">
-            <li>Lab Feedback Form</li>
-            <li>Lab Assessment Form</li>
-            <li>FAQ</li>
-            <li>Shakshat Portal</li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-3 border-b border-white/20 pb-2">About VLAB</h3>
-          <ul className="space-y-1.5">
-            <li><Link to="/" className="hover:underline">Home</Link></li>
-            <li><Link to="/about" className="hover:underline">About us</Link></li>
-            <li><Link to="/contact" className="hover:underline">Contact Us</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-3 border-b border-white/20 pb-2">Get In Touch With Us</h3>
-          <p>support@vlab.co.in</p>
-          <p>Phone(O): +91-9211460624</p>
-          <p className="mt-2">Wireless Research Lab, Bharti School of Telecom, IIT Delhi, Hauz Khas, New Delhi-110016</p>
-        </div>
-        <div>
-          <h3 className="font-semibold mb-3 border-b border-white/20 pb-2">Follow Us</h3>
-          <div className="flex gap-2">
-            {["T", "F", "Y", "L"].map(s => (
-              <span key={s} className="w-8 h-8 grid place-items-center rounded-full bg-white/10">{s}</span>
-            ))}
+    <>
+      <section className="footer">
+        <footer>
+          <div className="ftr">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-3 col-lg-3 col-xs-12 col-sm-12">
+                  <p className="ftr_head">Quick Links</p>
+                  <ul className="ftr_details">
+                    <li>
+                      <a
+                        href="http://38.100.110.143/feedback/feedback.html"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Lab Feedback Form
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="http://38.100.110.143/labassessment/assessmentform.html"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Lab Assessment Form
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.vlab.co.in/faq">FAQ</a>
+                    </li>
+                    <li>
+                      <a href="http://www.sakshat.ac.in/">Shakshat Portal</a>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-md-3 col-lg-3 col-xs-12 col-sm-12">
+                  <p className="ftr_head">About VLAB</p>
+                  <ul className="ftr_details">
+                    <li>
+                      <Link to="/">Home</Link>
+                    </li>
+                    <li>
+                      <Link to="/about">About us</Link>
+                    </li>
+                    <li>
+                      <Link to="/contact">Contact Us</Link>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-md-2 col-lg-2 col-xs-12 col-sm-12 bdr-ftr">
+                  <p className="ftr_head" />
+                  <ul className="ftr_lst">
+                    <li>
+                      <span style={{ marginLeft: 20 }} />
+                      <img src="/vl/images/qr-code-mob6.png" width="110" alt="Virtual Labs app" />
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-md-4 col-lg-4 col-xs-12 col-sm-12">
+                  <p className="ftr_head">
+                    <u>Get In Touch With Us</u>
+                  </p>
+                  <ul className="ftr_lst">
+                    <li />
+                    <li>
+                      <i className="fa fa-envelope ftr_fa_icn" />
+                      &nbsp;&nbsp;
+                      <a href="mailto:support@vlab.co.in">support@vlab.co.in</a>
+                    </li>
+                    <li>
+                      <i className="fa fa-phone ftr_fa_icn" />
+                      &nbsp;&nbsp; Phone(O) - +91-9211460624
+                    </li>
+                    <li>
+                      <i className="fa fa-map-marker ftr_fa_icn" />
+                      &nbsp;&nbsp;Wireless Research Lab <br />
+                      Room No - 206/IIA <br />
+                      Bharti School of Telecom
+                      <br /> Indian Institute of Technology Delhi
+                      <br />
+                      Hauz Khas, New Delhi-110016
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="mt-4 text-xs text-white/60">AGPL 3.0 & Creative Commons (CC BY-NC-SA 4.0)</p>
-        </div>
-      </div>
-    </footer>
+        </footer>
+      </section>
+
+      <ToTop />
+    </>
   );
 }

@@ -1,0 +1,145 @@
+/**
+ * Loaded last, after the platform's own stylesheets.
+ *
+ * Two jobs, both about making the replica land on the live site's cascade:
+ *
+ * 1. Undo Tailwind's preflight and utility layer where it collides with
+ *    Bootstrap 3. The live page loads normalize.css, which leaves images and
+ *    lists at their browser defaults and never defines `.container`; Tailwind
+ *    resets all three, and Bootstrap has no rule to put them back.
+ *
+ * 2. Stand in for the site's JS-driven layouts. The institute strip is a slick
+ *    carousel there; with all eleven crests visible at once it is a plain
+ *    horizontal row, reproduced here in CSS at the same measurements.
+ */
+
+/*
+ * Bootstrap 3 sets `html { font-size: 10px }` as a sizing convention, then
+ * expresses everything else in px -- not one portal stylesheet uses rem, so
+ * the rule has no effect on the replica. Tailwind's scale is rem-based
+ * throughout, though, so it inherited a 62.5% multiplier: the console's
+ * `max-w-7xl` came out at 800px instead of 1280px and `text-sm` at 8.75px
+ * instead of 14px. Restoring a 16px root fixes the console and, because
+ * nothing in the replica is rem-based, leaves it pixel-identical.
+ */
+html {
+  font-size: 16px;
+}
+
+/*
+ * Tailwind emits a `.container` utility because the class appears in the
+ * markup. Bootstrap's width wins on order, but Tailwind's max-width has no
+ * counterpart to override it and was clamping 1170px containers to 960px.
+ */
+.container {
+  max-width: none;
+}
+
+/*
+ * Preflight sets `img { display: block; max-width: 100% }`. On the live site
+ * images are inline and unconstrained, which is what the header lock-up and
+ * the counter strip are spaced against. Bootstrap's own `img` rule already
+ * restores vertical-align, and `.img-responsive` keeps winning on specificity.
+ */
+img {
+  display: inline;
+  max-width: none;
+}
+
+/*
+ * Preflight zeroes list padding and markers. Bootstrap 3 sets list margins but
+ * relies on the browser default for indentation, so without this the objective
+ * and theory lists lose their hanging indent. Class-based rules such as
+ * `.ftr_details` and `.ba-text ul` still win on specificity.
+ */
+/*
+ * Preflight sets `button { line-height: inherit }`. On the live site buttons
+ * keep the UA default of `normal`, so a button inside `.obj-text-inner`
+ * (line-height 1.8) does not stretch -- which is what sizes the institute
+ * crest cells. The console's own screens are designed against Tailwind's
+ * inheriting buttons, so they opt back in.
+ */
+button {
+  line-height: normal;
+}
+.console-scope button {
+  line-height: inherit;
+}
+
+ul,
+ol {
+  padding-left: 40px;
+}
+ul {
+  list-style: disc;
+}
+ol {
+  list-style: decimal;
+}
+
+/* ------------------------------------------------- institute strip (slick) */
+
+.customer-logos {
+  position: relative;
+}
+.vl-slick-list {
+  overflow: hidden;
+  width: 100%;
+}
+/*
+ * Measured off the live strip: eight crests visible in the 1140px window at a
+ * 143px pitch, but each slide box is only 103px wide -- slick leaves 40px of
+ * gap between them. Both numbers matter. The pitch is what makes the row look
+ * evenly spaced, and the 103px box is what wraps the longer institute names
+ * onto two and three lines, which is what makes the row 166px tall.
+ *
+ * The track holds two copies of the eleven institutes (22 slides); at eight
+ * per window it is 22/8 of the window wide, each slide 1/22 of the track, and
+ * the 40px of horizontal padding leaves the 103px content box.
+ */
+.vl-slick-track {
+  display: flex;
+  width: 275%;
+  align-items: flex-start;
+}
+.customer-logos .slide {
+  flex: 0 0 auto;
+  width: calc(100% / 22);
+  padding: 0 20px;
+  text-align: center;
+  outline: none;
+}
+.customer-logos .control-c {
+  cursor: pointer;
+  font-size: 30px;
+  color: #666;
+  line-height: 1;
+}
+.customer-logos .a-left {
+  left: 0;
+  position: absolute;
+  top: 36%;
+  z-index: 1000;
+  transform: translateY(-50%);
+  opacity: 0.6;
+}
+.customer-logos .slide a {
+  text-decoration: none;
+  color: inherit;
+}
+.customer-logos .slide img {
+  display: block;
+  margin: 0 auto;
+}
+/* Matches the live caption box: 12px inherited, and slick's own margins. */
+.customer-logos .slide p {
+  margin: 10px 10px 10px 0;
+}
+
+/*
+ * The right rail's photo rotator is a fixed-height skdslider on the live site:
+ * 183x158 frames sitting in a 227px block.
+ */
+#innerSlider {
+  height: 227px;
+}
