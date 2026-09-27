@@ -8,8 +8,20 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+/**
+ * Globals a host page may inject before the console script runs, so a
+ * deployment can point the console at its API and hand it a staff key without
+ * a rebuild. Declared rather than cast through `any`.
+ */
+declare global {
+  interface Window {
+    __VLAILA_API__?: string;
+    __VLAILA_STAFF_KEY__?: string;
+  }
+}
+
 export const API_BASE =
-  (typeof window !== "undefined" && (window as any).__VLAILA_API__) ||
+  (typeof window !== "undefined" && window.__VLAILA_API__) ||
   import.meta.env?.VITE_VLAILA_API ||
   "http://localhost:8000";
 
@@ -35,7 +47,7 @@ const STAFF_KEY_STORAGE = "vlaila_staff_key";
  */
 export function getStaffKey(): string | null {
   if (typeof window === "undefined") return null;
-  const injected = (window as any).__VLAILA_STAFF_KEY__;
+  const injected = window.__VLAILA_STAFF_KEY__;
   if (typeof injected === "string" && injected) return injected;
   try {
     return window.localStorage.getItem(STAFF_KEY_STORAGE);

@@ -15,7 +15,16 @@
     "Explain why a half adder cannot be chained and what the full adder adds.",
     "Verify each row of the truth table experimentally rather than by recall."
   ],
-  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+  "tasks": [
+    "Aim",
+    "Theory",
+    "Pretest",
+    "Procedure",
+    "Simulation",
+    "Posttest",
+    "References",
+    "Feedback"
+  ],
 
   "prerequisites": [
     {
@@ -87,7 +96,11 @@
       "hints": {
         "nudge": "Press ADD once now to capture the starting row of the table.",
         "specific": "The procedure asks you to press ADD before touching the switches, so the A=0, B=0 row is recorded first. The table is built row by row from what you press.",
-        "interactive": { "highlight": "#button", "frame": "sim:half_adder", "text": "Press ADD to log the current state." }
+        "interactive": {
+          "highlight": "#button",
+          "frame": "sim:half_adder",
+          "text": "Press ADD to log the current state."
+        }
       }
     },
     {
@@ -100,7 +113,11 @@
       "hints": {
         "nudge": "Toggle switches A and B to choose the input combination you want to test.",
         "specific": "Click switch A and/or switch B to set the combination. Watch the Sum and Carry LEDs change as you do — that is the circuit responding in real time.",
-        "interactive": { "highlight": "#A", "frame": "sim:half_adder", "text": "Switch A toggles the first input bit." }
+        "interactive": {
+          "highlight": "#A",
+          "frame": "sim:half_adder",
+          "text": "Switch A toggles the first input bit."
+        }
       },
       "concept_ref": "half-adder"
     },
@@ -154,7 +171,11 @@
       "hints": {
         "nudge": "Now try the full adder — same method, one extra input.",
         "specific": "The full adder adds Cin, so there are eight combinations instead of four. Same procedure: supply, ADD baseline, set inputs, ADD.",
-        "interactive": { "highlight": "a[href*='Simulator1']", "frame": "sim", "text": "Full Adder simulator." }
+        "interactive": {
+          "highlight": "a[href*='Simulator1']",
+          "frame": "sim",
+          "text": "Full Adder simulator."
+        }
       },
       "concept_ref": "full-adder"
     }
@@ -328,12 +349,7 @@
     {
       "id": "q3",
       "question": "What does a full adder have that a half adder does not?",
-      "options": [
-        "A second output",
-        "A carry-in input",
-        "A clock input",
-        "An enable line"
-      ],
+      "options": ["A second output", "A carry-in input", "A clock input", "An enable line"],
       "answer_index": 1,
       "explanation": "The carry-in is the whole difference. It is what lets full adders be chained into a multi-bit ripple-carry adder.",
       "concept_ref": "full-adder",

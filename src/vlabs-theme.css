@@ -20,13 +20,19 @@
   margin-left: auto;
 }
 @media (min-width: 768px) {
-  .vl-container { width: 750px; }
+  .vl-container {
+    width: 750px;
+  }
 }
 @media (min-width: 992px) {
-  .vl-container { width: 970px; }
+  .vl-container {
+    width: 970px;
+  }
 }
 @media (min-width: 1200px) {
-  .vl-container { width: 1170px; }
+  .vl-container {
+    width: 1170px;
+  }
 }
 
 .vl-row {
@@ -35,19 +41,51 @@
   margin-left: -15px;
   margin-right: -15px;
 }
-.vl-col { padding: 0 15px; flex: 1 1 0; min-width: 0; }
-.vl-col-3 { flex: 0 0 25%; max-width: 25%; padding: 0 15px; }
-.vl-col-4 { flex: 0 0 33.3333%; max-width: 33.3333%; padding: 0 15px; }
-.vl-col-6 { flex: 0 0 50%; max-width: 50%; padding: 0 15px; }
-.vl-col-9 { flex: 0 0 75%; max-width: 75%; padding: 0 15px; }
-
-@media (max-width: 992px) {
-  .vl-col-3, .vl-col-4, .vl-col-6, .vl-col-9 { flex: 0 0 100%; max-width: 100%; }
+.vl-col {
+  padding: 0 15px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.vl-col-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+  padding: 0 15px;
+}
+.vl-col-4 {
+  flex: 0 0 33.3333%;
+  max-width: 33.3333%;
+  padding: 0 15px;
+}
+.vl-col-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 0 15px;
+}
+.vl-col-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+  padding: 0 15px;
 }
 
-.space10 { height: 10px; }
-.space20 { height: 20px; }
-.space30 { height: 30px; }
+@media (max-width: 992px) {
+  .vl-col-3,
+  .vl-col-4,
+  .vl-col-6,
+  .vl-col-9 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.space10 {
+  height: 10px;
+}
+.space20 {
+  height: 20px;
+}
+.space30 {
+  height: 30px;
+}
 
 /* Data tables on the analytics screens, matching the platform's table styling. */
 table.vl-tbl {

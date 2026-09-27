@@ -128,11 +128,7 @@ export function VlabsHeader() {
                       preflight sets `img { height: auto }`, which outranks a
                       presentational hint and would render this at its natural
                       32px, making the strip taller than the live one. */}
-                  <img
-                    src="/vl/images/fb-icon.png"
-                    style={{ height: 20, marginTop: -4 }}
-                    alt=""
-                  />
+                  <img src="/vl/images/fb-icon.png" style={{ height: 20, marginTop: -4 }} alt="" />
                 </a>
               </span>
             </div>

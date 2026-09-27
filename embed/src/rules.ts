@@ -42,7 +42,7 @@ export interface Detector {
 
 export interface KbError {
   id: string;
-  severity: 'fatal' | 'recoverable';
+  severity: "fatal" | "recoverable";
   when: Record<string, unknown>;
   message: string;
   correction_step?: string;
@@ -78,7 +78,7 @@ export interface LocalState {
 }
 
 export interface LocalVerdict {
-  kind: 'NO_ACTION' | 'WARN' | 'HINT' | 'CONCEPT';
+  kind: "NO_ACTION" | "WARN" | "HINT" | "CONCEPT";
   severity?: string;
   title?: string;
   message?: string;
@@ -99,12 +99,12 @@ export function selectorMatches(
   if (!pattern) return true;
   if (!actual && !label) return false;
 
-  for (const raw of pattern.split(',')) {
+  for (const raw of pattern.split(",")) {
     const candidate = raw.trim();
     if (!candidate) continue;
     if (actual && (candidate === actual || actual.includes(candidate))) return true;
-    if (actual && candidate.startsWith('#') && actual.endsWith(candidate)) return true;
-    if (actual && candidate.startsWith('.') && actual.includes(candidate.slice(1))) return true;
+    if (actual && candidate.startsWith("#") && actual.endsWith(candidate)) return true;
+    if (actual && candidate.startsWith(".") && actual.includes(candidate.slice(1))) return true;
     const attr = candidate.match(/^\w*\[([\w-]+)\*?=['"]?([^'"\]]+)['"]?\]$/);
     if (attr && actual && actual.includes(attr[2])) return true;
     // Match a control by its visible label. Several Virtual Labs simulators
@@ -117,20 +117,16 @@ export function selectorMatches(
 
 function framesMatch(pattern: string | undefined, actual: string): boolean {
   if (!pattern || pattern === actual) return true;
-  return pattern === 'sim' && actual.startsWith('sim');
+  return pattern === "sim" && actual.startsWith("sim");
 }
 
-export function matchStep(
-  rules: ClientRules,
-  obs: Observation,
-  state: LocalState,
-): KbStep | null {
+export function matchStep(rules: ClientRules, obs: Observation, state: LocalState): KbStep | null {
   for (const step of rules.steps) {
     if (state.completed.has(step.id)) continue;
     const d = step.detect;
     if (!d || d.action !== obs.action) continue;
 
-    if (obs.action === 'navigate') {
+    if (obs.action === "navigate") {
       if (d.task && d.task === obs.task) return step;
       continue;
     }
@@ -177,11 +173,7 @@ function conditionHolds(err: KbError, obs: Observation, state: LocalState): bool
   return true;
 }
 
-export function nextStep(
-  rules: ClientRules,
-  state: LocalState,
-  task?: string,
-): KbStep | null {
+export function nextStep(rules: ClientRules, state: LocalState, task?: string): KbStep | null {
   const pick = (steps: KbStep[]) =>
     steps.find(
       (s) =>
@@ -197,7 +189,10 @@ export function nextStep(
   return pick(rules.steps);
 }
 
-function hintFor(step: KbStep, level: number): { text: string; highlight?: string; frame?: string } {
+function hintFor(
+  step: KbStep,
+  level: number,
+): { text: string; highlight?: string; frame?: string } {
   if (level <= 1) return { text: step.hints.nudge };
   if (level === 2) return { text: step.hints.specific || step.hints.nudge };
   const interactive = step.hints.interactive;
@@ -215,7 +210,7 @@ export function evaluate(
 ): LocalVerdict {
   const candidates = rules.errors
     .filter((e) => !state.shownErrors.has(e.id))
-    .sort((a, b) => (a.severity === 'fatal' ? 0 : 1) - (b.severity === 'fatal' ? 0 : 1));
+    .sort((a, b) => (a.severity === "fatal" ? 0 : 1) - (b.severity === "fatal" ? 0 : 1));
 
   for (const err of candidates) {
     if (!conditionHolds(err, obs, state)) continue;
@@ -225,19 +220,19 @@ export function evaluate(
     if (confidence < warnThreshold) {
       const stepId = err.correction_step;
       return {
-        kind: 'HINT',
-        title: 'One thing to consider',
+        kind: "HINT",
+        title: "One thing to consider",
         message: err.message,
         stepId,
         errorId: err.id,
-        hintLevel: (state.hintLevels[stepId ?? ''] ?? 0) + 1,
+        hintLevel: (state.hintLevels[stepId ?? ""] ?? 0) + 1,
         confidence,
       };
     }
     return {
-      kind: 'WARN',
+      kind: "WARN",
       severity: err.severity,
-      title: err.severity === 'fatal' ? 'This will affect your result' : 'Heads up',
+      title: err.severity === "fatal" ? "This will affect your result" : "Heads up",
       message: err.message,
       correctionStepId: err.correction_step,
       errorId: err.id,
@@ -247,14 +242,14 @@ export function evaluate(
 
   const step = matchStep(rules, obs, state);
   if (step) {
-    const arrivedOnly = step.detect?.action === 'navigate';
+    const arrivedOnly = step.detect?.action === "navigate";
     if (step.milestone && !arrivedOnly && !state.shownConcepts.has(step.id)) {
       // The concept text itself lives server-side; locally we only know a
       // milestone was reached. The widget asks for the explanation rather than
       // inventing one.
-      return { kind: 'CONCEPT', stepId: step.id, confidence: 1 };
+      return { kind: "CONCEPT", stepId: step.id, confidence: 1 };
     }
-    return { kind: 'NO_ACTION', stepId: step.id, confidence: 1 };
+    return { kind: "NO_ACTION", stepId: step.id, confidence: 1 };
   }
 
   const pending = nextStep(rules, state, obs.task ?? state.currentTask);
@@ -263,7 +258,7 @@ export function evaluate(
     const hint = hintFor(pending, level);
     if (hint.text) {
       return {
-        kind: 'HINT',
+        kind: "HINT",
         title: pending.title,
         message: hint.text,
         stepId: pending.id,
@@ -275,7 +270,7 @@ export function evaluate(
     }
   }
 
-  return { kind: 'NO_ACTION', confidence: 1 };
+  return { kind: "NO_ACTION", confidence: 1 };
 }
 
 export function progressPercent(rules: ClientRules, state: LocalState): number {

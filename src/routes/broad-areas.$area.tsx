@@ -48,9 +48,7 @@ function AreaPage() {
       )}
 
       <p className="hlh" style={{ paddingBottom: 0 }}>
-        <a href="#nptel">
-          Click here for related NPTEL video lectures
-        </a>
+        <a href="#nptel">Click here for related NPTEL video lectures</a>
       </p>
     </InnerPage>
   );

@@ -8,8 +8,14 @@ export const Route = createFileRoute("/faculty/classes")({
         ["B.Tech CSE — 3rd yr — Section B", 30],
         ["M.Tech CSE — 1st yr", 24],
       ].map(([n, c]) => (
-        <div key={n as string} className="bg-white border rounded p-4 flex items-center justify-between">
-          <div><div className="font-semibold">{n}</div><div className="text-xs text-muted-foreground">{c} students</div></div>
+        <div
+          key={n as string}
+          className="bg-white border rounded p-4 flex items-center justify-between"
+        >
+          <div>
+            <div className="font-semibold">{n}</div>
+            <div className="text-xs text-muted-foreground">{c} students</div>
+          </div>
           <button className="text-xs vlabs-link">Open →</button>
         </div>
       ))}

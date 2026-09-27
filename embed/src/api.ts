@@ -6,13 +6,13 @@
  * quieter assistant, never a console full of errors or a blocked interaction.
  */
 
-import type { ClientRules } from './rules';
-import type { ExperimentRef } from './detect';
-import type { StepEvent } from './observer';
+import type { ClientRules } from "./rules";
+import type { ExperimentRef } from "./detect";
+import type { StepEvent } from "./observer";
 
 export interface AgentResponse {
-  verdict: 'NO_ACTION' | 'WARN' | 'HINT' | 'CONCEPT';
-  severity: 'fatal' | 'recoverable' | 'info';
+  verdict: "NO_ACTION" | "WARN" | "HINT" | "CONCEPT";
+  severity: "fatal" | "recoverable" | "info";
   title?: string;
   message?: string;
   concept?: string;
@@ -79,13 +79,13 @@ export class Api {
     const timer = window.setTimeout(() => controller.abort(), timeoutMs ?? this.timeoutMs);
     try {
       const res = await fetch(`${this.base}${path}`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify(body),
         signal: controller.signal,
         // No cookies: the session is pseudonymous and cross-origin by design.
-        credentials: 'omit',
-        mode: 'cors',
+        credentials: "omit",
+        mode: "cors",
       });
       if (!res.ok) return null;
       return (await res.json()) as T;
@@ -100,7 +100,7 @@ export class Api {
     ref: ExperimentRef,
     extras: { role?: string; userKey?: string; institution?: string; locale?: string },
   ): Promise<StartResponse | null> {
-    return this.post<StartResponse>('/session/start', {
+    return this.post<StartResponse>("/session/start", {
       experiment: {
         experiment_id: ref.experimentId,
         lab_id: ref.labId,
@@ -109,17 +109,17 @@ export class Api {
         institute: ref.institute,
         experiment_title: ref.experimentTitle,
       },
-      role: extras.role ?? 'student',
+      role: extras.role ?? "student",
       user_key: extras.userKey,
       institution: extras.institution,
-      locale: extras.locale ?? 'en',
-      client_version: '1.0.0',
+      locale: extras.locale ?? "en",
+      client_version: "1.0.0",
     });
   }
 
   sendEvent(sessionId: string, event: StepEvent): Promise<AgentResponse | null> {
     return this.post<AgentResponse>(
-      '/session/event',
+      "/session/event",
       {
         session_id: sessionId,
         action: event.action,
@@ -145,7 +145,7 @@ export class Api {
    * next real event.
    */
   behaviour(sessionId: string, snapshot: unknown, signals: unknown[]): Promise<unknown | null> {
-    return this.post('/session/behaviour', {
+    return this.post("/session/behaviour", {
       session_id: sessionId,
       snapshot,
       signals,
@@ -153,7 +153,7 @@ export class Api {
   }
 
   feedback(sessionId: string, interventionId: string, outcome: string, note?: string) {
-    return this.post('/session/feedback', {
+    return this.post("/session/feedback", {
       session_id: sessionId,
       intervention_id: interventionId,
       outcome,
@@ -161,8 +161,8 @@ export class Api {
     });
   }
 
-  endSession(sessionId: string, reason = 'completed'): Promise<Summary | null> {
-    return this.post<Summary>('/session/end', { session_id: sessionId, reason }, 25000);
+  endSession(sessionId: string, reason = "completed"): Promise<Summary | null> {
+    return this.post<Summary>("/session/end", { session_id: sessionId, reason }, 25000);
   }
 
   submitQuiz(sessionId: string, answers: Record<string, number>) {
@@ -171,7 +171,7 @@ export class Api {
       total: number;
       per_question: Record<string, boolean>;
       feedback: Record<string, string>;
-    }>('/session/quiz', { session_id: sessionId, answers });
+    }>("/session/quiz", { session_id: sessionId, answers });
   }
 
   /** Streaming chat. Falls back to the non-streaming endpoint on failure. */
@@ -183,25 +183,25 @@ export class Api {
     let res: Response;
     try {
       res = await fetch(`${this.base}/chat/stream`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        method: "POST",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, message, history }),
-        credentials: 'omit',
-        mode: 'cors',
+        credentials: "omit",
+        mode: "cors",
       });
     } catch {
-      yield { delta: 'I could not reach the assistant service just now.', done: true };
+      yield { delta: "I could not reach the assistant service just now.", done: true };
       return;
     }
 
     if (!res.ok || !res.body) {
-      const fallback = await this.post<{ text: string }>('/chat', {
+      const fallback = await this.post<{ text: string }>("/chat", {
         session_id: sessionId,
         message,
         history,
       });
       yield {
-        delta: fallback?.text ?? 'I could not reach the assistant service just now.',
+        delta: fallback?.text ?? "I could not reach the assistant service just now.",
         done: true,
       };
       return;
@@ -209,17 +209,17 @@ export class Api {
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
-    let buffer = '';
+    let buffer = "";
 
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
-      const parts = buffer.split('\n\n');
-      buffer = parts.pop() ?? '';
+      const parts = buffer.split("\n\n");
+      buffer = parts.pop() ?? "";
       for (const part of parts) {
         const line = part.trim();
-        if (!line.startsWith('data:')) continue;
+        if (!line.startsWith("data:")) continue;
         try {
           yield JSON.parse(line.slice(5).trim());
         } catch {

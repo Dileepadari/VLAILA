@@ -15,7 +15,16 @@
     "Predict which colour pairs collapse under each form of CVD.",
     "Apply the finding to interface and signage design so information is never carried by hue alone."
   ],
-  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+  "tasks": [
+    "Aim",
+    "Theory",
+    "Pretest",
+    "Procedure",
+    "Simulation",
+    "Posttest",
+    "References",
+    "Feedback"
+  ],
 
   "prerequisites": [
     {

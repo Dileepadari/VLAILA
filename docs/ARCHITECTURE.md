@@ -30,12 +30,12 @@ If the network is down, the student loses the model tier and keeps everything el
 `kb/experiments/*.json` is the only source of truth about an experiment, and it is consumed by
 four things that must agree:
 
-| Consumer | Uses |
-|---|---|
-| `server/app/agent/rules.py` | steps, errors |
-| `embed/src/rules.ts` | steps, errors (shipped to the browser at session start) |
-| `server/app/agent/rag.py` | theory_chunks, concepts, misconceptions |
-| `server/app/agent/quiz.py` | quiz_bank |
+| Consumer                    | Uses                                                    |
+| --------------------------- | ------------------------------------------------------- |
+| `server/app/agent/rules.py` | steps, errors                                           |
+| `embed/src/rules.ts`        | steps, errors (shipped to the browser at session start) |
+| `server/app/agent/rag.py`   | theory_chunks, concepts, misconceptions                 |
+| `server/app/agent/quiz.py`  | quiz_bank                                               |
 
 `ExperimentKB.client_rules()` decides what the browser gets. It deliberately excludes
 `theory_chunks` (large) and `quiz_bank` — shipping the quiz answers to the client would let a
@@ -136,7 +136,7 @@ Consequences of running inside pages we do not own:
 
 The entire UI renders inside a Shadow root. Non-negotiable when injecting into ~200 sites you do
 not control: the labs style bare `button`, `h1` and `.btn` globally, and without a shadow boundary
-the widget would look different on every lab. Theme follows the *host page's* background rather
+the widget would look different on every lab. Theme follows the _host page's_ background rather
 than the OS, because a dark panel over a white lab page reads as a stray browser extension.
 
 Bundle: IIFE, ES2019, ~20 kB gzipped, no webfont, no external request.

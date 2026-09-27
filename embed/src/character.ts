@@ -18,11 +18,11 @@
  * by swapping artwork.
  */
 
-export type Pose = 'idle' | 'thinking' | 'talking' | 'pointing' | 'pleased' | 'concerned';
-export type Avatar = 'ravi' | 'asha';
+export type Pose = "idle" | "thinking" | "talking" | "pointing" | "pleased" | "concerned";
+export type Avatar = "ravi" | "asha";
 
-const SKIN = { light: '#F3C9A6', mid: '#E0A87E', dark: '#C4885F' };
-const HAIR_TONE = { light: '#3A2E2A', dark: '#241B18' };
+const SKIN = { light: "#F3C9A6", mid: "#E0A87E", dark: "#C4885F" };
+const HAIR_TONE = { light: "#3A2E2A", dark: "#241B18" };
 
 /*
  * Hair is the only thing that differs between the two assistants -- the rig,
@@ -37,15 +37,14 @@ const HAIR: Record<Avatar, { back: string | null; front: string }> = {
   ravi: {
     back: null,
     front:
-      'M76 44c0-16 11-26 24-26s24 10 24 26c0 4-1 8-2 11 0-8-3-12-8-13-6-1-9 2-14 2s-8-3-14-2c-5 1-8 5-8 13-1-3-2-7-2-11z',
+      "M76 44c0-16 11-26 24-26s24 10 24 26c0 4-1 8-2 11 0-8-3-12-8-13-6-1-9 2-14 2s-8-3-14-2c-5 1-8 5-8 13-1-3-2-7-2-11z",
   },
   asha: {
     // Falls from the crown to just below the shoulder line, tucked behind
     // the coat collar.
-    back:
-      'M71 48c0-19 13-31 29-31s29 12 29 31c0 12-2 22-3 32-1 12-2 22-5 30-3-9-5-19-6-30-1-9-1-19-1-27h-28c0 8 0 18-1 27-1 11-3 21-6 30-3-8-4-18-5-30-1-10-3-20-3-32z',
+    back: "M71 48c0-19 13-31 29-31s29 12 29 31c0 12-2 22-3 32-1 12-2 22-5 30-3-9-5-19-6-30-1-9-1-19-1-27h-28c0 8 0 18-1 27-1 11-3 21-6 30-3-8-4-18-5-30-1-10-3-20-3-32z",
     front:
-      'M75 46c0-17 11-28 25-28s25 11 25 28c0 4-1 8-2 12-1-9-4-14-10-16-5-2-9 1-13 1s-8-3-13-1c-6 2-9 7-10 16-1-4-2-8-2-12z',
+      "M75 46c0-17 11-28 25-28s25 11 25 28c0 4-1 8-2 12-1-9-4-14-10-16-5-2-9 1-13 1s-8-3-13-1c-6 2-9 7-10 16-1-4-2-8-2-12z",
   },
 };
 
@@ -173,7 +172,7 @@ export const CHARACTER_SVG = (avatar: Avatar): string => /* html */ `
 
     <!-- ---------------------------------------------------------- head -->
     <g class="vl-head">
-      ${HAIR[avatar].back ? `<path d="${HAIR[avatar].back}" fill="url(#vl-hair)"/>` : ''}
+      ${HAIR[avatar].back ? `<path d="${HAIR[avatar].back}" fill="url(#vl-hair)"/>` : ""}
       <!-- Neck, with the shadow the jaw casts onto it -->
       <path d="M92 78h16v22H92z" fill="${SKIN.mid}"/>
       <path d="M92 78h16v9c-5 3-11 3-16 0z" fill="${SKIN.dark}" opacity="0.55"/>
@@ -252,17 +251,65 @@ export const POSES: Record<
   // angles stay inside what the rig can express convincingly; the head tilt,
   // brows and mouth carry most of the expression, and the bubble shape
   // (spoken vs thought) carries the rest.
-  idle:      { armL: 0,   armR: 0,   headTilt: 0,  headNod: 0,  mouth: 'M93 69q7 4 14 0',   browY: 0,    clipboard: 0 },
+  idle: {
+    armL: 0,
+    armR: 0,
+    headTilt: 0,
+    headNod: 0,
+    mouth: "M93 69q7 4 14 0",
+    browY: 0,
+    clipboard: 0,
+  },
   // Weight shifted, head tipped, brows up: considering.
-  thinking:  { armL: 4,   armR: -20, headTilt: -8, headNod: 2,  mouth: 'M94 70q6 2 12 -1',  browY: -2,   clipboard: 0 },
+  thinking: {
+    armL: 4,
+    armR: -20,
+    headTilt: -8,
+    headNod: 2,
+    mouth: "M94 70q6 2 12 -1",
+    browY: -2,
+    clipboard: 0,
+  },
   // Mid-explanation: open gesture, clipboard out.
-  talking:   { armL: -12, armR: -34, headTilt: 2,  headNod: 0,  mouth: 'M92 68q8 7 16 0',   browY: 0,    clipboard: 1 },
+  talking: {
+    armL: -12,
+    armR: -34,
+    headTilt: 2,
+    headNod: 0,
+    mouth: "M92 68q8 7 16 0",
+    browY: 0,
+    clipboard: 1,
+  },
   // The one pose where a fully extended arm is right. It has to be the *left*
   // arm: the assistant stands at the bottom-right of the page, so the
   // experiment is on their left, and pointing with the near arm would send the
   // student's eye off the edge of the screen. The head turns to follow.
-  pointing:  { armL: 98,  armR: -6,  headTilt: -7, headNod: 1,  mouth: 'M93 69q7 5 14 0',   browY: -1,   clipboard: 0 },
-  pleased:   { armL: -10, armR: -18, headTilt: -3, headNod: -1, mouth: 'M90 67q10 9 20 0',  browY: -2.5, clipboard: 0 },
+  pointing: {
+    armL: 98,
+    armR: -6,
+    headTilt: -7,
+    headNod: 1,
+    mouth: "M93 69q7 5 14 0",
+    browY: -1,
+    clipboard: 0,
+  },
+  pleased: {
+    armL: -10,
+    armR: -18,
+    headTilt: -3,
+    headNod: -1,
+    mouth: "M90 67q10 9 20 0",
+    browY: -2.5,
+    clipboard: 0,
+  },
   // Brows down, mouth flat, shoulders drawn in.
-  concerned: { armL: 8,   armR: -8,  headTilt: -4, headNod: 3,  mouth: 'M93 71h14',         browY: 2.5,  clipboard: 0 },
+  concerned: {
+    armL: 8,
+    armR: -8,
+    headTilt: -4,
+    headNod: 3,
+    mouth: "M93 71h14",
+    browY: 2.5,
+    clipboard: 0,
+  },
 };

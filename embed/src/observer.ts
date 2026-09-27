@@ -20,7 +20,7 @@
  *     `mousemove`-driven canvas cannot flood the API.
  */
 
-import { currentTask, simulatorFrames } from './detect';
+import { currentTask, simulatorFrames } from "./detect";
 
 export interface StepEvent {
   action: string;
@@ -39,13 +39,13 @@ const MAX_EVENTS_PER_MINUTE = 60;
 /** A stable, readable selector for an element: id, else tag.class, else tag. */
 function describe(el: Element): string {
   if (el.id) return `${el.tagName.toLowerCase()}#${el.id}`;
-  const cls = (el.getAttribute('class') || '')
+  const cls = (el.getAttribute("class") || "")
     .split(/\s+/)
     .filter((c) => c && !/^(ng-|is-|active$|selected$)/.test(c))
     .slice(0, 2)
-    .join('.');
+    .join(".");
   if (cls) return `${el.tagName.toLowerCase()}.${cls}`;
-  const href = el.getAttribute('href');
+  const href = el.getAttribute("href");
   if (href) return `${el.tagName.toLowerCase()}[href="${href}"]`;
   return el.tagName.toLowerCase();
 }
@@ -53,17 +53,18 @@ function describe(el: Element): string {
 /** The element's accessible label, so a KB author can target it by text. */
 function labelOf(el: Element): string | undefined {
   const input = el as HTMLInputElement;
-  if (input.value && (el.tagName === 'INPUT' || el.tagName === 'BUTTON')) {
+  if (input.value && (el.tagName === "INPUT" || el.tagName === "BUTTON")) {
     return input.value.trim().slice(0, 80);
   }
-  const aria = el.getAttribute('aria-label') || el.getAttribute('title');
+  const aria = el.getAttribute("aria-label") || el.getAttribute("title");
   if (aria) return aria.trim().slice(0, 80);
-  const text = (el as HTMLElement).innerText || el.textContent || '';
-  const trimmed = text.trim().replace(/\s+/g, ' ');
+  const text = (el as HTMLElement).innerText || el.textContent || "";
+  const trimmed = text.trim().replace(/\s+/g, " ");
   return trimmed ? trimmed.slice(0, 80) : undefined;
 }
 
-const INTERACTIVE = 'a,button,input,select,textarea,label,img,canvas,[role="button"],md-select,md-option,md-slider';
+const INTERACTIVE =
+  'a,button,input,select,textarea,label,img,canvas,[role="button"],md-select,md-option,md-slider';
 
 /**
  * Duck-typed, deliberately.
@@ -76,7 +77,7 @@ const INTERACTIVE = 'a,button,input,select,textarea,label,img,canvas,[role="butt
  */
 function closestInteractive(target: EventTarget | null): Element | null {
   const node = target as Element | null;
-  if (!node || node.nodeType !== 1 || typeof node.closest !== 'function') return null;
+  if (!node || node.nodeType !== 1 || typeof node.closest !== "function") return null;
   return node.closest(INTERACTIVE) ?? node;
 }
 
@@ -95,7 +96,7 @@ export class Observer {
   }
 
   start(): void {
-    this.attach(document, 'host');
+    this.attach(document, "host");
     this.scanFrames();
 
     // Frames arrive late and get replaced; re-scan on DOM change, coalesced.
@@ -137,10 +138,10 @@ export class Observer {
 
     const opts: AddEventListenerOptions = { capture: true, passive: true };
 
-    doc.addEventListener('click', (e) => this.onClick(e, frame), opts);
-    doc.addEventListener('change', (e) => this.onChange(e, frame), opts);
-    doc.addEventListener('input', (e) => this.onInput(e, frame), opts);
-    doc.addEventListener('submit', (e) => this.onSubmit(e, frame), opts);
+    doc.addEventListener("click", (e) => this.onClick(e, frame), opts);
+    doc.addEventListener("change", (e) => this.onChange(e, frame), opts);
+    doc.addEventListener("input", (e) => this.onInput(e, frame), opts);
+    doc.addEventListener("submit", (e) => this.onSubmit(e, frame), opts);
   }
 
   private allow(): boolean {
@@ -164,20 +165,20 @@ export class Observer {
     // An in-page link to another task page is a navigation, not a click: it
     // tells us the student is moving between Aim / Theory / Simulation, which
     // is what the KB's navigate detectors key on.
-    const href = el.getAttribute?.('href');
-    if (href && /\.html?($|[?#])/.test(href) && !href.startsWith('http')) {
+    const href = el.getAttribute?.("href");
+    if (href && /\.html?($|[?#])/.test(href) && !href.startsWith("http")) {
       const task = this.taskFromHref(href);
       if (task) {
-        this.send({ action: 'navigate', task, frame, selector: describe(el) });
+        this.send({ action: "navigate", task, frame, selector: describe(el) });
         return;
       }
     }
 
     const input = el as HTMLInputElement;
-    if (input.type === 'file') return; // handled by change
+    if (input.type === "file") return; // handled by change
 
     this.send({
-      action: 'click',
+      action: "click",
       task: currentTask(),
       selector: describe(el),
       frame,
@@ -189,9 +190,9 @@ export class Observer {
     const el = e.target as HTMLInputElement | HTMLSelectElement | null;
     if (!el || !el.tagName) return;
 
-    if ((el as HTMLInputElement).type === 'file') {
+    if ((el as HTMLInputElement).type === "file") {
       this.send({
-        action: 'upload',
+        action: "upload",
         task: currentTask(),
         selector: describe(el),
         frame,
@@ -200,9 +201,9 @@ export class Observer {
       return;
     }
 
-    const action = el.tagName === 'SELECT' ? 'select' : 'change';
+    const action = el.tagName === "SELECT" ? "select" : "change";
     const raw = (el as HTMLInputElement).value;
-    const numeric = raw !== '' && !Number.isNaN(Number(raw)) ? Number(raw) : undefined;
+    const numeric = raw !== "" && !Number.isNaN(Number(raw)) ? Number(raw) : undefined;
 
     this.send({
       action,
@@ -216,8 +217,8 @@ export class Observer {
 
   private onInput(e: Event, frame: string): void {
     const el = e.target as HTMLInputElement | null;
-    if (!el || el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA') return;
-    if (el.type === 'file') return;
+    if (!el || (el.tagName !== "INPUT" && el.tagName !== "TEXTAREA")) return;
+    if (el.type === "file") return;
 
     // Debounce: a student typing "220" must produce one event, not three.
     const key = `${frame}:${describe(el)}`;
@@ -226,9 +227,9 @@ export class Observer {
       key,
       window.setTimeout(() => {
         const raw = el.value;
-        const numeric = raw !== '' && !Number.isNaN(Number(raw)) ? Number(raw) : undefined;
+        const numeric = raw !== "" && !Number.isNaN(Number(raw)) ? Number(raw) : undefined;
         this.send({
-          action: 'input',
+          action: "input",
           task: currentTask(),
           selector: describe(el),
           frame,
@@ -242,7 +243,7 @@ export class Observer {
   private onSubmit(e: Event, frame: string): void {
     const el = e.target as Element | null;
     this.send({
-      action: 'submit',
+      action: "submit",
       task: currentTask(),
       selector: el ? describe(el) : undefined,
       frame,
@@ -250,28 +251,28 @@ export class Observer {
   }
 
   private taskFromHref(href: string): string | undefined {
-    const file = href.split('/').pop()?.split(/[?#]/)[0]?.replace('.html', '').toLowerCase();
+    const file = href.split("/").pop()?.split(/[?#]/)[0]?.replace(".html", "").toLowerCase();
     const map: Record<string, string> = {
-      index: 'Aim',
-      theory: 'Theory',
-      pretest: 'Pretest',
-      procedure: 'Procedure',
-      simulation: 'Simulation',
-      posttest: 'Posttest',
-      references: 'References',
-      feedback: 'Feedback',
+      index: "Aim",
+      theory: "Theory",
+      pretest: "Pretest",
+      procedure: "Procedure",
+      simulation: "Simulation",
+      posttest: "Posttest",
+      references: "References",
+      feedback: "Feedback",
     };
     return file ? map[file] : undefined;
   }
 
   /** Resolve a KB `frame` name to a live document, for highlighting. */
   documentFor(frame: string | undefined): Document {
-    if (!frame || frame === 'host') return document;
+    if (!frame || frame === "host") return document;
     for (const { name, doc } of simulatorFrames()) {
       if (name === frame) return doc;
     }
     // `sim` in the KB means "anywhere in the simulator"; take the outermost.
-    if (frame === 'sim') {
+    if (frame === "sim") {
       const first = simulatorFrames()[0];
       if (first) return first.doc;
     }

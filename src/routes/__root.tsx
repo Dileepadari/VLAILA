@@ -77,10 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "VLAILA — Virtual Labs AI Lab Assistant" },
-      { name: "description", content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India." },
+      {
+        name: "description",
+        content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India.",
+      },
       { name: "author", content: "Virtual Labs" },
       { property: "og:title", content: "VLAILA — Virtual Labs AI Lab Assistant" },
-      { property: "og:description", content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India." },
+      {
+        property: "og:description",
+        content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@virtuallabs" },
@@ -124,7 +130,10 @@ function PortalStyles() {
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i"
       />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i"
+      />
       <link rel="stylesheet" href={vlabsOverridesCss} />
     </>
   );

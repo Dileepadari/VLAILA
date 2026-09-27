@@ -25,17 +25,17 @@
  */
 
 export type BehaviourSignalKind =
-  | 'rage_click'
-  | 'hesitation'
-  | 'thrash'
-  | 'idle'
-  | 'attention_lost'
-  | 'returned'
-  | 'skimmed'
-  | 'read'
-  | 'backtrack'
-  | 'wandering'
-  | 'flow';
+  | "rage_click"
+  | "hesitation"
+  | "thrash"
+  | "idle"
+  | "attention_lost"
+  | "returned"
+  | "skimmed"
+  | "read"
+  | "backtrack"
+  | "wandering"
+  | "flow";
 
 export interface BehaviourSignal {
   kind: BehaviourSignalKind;
@@ -92,17 +92,17 @@ const INTERACTIVE =
 
 function describe(el: Element): string {
   if (el.id) return `${el.tagName.toLowerCase()}#${el.id}`;
-  const cls = (el.getAttribute('class') || '')
+  const cls = (el.getAttribute("class") || "")
     .split(/\s+/)
     .filter((c) => c && !/^(ng-|is-|active$|selected$)/.test(c))
     .slice(0, 2)
-    .join('.');
+    .join(".");
   return cls ? `${el.tagName.toLowerCase()}.${cls}` : el.tagName.toLowerCase();
 }
 
 function closestInteractive(target: EventTarget | null): Element | null {
   const node = target as Element | null;
-  if (!node || node.nodeType !== 1 || typeof node.closest !== 'function') return null;
+  if (!node || node.nodeType !== 1 || typeof node.closest !== "function") return null;
   return node.closest(INTERACTIVE);
 }
 
@@ -153,7 +153,7 @@ export class Behaviour {
 
   start(): void {
     this.attach(document);
-    document.addEventListener('visibilitychange', () => this.onVisibility(), { passive: true });
+    document.addEventListener("visibilitychange", () => this.onVisibility(), { passive: true });
     this.ticker = window.setInterval(() => this.tick(), TICK_MS);
   }
 
@@ -169,12 +169,12 @@ export class Behaviour {
     this.docs.add(doc);
     const opts: AddEventListenerOptions = { capture: true, passive: true };
 
-    doc.addEventListener('pointermove', (e) => this.onPointerMove(e as PointerEvent), opts);
-    doc.addEventListener('pointerover', (e) => this.onPointerOver(e), opts);
-    doc.addEventListener('pointerout', (e) => this.onPointerOut(e), opts);
-    doc.addEventListener('click', (e) => this.onClick(e), opts);
-    doc.addEventListener('keydown', () => this.markActive(), opts);
-    doc.addEventListener('scroll', () => this.onScroll(doc), { capture: true, passive: true });
+    doc.addEventListener("pointermove", (e) => this.onPointerMove(e as PointerEvent), opts);
+    doc.addEventListener("pointerover", (e) => this.onPointerOver(e), opts);
+    doc.addEventListener("pointerout", (e) => this.onPointerOut(e), opts);
+    doc.addEventListener("click", (e) => this.onClick(e), opts);
+    doc.addEventListener("keydown", () => this.markActive(), opts);
+    doc.addEventListener("scroll", () => this.onScroll(doc), { capture: true, passive: true });
   }
 
   /** Called by the host when a step event names a task, to spot backtracking. */
@@ -187,7 +187,7 @@ export class Behaviour {
     // a student browsing. Only flag it when they had moved on at least twice.
     if (previous >= 0 && this.tasksVisited.length - previous > 2) {
       this.emit({
-        kind: 'backtrack',
+        kind: "backtrack",
         confidence: 0.75,
         detail: task,
         at: Date.now(),
@@ -202,7 +202,7 @@ export class Behaviour {
     this.fieldChanges.set(selector, n);
     if (n === 4) {
       this.corrections += 1;
-      this.emit({ kind: 'thrash', confidence: 0.7, selector, at: Date.now() });
+      this.emit({ kind: "thrash", confidence: 0.7, selector, at: Date.now() });
     }
   }
 
@@ -260,7 +260,7 @@ export class Behaviour {
     this.lastActivityAt = Date.now();
     if (this.idleAnnounced) {
       this.idleAnnounced = false;
-      this.emit({ kind: 'returned', confidence: 0.8, at: Date.now() });
+      this.emit({ kind: "returned", confidence: 0.8, at: Date.now() });
     }
   }
 
@@ -284,7 +284,10 @@ export class Behaviour {
         const dist = Math.hypot(dx, dy);
         if (dist < 400) this.pointerDistance += dist;
         // A reversal is a sign change on either axis with real movement.
-        if (dist > 6 && (Math.sign(dx) !== Math.sign(last.dx) || Math.sign(dy) !== Math.sign(last.dy))) {
+        if (
+          dist > 6 &&
+          (Math.sign(dx) !== Math.sign(last.dx) || Math.sign(dy) !== Math.sign(last.dy))
+        ) {
           this.pointerReversals += 1;
         }
         this.lastPointer = { x: e.clientX, y: e.clientY, dx, dy };
@@ -312,7 +315,7 @@ export class Behaviour {
       if (!current || current.committed) return;
       this.hesitations += 1;
       this.emit({
-        kind: 'hesitation',
+        kind: "hesitation",
         confidence: 0.72,
         selector,
         detail: labelFor(el),
@@ -337,7 +340,7 @@ export class Behaviour {
   private onClick(e: Event): void {
     this.markActive();
     const el = closestInteractive(e.target);
-    const selector = el ? describe(el) : 'non-interactive';
+    const selector = el ? describe(el) : "non-interactive";
     const now = Date.now();
     this.clicks.push({ at: now, selector });
     if (this.clicks.length > 200) this.clicks.shift();
@@ -347,12 +350,14 @@ export class Behaviour {
 
     // Repeated hits on the same target in quick succession: the control is
     // not responding the way the student expects.
-    const recent = this.clicks.filter((c) => now - c.at < RAGE_WINDOW_MS && c.selector === selector);
+    const recent = this.clicks.filter(
+      (c) => now - c.at < RAGE_WINDOW_MS && c.selector === selector,
+    );
     if (recent.length >= RAGE_CLICKS) {
       this.rageClicks += 1;
       this.clicks = this.clicks.filter((c) => c.selector !== selector);
       this.emit({
-        kind: 'rage_click',
+        kind: "rage_click",
         confidence: 0.85,
         selector,
         detail: el ? labelFor(el) : undefined,
@@ -382,7 +387,7 @@ export class Behaviour {
       this.markActive();
       if (gone > 30_000) {
         this.emit({
-          kind: 'attention_lost',
+          kind: "attention_lost",
           confidence: 0.8,
           detail: `${Math.round(gone / 1000)}s`,
           at: Date.now(),
@@ -401,7 +406,7 @@ export class Behaviour {
     if (idleMs > IDLE_MS && !this.idleAnnounced && !document.hidden) {
       this.idleAnnounced = true;
       this.emit({
-        kind: 'idle',
+        kind: "idle",
         confidence: 0.7,
         detail: `${Math.round(idleMs / 1000)}s`,
         at: now,
@@ -413,7 +418,7 @@ export class Behaviour {
     if (this.pointerDistance > 4000 && this.pointerReversals > 25 && this.clicks.length === 0) {
       this.pointerReversals = 0;
       this.pointerDistance = 0;
-      this.emit({ kind: 'wandering', confidence: 0.65, at: now });
+      this.emit({ kind: "wandering", confidence: 0.65, at: now });
     }
 
     // Steady, decisive work with nothing going wrong is worth saying out loud
@@ -428,7 +433,7 @@ export class Behaviour {
       !this.flowAnnounced
     ) {
       this.flowAnnounced = true;
-      this.emit({ kind: 'flow', confidence: 0.7, at: now });
+      this.emit({ kind: "flow", confidence: 0.7, at: now });
     }
 
     this.onSnapshot(snap);
@@ -445,9 +450,9 @@ export class Behaviour {
       const dwell = Date.now() - this.scrollStartedAt;
       const screens = Math.max(1, this.scrollDepth * 3);
       if (this.scrollDepth > 0.6 && dwell > READ_MS_PER_SCREEN * screens) {
-        this.emit({ kind: 'read', confidence: 0.7, at: Date.now() });
+        this.emit({ kind: "read", confidence: 0.7, at: Date.now() });
       } else if (this.scrollDepth > 0.5 && dwell < READ_MS_PER_SCREEN) {
-        this.emit({ kind: 'skimmed', confidence: 0.75, at: Date.now() });
+        this.emit({ kind: "skimmed", confidence: 0.75, at: Date.now() });
       }
     }
     this.scrollDepth = 0;
@@ -468,8 +473,8 @@ function clamp01(n: number): number {
 }
 
 function labelFor(el: Element): string | undefined {
-  const aria = el.getAttribute('aria-label') || el.getAttribute('title');
+  const aria = el.getAttribute("aria-label") || el.getAttribute("title");
   if (aria) return aria.trim().slice(0, 60);
-  const text = ((el as HTMLElement).innerText || el.textContent || '').trim().replace(/\s+/g, ' ');
+  const text = ((el as HTMLElement).innerText || el.textContent || "").trim().replace(/\s+/g, " ");
   return text ? text.slice(0, 60) : undefined;
 }

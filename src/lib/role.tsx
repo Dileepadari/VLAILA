@@ -14,14 +14,17 @@ const NAMES: Record<Role, string> = {
 export function RoleProvider({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<Role>("student");
   useEffect(() => {
-    const stored = (typeof window !== "undefined" && localStorage.getItem("vlabs-role")) as Role | null;
+    const stored = (typeof window !== "undefined" &&
+      localStorage.getItem("vlabs-role")) as Role | null;
     if (stored) setRoleState(stored);
   }, []);
   const setRole = (r: Role) => {
     setRoleState(r);
     if (typeof window !== "undefined") localStorage.setItem("vlabs-role", r);
   };
-  return <RoleCtx.Provider value={{ role, setRole, name: NAMES[role] }}>{children}</RoleCtx.Provider>;
+  return (
+    <RoleCtx.Provider value={{ role, setRole, name: NAMES[role] }}>{children}</RoleCtx.Provider>
+  );
 }
 
 export const useRole = () => useContext(RoleCtx);

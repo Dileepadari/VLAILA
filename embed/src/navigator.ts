@@ -17,14 +17,7 @@
  */
 
 export type PageKind =
-  | 'home'
-  | 'broad-area'
-  | 'lab'
-  | 'institutes'
-  | 'about'
-  | 'contact'
-  | 'dashboard'
-  | 'other';
+  "home" | "broad-area" | "lab" | "institutes" | "about" | "contact" | "dashboard" | "other";
 
 export interface PageContext {
   kind: PageKind;
@@ -36,15 +29,15 @@ export interface PageContext {
 const MAX_TARGETS = 40;
 
 export function classify(): PageKind {
-  const path = location.pathname.replace(/\/+$/, '');
-  if (path === '' || path === '/') return 'home';
-  if (/broad-area/.test(path)) return 'broad-area';
-  if (/\/labs?\//.test(path) || document.querySelector('.vlabs-page-main')) return 'lab';
-  if (/participating-institutes|partners/.test(path)) return 'institutes';
-  if (/about/.test(path)) return 'about';
-  if (/contact/.test(path)) return 'contact';
-  if (/dashboard|faculty|admin|studio/.test(path)) return 'dashboard';
-  return 'other';
+  const path = location.pathname.replace(/\/+$/, "");
+  if (path === "" || path === "/") return "home";
+  if (/broad-area/.test(path)) return "broad-area";
+  if (/\/labs?\//.test(path) || document.querySelector(".vlabs-page-main")) return "lab";
+  if (/participating-institutes|partners/.test(path)) return "institutes";
+  if (/about/.test(path)) return "about";
+  if (/contact/.test(path)) return "contact";
+  if (/dashboard|faculty|admin|studio/.test(path)) return "dashboard";
+  return "other";
 }
 
 /**
@@ -53,44 +46,48 @@ export function classify(): PageKind {
  * Restricted to same-origin, in-content links: the header, footer and any
  * social or external link would otherwise swamp the useful destinations.
  */
-export function scanTargets(): PageContext['targets'] {
+export function scanTargets(): PageContext["targets"] {
   const seen = new Set<string>();
-  const out: PageContext['targets'] = [];
+  const out: PageContext["targets"] = [];
 
   const scopes = [
-    document.querySelector('.ba-text'),
-    document.querySelector('.vlabs-page-content'),
-    document.querySelector('#menu'),
-    document.querySelector('main'),
+    document.querySelector(".ba-text"),
+    document.querySelector(".vlabs-page-content"),
+    document.querySelector("#menu"),
+    document.querySelector("main"),
     document.body,
   ].filter(Boolean) as Element[];
 
   for (const scope of scopes) {
-    for (const a of Array.from(scope.querySelectorAll('a[href]'))) {
+    for (const a of Array.from(scope.querySelectorAll("a[href]"))) {
       if (out.length >= MAX_TARGETS) break;
-      const href = a.getAttribute('href') || '';
-      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('javascript:')) {
+      const href = a.getAttribute("href") || "";
+      if (
+        !href ||
+        href.startsWith("#") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("javascript:")
+      ) {
         continue;
       }
       // Skip the chrome: these are on every page and are never the answer to
       // "where do I find X".
-      if (a.closest('header,footer,.footer,.ftr,.navbar,.sm-hdr-top,nav.navbar')) continue;
+      if (a.closest("header,footer,.footer,.ftr,.navbar,.sm-hdr-top,nav.navbar")) continue;
 
-      const label = (a.textContent || '').trim().replace(/\s+/g, ' ');
+      const label = (a.textContent || "").trim().replace(/\s+/g, " ");
       if (!label || label.length < 3 || label.length > 90) continue;
 
       const key = label.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
 
-      const group =
-        a.closest('.labs')
-          ? 'Lab'
-          : a.closest('.ba-text')
-            ? 'Discipline'
-            : a.closest('#menu')
-              ? 'This lab'
-              : undefined;
+      const group = a.closest(".labs")
+        ? "Lab"
+        : a.closest(".ba-text")
+          ? "Discipline"
+          : a.closest("#menu")
+            ? "This lab"
+            : undefined;
 
       out.push({ label, href, group });
     }
@@ -103,9 +100,9 @@ export function scanTargets(): PageContext['targets'] {
 export function pageContext(): PageContext {
   const kind = classify();
   const heading =
-    document.querySelector('.innerhead-text')?.textContent?.trim() ||
-    document.querySelector('.vlabs-page-content h2')?.textContent?.trim() ||
-    document.querySelector('h1')?.textContent?.trim() ||
+    document.querySelector(".innerhead-text")?.textContent?.trim() ||
+    document.querySelector(".vlabs-page-content h2")?.textContent?.trim() ||
+    document.querySelector("h1")?.textContent?.trim() ||
     document.title;
 
   return { kind, title: heading || document.title, targets: scanTargets() };
@@ -114,47 +111,47 @@ export function pageContext(): PageContext {
 /** What the assistant offers when it is opened with nothing else to say. */
 export function greeting(ctx: PageContext): { title: string; message: string } {
   switch (ctx.kind) {
-    case 'home':
+    case "home":
       return {
-        title: 'Looking for a particular lab?',
+        title: "Looking for a particular lab?",
         message:
-          'There are ten disciplines here and over 1500 experiments. Tell me a subject — “half adder”, “titration”, “pendulum” — and I will take you to the lab that covers it.',
+          "There are ten disciplines here and over 1500 experiments. Tell me a subject — “half adder”, “titration”, “pendulum” — and I will take you to the lab that covers it.",
       };
-    case 'broad-area':
+    case "broad-area":
       return {
         title: `${ctx.title}`,
         message: `This page lists the labs in ${ctx.title.toLowerCase()}, each hosted by the institute that built it. Tell me what you want to practise and I will pick the lab, or say “what is in this area?” for a summary.`,
       };
-    case 'lab':
+    case "lab":
       return {
-        title: 'Inside a lab',
+        title: "Inside a lab",
         message:
-          'Introduction and Objective set up the theory; List of experiments is where the actual simulators are. Once you open an experiment I switch from guide to lab assistant and start watching the steps with you.',
+          "Introduction and Objective set up the theory; List of experiments is where the actual simulators are. Once you open an experiment I switch from guide to lab assistant and start watching the steps with you.",
       };
-    case 'institutes':
+    case "institutes":
       return {
-        title: 'Participating institutes',
+        title: "Participating institutes",
         message:
-          'Each crest opens the labs that institute maintains. If you are looking for a subject rather than an institute, ask me and I will search across all of them.',
+          "Each crest opens the labs that institute maintains. If you are looking for a subject rather than an institute, ask me and I will search across all of them.",
       };
-    case 'dashboard':
+    case "dashboard":
       return {
-        title: 'Your dashboard',
+        title: "Your dashboard",
         message:
-          'This is where your sessions, assignments and progress live. Ask me things like “what am I behind on?” or “which experiment did I struggle with?”.',
+          "This is where your sessions, assignments and progress live. Ask me things like “what am I behind on?” or “which experiment did I struggle with?”.",
       };
-    case 'about':
-    case 'contact':
+    case "about":
+    case "contact":
       return {
-        title: 'About Virtual Labs',
+        title: "About Virtual Labs",
         message:
-          'Happy to answer questions about the platform. If you would rather get started, ask me for a subject and I will take you to a lab.',
+          "Happy to answer questions about the platform. If you would rather get started, ask me for a subject and I will take you to a lab.",
       };
     default:
       return {
-        title: 'I can help you find your way',
+        title: "I can help you find your way",
         message:
-          'Tell me a subject, a lab or an experiment and I will take you there. On an experiment page I become a lab assistant and watch the steps with you.',
+          "Tell me a subject, a lab or an experiment and I will take you there. On an experiment page I become a lab assistant and watch the steps with you.",
       };
   }
 }
@@ -169,7 +166,7 @@ export function greeting(ctx: PageContext): { title: string; message: string } {
  */
 export function resolve(
   query: string,
-  targets: PageContext['targets'],
+  targets: PageContext["targets"],
 ): { label: string; href: string; score: number }[] {
   const q = query.toLowerCase().trim();
   if (q.length < 2) return [];
@@ -195,5 +192,5 @@ export function resolve(
 }
 
 function escapeRe(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

@@ -15,7 +15,16 @@
     "Apply superposition correctly, including the treatment of suppressed sources.",
     "Recognise the linearity assumption both theorems depend on."
   ],
-  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+  "tasks": [
+    "Aim",
+    "Theory",
+    "Pretest",
+    "Procedure",
+    "Simulation",
+    "Posttest",
+    "References",
+    "Feedback"
+  ],
 
   "prerequisites": [
     {
@@ -127,7 +136,11 @@
       "task": "Simulation",
       "title": "Compute and record the result",
       "requires": ["set-v2"],
-      "detect": { "action": "click", "selector": "#result, button[type='submit']", "frame": "sim:thevenin" },
+      "detect": {
+        "action": "click",
+        "selector": "#result, button[type='submit']",
+        "frame": "sim:thevenin"
+      },
       "milestone": true,
       "hints": {
         "nudge": "Run it — then predict the answer yourself before you look.",
@@ -161,7 +174,11 @@
       "hints": {
         "nudge": "Now check superposition using the same component values.",
         "specific": "Suppress V2 (replace with a short) and find the response to V1 alone, then the reverse, then add. The sum should equal the response with both sources active.",
-        "interactive": { "highlight": "a[href*='superposition']", "frame": "sim", "text": "Superposition simulator." }
+        "interactive": {
+          "highlight": "a[href*='superposition']",
+          "frame": "sim",
+          "text": "Superposition simulator."
+        }
       },
       "concept_ref": "superposition"
     }
@@ -346,7 +363,12 @@
     {
       "id": "q3",
       "question": "Superposition cannot be applied directly to which quantity?",
-      "options": ["Branch current", "Node voltage", "Power dissipated in a resistor", "Terminal voltage"],
+      "options": [
+        "Branch current",
+        "Node voltage",
+        "Power dissipated in a resistor",
+        "Terminal voltage"
+      ],
       "answer_index": 2,
       "explanation": "Power depends on the square of current, so it is not a linear function of the sources. Add the currents first, then compute power from the total.",
       "concept_ref": "superposition",

@@ -17,7 +17,11 @@ function Partners() {
   for (let i = 0; i < INSTITUTES.length; i += 4) rows.push(INSTITUTES.slice(i, i + 4));
 
   return (
-    <InnerPage title="Participating Institutes" breadcrumb="Participating Institutes" rail={<ContactRail />}>
+    <InnerPage
+      title="Participating Institutes"
+      breadcrumb="Participating Institutes"
+      rail={<ContactRail />}
+    >
       <div className="obj-heading-inner">Participating Institutes</div>
       <div className="obj-text-inner">
         {rows.map((row, i) => (

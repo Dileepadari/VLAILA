@@ -7,35 +7,35 @@
  * a student in a college lab happens to have.
  */
 
-import { build } from 'esbuild';
-import { mkdirSync, statSync } from 'node:fs';
+import { build } from "esbuild";
+import { mkdirSync, statSync } from "node:fs";
 
-const watch = process.argv.includes('--watch');
-const dev = process.argv.includes('--dev');
+const watch = process.argv.includes("--watch");
+const dev = process.argv.includes("--dev");
 
-mkdirSync('dist', { recursive: true });
+mkdirSync("dist", { recursive: true });
 
 const options = {
-  entryPoints: ['src/index.ts'],
+  entryPoints: ["src/index.ts"],
   bundle: true,
-  format: 'iife',
-  target: ['es2019'],
-  outfile: 'dist/vlaila.js',
+  format: "iife",
+  target: ["es2019"],
+  outfile: "dist/vlaila.js",
   minify: !dev,
-  sourcemap: dev ? 'inline' : true,
-  legalComments: 'none',
+  sourcemap: dev ? "inline" : true,
+  legalComments: "none",
   banner: {
-    js: '/*! VLAILA - Virtual Labs AI Lab Assistant | AGPL-3.0 | vlab.co.in */',
+    js: "/*! VLAILA - Virtual Labs AI Lab Assistant | AGPL-3.0 | vlab.co.in */",
   },
-  logLevel: 'info',
+  logLevel: "info",
 };
 
 if (watch) {
-  const ctx = await (await import('esbuild')).context(options);
+  const ctx = await (await import("esbuild")).context(options);
   await ctx.watch();
-  console.log('watching src/ …');
+  console.log("watching src/ …");
 } else {
   await build(options);
-  const { size } = statSync('dist/vlaila.js');
+  const { size } = statSync("dist/vlaila.js");
   console.log(`dist/vlaila.js  ${(size / 1024).toFixed(1)} kB`);
 }

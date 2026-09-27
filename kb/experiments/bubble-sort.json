@@ -83,7 +83,11 @@
       "hints": {
         "nudge": "Step through the demo — but predict each swap before you click Next.",
         "specific": "Use Next to advance one comparison at a time and Pause to stop the animation. The interval control changes the speed. Watching passively teaches far less than predicting each step first.",
-        "interactive": { "highlight": "#next", "frame": "sim", "text": "Advance one comparison at a time." }
+        "interactive": {
+          "highlight": "#next",
+          "frame": "sim",
+          "text": "Advance one comparison at a time."
+        }
       },
       "concept": "Each pass guarantees exactly one more element is in its final position. That is the loop invariant, and it is why the algorithm terminates after at most n-1 passes."
     },
@@ -111,7 +115,11 @@
       "hints": {
         "nudge": "Now you decide: swap or move on?",
         "specific": "For each highlighted pair choose Swap if they are out of order, or Next if they are already correct. Practice gives feedback, so wrong choices are cheap here.",
-        "interactive": { "highlight": "#swap", "frame": "sim", "text": "Swap this pair if they are out of order." }
+        "interactive": {
+          "highlight": "#swap",
+          "frame": "sim",
+          "text": "Swap this pair if they are out of order."
+        }
       },
       "concept": "Bubble sort only ever compares adjacent elements. That restriction is exactly what makes it stable, and also what makes it slow."
     },
@@ -179,7 +187,11 @@
       "hints": {
         "nudge": "One flag turns the best case from O(n^2) into O(n) — see how.",
         "specific": "Track whether any swap occurred during a pass. If a full pass completes with no swaps the array is already sorted and you can stop, giving O(n) on already-sorted input.",
-        "interactive": { "highlight": "a[href*='optimized']", "frame": "host", "text": "The optimised variant." }
+        "interactive": {
+          "highlight": "a[href*='optimized']",
+          "frame": "host",
+          "text": "The optimised variant."
+        }
       },
       "concept": "The early-exit flag changes only the best case. Worst and average cases stay O(n^2), because a single element far from its position still forces a full set of passes.",
       "concept_ref": "optimisation"

@@ -18,29 +18,29 @@
  *   data-vlaila-institution institution name, for instructor analytics
  */
 
-import { Api } from './api';
-import type { AgentResponse } from './api';
-import { detect, currentTask } from './detect';
-import { Observer } from './observer';
-import type { StepEvent } from './observer';
+import { Api } from "./api";
+import type { AgentResponse } from "./api";
+import { detect, currentTask } from "./detect";
+import { Observer } from "./observer";
+import type { StepEvent } from "./observer";
 import {
   evaluate,
   progressPercent,
   type ClientRules,
   type LocalState,
   type LocalVerdict,
-} from './rules';
-import { Ui, type Intervention } from './ui';
-import type { Avatar } from './character';
-import { detectLocale, t } from './i18n';
-import { Behaviour, type BehaviourSignal, type BehaviourSnapshot } from './behaviour';
-import { Coach, readout, type CoachMode } from './coach';
-import { greeting, pageContext, resolve, type PageContext } from './navigator';
-import { simulatorFrames } from './detect';
+} from "./rules";
+import { Ui, type Intervention } from "./ui";
+import type { Avatar } from "./character";
+import { detectLocale, t } from "./i18n";
+import { Behaviour, type BehaviourSignal, type BehaviourSnapshot } from "./behaviour";
+import { Coach, readout, type CoachMode } from "./coach";
+import { greeting, pageContext, resolve, type PageContext } from "./navigator";
+import { simulatorFrames } from "./detect";
 
-const DEFAULT_API = 'https://vlaila.vlabs.ac.in/api';
-const OPT_OUT_KEY = 'vlaila:opt-out';
-const SESSION_KEY = 'vlaila:session';
+const DEFAULT_API = "https://vlaila.vlabs.ac.in/api";
+const OPT_OUT_KEY = "vlaila:opt-out";
+const SESSION_KEY = "vlaila:session";
 
 class Vlaila {
   private api!: Api;
@@ -48,12 +48,12 @@ class Vlaila {
   private observer!: Observer;
   private rules: ClientRules | null = null;
   private sessionId: string | null = null;
-  private locale = 'en';
+  private locale = "en";
   private ended = false;
 
   private behaviour!: Behaviour;
   private coach!: Coach;
-  private mode: CoachMode = 'lab';
+  private mode: CoachMode = "lab";
   private page: PageContext | null = null;
   /** Signals since the last report, batched so the API sees one call a minute. */
   private pendingSignals: BehaviourSignal[] = [];
@@ -72,7 +72,7 @@ class Vlaila {
   async boot(): Promise<void> {
     // A student who turns VLAILA off stays off for the whole visit, across
     // page navigations within the experiment.
-    if (sessionStorage.getItem(OPT_OUT_KEY) === '1') return;
+    if (sessionStorage.getItem(OPT_OUT_KEY) === "1") return;
 
     const { ref, apiOverride } = detect();
 
@@ -88,8 +88,7 @@ class Vlaila {
     this.api = new Api(apiOverride || DEFAULT_API);
 
     const script =
-      document.currentScript ??
-      document.querySelector<HTMLScriptElement>('script[src*="vlaila"]');
+      document.currentScript ?? document.querySelector<HTMLScriptElement>('script[src*="vlaila"]');
     const dataset = (script as HTMLScriptElement | null)?.dataset ?? {};
 
     const started = await this.api.startSession(ref, {
@@ -115,34 +114,36 @@ class Vlaila {
         onOpen: () => undefined,
         onClose: () => undefined,
         onOptOut: () => {
-          sessionStorage.setItem(OPT_OUT_KEY, '1');
+          sessionStorage.setItem(OPT_OUT_KEY, "1");
           this.observer.stop();
         },
       },
       this.locale,
-      Ui.storedAvatar() ?? (dataset.vlailaAvatar as Avatar) ?? 'ravi',
+      Ui.storedAvatar() ?? (dataset.vlailaAvatar as Avatar) ?? "ravi",
     );
 
-    this.ui.setSubtitle(started.title ? this.truncate(started.title, 42) : t(this.locale, 'subtitle'));
+    this.ui.setSubtitle(
+      started.title ? this.truncate(started.title, 42) : t(this.locale, "subtitle"),
+    );
 
     this.observer = new Observer((event) => void this.onEvent(event));
     this.observer.start();
 
-    this.startBehaviour('lab');
+    this.startBehaviour("lab");
 
     // Arriving on a page is itself a step in several experiments' procedures.
     const task = currentTask();
-    if (task) void this.onEvent({ action: 'navigate', task, frame: 'host' });
+    if (task) void this.onEvent({ action: "navigate", task, frame: "host" });
 
     // A student sitting on one step is the signal for a hint. Poll rather than
     // wait for an interaction, because being stuck means not interacting.
     window.setInterval(() => this.checkStuck(), 10_000);
 
     // The Feedback page is the platform's own end-of-experiment marker.
-    if (task === 'Feedback' || task === 'Posttest') {
+    if (task === "Feedback" || task === "Posttest") {
       window.setTimeout(() => void this.finish(), 4000);
     }
-    window.addEventListener('pagehide', () => this.flushEnd());
+    window.addEventListener("pagehide", () => this.flushEnd());
   }
 
   // -- behaviour ----------------------------------------------------------
@@ -164,7 +165,7 @@ class Vlaila {
 
     // Simulator frames are separate documents with their own event streams;
     // without this the engine would go blind exactly where it matters most.
-    if (mode === 'lab') {
+    if (mode === "lab") {
       const followFrames = () => {
         for (const { doc } of simulatorFrames()) this.behaviour.attach(doc);
       };
@@ -174,7 +175,7 @@ class Vlaila {
 
     // Batched, so a busy session still costs one request a minute.
     window.setInterval(() => this.reportBehaviour(), 60_000);
-    window.addEventListener('pagehide', () => this.reportBehaviour());
+    window.addEventListener("pagehide", () => this.reportBehaviour());
   }
 
   private onBehaviourSignal(signal: BehaviourSignal): void {
@@ -193,9 +194,9 @@ class Vlaila {
       title: nudge.title,
       message: nudge.message,
       highlightSelector: nudge.selector,
-      highlightFrame: 'host',
+      highlightFrame: "host",
       actions: nudge.actions,
-      tier: 'behaviour',
+      tier: "behaviour",
     } as Intervention);
   }
 
@@ -235,20 +236,20 @@ class Vlaila {
         onOpen: () => undefined,
         onClose: () => undefined,
         onOptOut: () => {
-          sessionStorage.setItem(OPT_OUT_KEY, '1');
+          sessionStorage.setItem(OPT_OUT_KEY, "1");
           this.behaviour?.stop();
           this.coach?.mute();
         },
       },
       this.locale,
-      Ui.storedAvatar() ?? 'ravi',
+      Ui.storedAvatar() ?? "ravi",
     );
 
     const hello = greeting(this.page);
     this.ui.setSubtitle(this.truncate(this.page.title, 42));
     this.ui.setNavigatorMode(hello);
 
-    this.startBehaviour('navigator');
+    this.startBehaviour("navigator");
   }
 
   /** Resolve a typed request against the page index and offer the matches. */
@@ -264,9 +265,7 @@ class Vlaila {
       return;
     }
 
-    const list = matches
-      .map((m) => `- [${m.label}](${m.href})`)
-      .join('\n');
+    const list = matches.map((m) => `- [${m.label}](${m.href})`).join("\n");
     this.ui.pushAgentMessage(
       matches.length === 1
         ? `That is here:\n\n${list}`
@@ -284,8 +283,8 @@ class Vlaila {
     // Feed the behavioural read from the semantic stream too: which task the
     // student moved to, and which fields they keep rewriting, are things only
     // the Observer knows.
-    if (event.action === 'navigate' && event.task) this.behaviour?.noteTask(event.task);
-    if ((event.action === 'input' || event.action === 'change') && event.selector) {
+    if (event.action === "navigate" && event.task) this.behaviour?.noteTask(event.task);
+    if ((event.action === "input" || event.action === "change") && event.selector) {
       this.behaviour?.noteFieldChange(event.selector);
     }
 
@@ -305,14 +304,14 @@ class Vlaila {
           },
           this.state,
         )
-      : ({ kind: 'NO_ACTION', confidence: 1 } as LocalVerdict);
+      : ({ kind: "NO_ACTION", confidence: 1 } as LocalVerdict);
 
     this.applyLocal(local);
 
     const remote = this.sessionId ? await this.api.sendEvent(this.sessionId, event) : null;
     if (remote) {
       this.applyRemote(remote);
-    } else if (local.kind !== 'NO_ACTION') {
+    } else if (local.kind !== "NO_ACTION") {
       // Offline: present the local verdict ourselves.
       this.present({
         kind: local.kind,
@@ -321,20 +320,20 @@ class Vlaila {
         message: local.message,
         highlightSelector: local.highlightSelector,
         highlightFrame: local.highlightFrame,
-        tier: 'offline',
+        tier: "offline",
       });
     }
   }
 
   /** Keep the local mirror in step with what Tier 1 just decided. */
   private applyLocal(verdict: LocalVerdict): void {
-    if (verdict.stepId && verdict.kind === 'NO_ACTION') this.state.completed.add(verdict.stepId);
+    if (verdict.stepId && verdict.kind === "NO_ACTION") this.state.completed.add(verdict.stepId);
     if (verdict.errorId) this.state.shownErrors.add(verdict.errorId);
-    if (verdict.kind === 'CONCEPT' && verdict.stepId) {
+    if (verdict.kind === "CONCEPT" && verdict.stepId) {
       this.state.shownConcepts.add(verdict.stepId);
       this.state.completed.add(verdict.stepId);
     }
-    if (verdict.kind === 'HINT' && verdict.stepId) {
+    if (verdict.kind === "HINT" && verdict.stepId) {
       this.state.hintLevels[verdict.stepId] = verdict.hintLevel ?? 1;
     }
     if (this.rules) this.ui?.setProgress(progressPercent(this.rules, this.state));
@@ -347,7 +346,7 @@ class Vlaila {
       this.state.completed = new Set(response.progress.completed_steps);
       this.ui.setProgress(response.progress.percent);
     }
-    if (response.verdict === 'NO_ACTION') {
+    if (response.verdict === "NO_ACTION") {
       // The student just did the thing we asked for. Retract without being
       // told to: an assistant that notices you fixed it yourself and gets out
       // of the way is the single most trust-building behaviour it has.
@@ -380,21 +379,21 @@ class Vlaila {
     this.state.idleSeconds = this.observer.idleSeconds();
     const verdict = evaluate(
       this.rules,
-      { action: 'dwell', task: currentTask(), frame: 'host' },
+      { action: "dwell", task: currentTask(), frame: "host" },
       this.state,
     );
-    if (verdict.kind !== 'HINT') return;
+    if (verdict.kind !== "HINT") return;
     this.applyLocal(verdict);
     this.present({
-      kind: 'HINT',
+      kind: "HINT",
       title: verdict.title,
       message: verdict.message,
       highlightSelector: verdict.highlightSelector,
       highlightFrame: verdict.highlightFrame,
-      tier: 'rules',
+      tier: "rules",
       actions: [
-        { label: 'Show me', kind: 'show_me' },
-        { label: "I'm fine", kind: 'dismiss' },
+        { label: "Show me", kind: "show_me" },
+        { label: "I'm fine", kind: "dismiss" },
       ],
     });
   }
@@ -402,22 +401,18 @@ class Vlaila {
   // -- UI callbacks -------------------------------------------------------
 
   private onAction(kind: string, intervention: Intervention): void {
-    if (kind === 'show_me' && intervention.highlightSelector) {
+    if (kind === "show_me" && intervention.highlightSelector) {
       const doc = this.observer.documentFor(intervention.highlightFrame);
       this.ui.highlight(intervention.highlightSelector, doc);
       // The assistant physically points at the control while the ring is up,
       // so the gesture and the highlight are one action rather than two.
-      this.ui.setPose('pointing');
-      window.setTimeout(() => this.ui.setPose('idle'), 6000);
+      this.ui.setPose("pointing");
+      window.setTimeout(() => this.ui.setPose("idle"), 6000);
     }
     if (!this.sessionId || !intervention.interventionId) return;
 
     const outcome =
-      kind === 'dismiss'
-        ? 'dismissed'
-        : kind === 'auto_resolved'
-          ? 'auto_resolved'
-          : 'accepted';
+      kind === "dismiss" ? "dismissed" : kind === "auto_resolved" ? "auto_resolved" : "accepted";
     void this.api.feedback(this.sessionId, intervention.interventionId, outcome);
   }
 
@@ -426,8 +421,8 @@ class Vlaila {
     void this.api.feedback(
       this.sessionId,
       intervention.interventionId,
-      'reported_wrong',
-      'Reported from the widget',
+      "reported_wrong",
+      "Reported from the widget",
     );
   }
 
@@ -455,7 +450,7 @@ class Vlaila {
   private async finish(): Promise<void> {
     if (this.ended || !this.sessionId) return;
     this.ended = true;
-    const summary = await this.api.endSession(this.sessionId, 'completed');
+    const summary = await this.api.endSession(this.sessionId, "completed");
     if (!summary) return;
     this.ui.showSummary({
       experimentTitle: summary.experiment_title,
@@ -481,10 +476,10 @@ class Vlaila {
    */
   private flushEnd(): void {
     if (this.ended || !this.sessionId) return;
-    const body = JSON.stringify({ session_id: this.sessionId, reason: 'navigated_away' });
+    const body = JSON.stringify({ session_id: this.sessionId, reason: "navigated_away" });
     navigator.sendBeacon?.(
       `${(this.api as unknown as { base: string }).base}/session/end`,
-      new Blob([body], { type: 'application/json' }),
+      new Blob([body], { type: "application/json" }),
     );
   }
 
@@ -504,7 +499,7 @@ class Vlaila {
   async refresh(): Promise<void> {
     const { ref } = detect();
     const shouldBeLab = !!ref;
-    const isLab = this.mode === 'lab';
+    const isLab = this.mode === "lab";
 
     if (shouldBeLab !== isLab) {
       this.teardown();
@@ -547,8 +542,8 @@ function boot(): void {
   void instance.boot();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', boot);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", boot);
 } else {
   boot();
 }

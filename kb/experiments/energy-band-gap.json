@@ -15,7 +15,16 @@
     "Linearise Is = A T^(3/2) exp(-Eg/kT) into a straight-line form and identify what the slope encodes.",
     "Extract Eg from a measured slope and judge the result against known values for Ge and Si."
   ],
-  "tasks": ["Aim", "Theory", "Pretest", "Procedure", "Simulation", "Posttest", "References", "Feedback"],
+  "tasks": [
+    "Aim",
+    "Theory",
+    "Pretest",
+    "Procedure",
+    "Simulation",
+    "Posttest",
+    "References",
+    "Feedback"
+  ],
 
   "prerequisites": [
     {
@@ -61,7 +70,11 @@
       "hints": {
         "nudge": "Start by enabling power to the apparatus.",
         "specific": "The procedure begins with the Enable Power button. Nothing else in the simulator responds until it is on.",
-        "interactive": { "highlight": "#btn_main", "frame": "sim", "text": "Enable Power to begin." }
+        "interactive": {
+          "highlight": "#btn_main",
+          "frame": "sim",
+          "text": "Enable Power to begin."
+        }
       }
     },
     {
@@ -70,7 +83,12 @@
       "task": "Simulation",
       "title": "Place the container, battery, ammeter and voltmeter",
       "requires": ["enable-power"],
-      "detect": { "action": "click", "selector": "#container, #battery, #ammeter", "frame": "sim", "count": 3 },
+      "detect": {
+        "action": "click",
+        "selector": "#container, #battery, #ammeter",
+        "frame": "sim",
+        "count": 3
+      },
       "hints": {
         "nudge": "Place each instrument on the board before wiring anything.",
         "specific": "Click Place Container then the drawing box, then Battery, Ammeter and Voltmeter in turn — each is a two-click action: select the component, then click where it goes."
@@ -86,7 +104,11 @@
       "hints": {
         "nudge": "The diode goes inside the container, not on the open board.",
         "specific": "Click the PN Junction button, then click on the liquid inside the container. The bath is what sets and holds the junction temperature — that is the independent variable of the whole experiment.",
-        "interactive": { "highlight": "#img_therma", "frame": "sim", "text": "Place the diode into the liquid bath." }
+        "interactive": {
+          "highlight": "#img_therma",
+          "frame": "sim",
+          "text": "Place the diode into the liquid bath."
+        }
       },
       "concept": "The junction must sit in the bath so its temperature is known and uniform. A diode in open air is at an unknown temperature, which makes every current reading unusable."
     },
@@ -101,7 +123,11 @@
       "hints": {
         "nudge": "Add your connection points, then use Connect to wire them up.",
         "specific": "Click Point and place connection points wherever a junction is needed, then Connect and click point-to-point to draw wires. Undo/Redo is there for wrong connections.",
-        "interactive": { "highlight": "#l1", "frame": "sim", "text": "Place connection points, then wire them." }
+        "interactive": {
+          "highlight": "#l1",
+          "frame": "sim",
+          "text": "Place connection points, then wire them."
+        }
       },
       "concept": "The diode must end up reverse biased. In reverse bias the current is small, so the junction does not self-heat and the bath temperature is genuinely the junction temperature."
     },
@@ -148,7 +174,12 @@
       "task": "Simulation",
       "title": "Repeat across the temperature range",
       "requires": ["read-current"],
-      "detect": { "action": "click", "selector": "#current, #eg_button", "frame": "sim", "count": 6 },
+      "detect": {
+        "action": "click",
+        "selector": "#current, #eg_button",
+        "frame": "sim",
+        "count": 6
+      },
       "milestone": true,
       "hints": {
         "nudge": "Keep going — a slope from three points is not a measurement.",

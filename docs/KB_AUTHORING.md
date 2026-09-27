@@ -67,7 +67,11 @@ One entry per thing a student does, in the order they should do it. Order define
   "hints": {
     "nudge": "Pick one of the images above to get started.",
     "specific": "Click any thumbnail. The image loads onto the canvas showing normal colour vision — that is your reference before you apply any filter.",
-    "interactive": { "highlight": ".thumbnail-row .image-thumbnail", "frame": "sim", "text": "Click any of these thumbnails." }
+    "interactive": {
+      "highlight": ".thumbnail-row .image-thumbnail",
+      "frame": "sim",
+      "text": "Click any of these thumbnails."
+    }
   },
   "milestone": true,
   "concept": "The unfiltered image is your control condition…"
@@ -81,11 +85,11 @@ classic eight (Aim → Feedback); learning-unit labs such as `ds1-iiith` define 
 **`detect`** is how the observer recognises the step. Find the selector by opening the simulator,
 right-clicking the control and inspecting it.
 
-| `frame` | Means |
-|---|---|
-| `host` | The experiment page itself |
-| `sim` | Anywhere inside the simulator iframe — use this unless you need to be precise |
-| `sim:half_adder` | A specific nested simulator frame |
+| `frame`          | Means                                                                         |
+| ---------------- | ----------------------------------------------------------------------------- |
+| `host`           | The experiment page itself                                                    |
+| `sim`            | Anywhere inside the simulator iframe — use this unless you need to be precise |
+| `sim:half_adder` | A specific nested simulator frame                                             |
 
 If a control has no stable id, target its **visible label** instead — the observer reports it, and
 `selector` matches against it:
@@ -132,14 +136,14 @@ it cannot fire spuriously.
 
 All present keys in `when` must hold. The useful ones:
 
-| Key | Detects |
-|---|---|
-| `unless_completed` | **Out of order** — fires only if none of these steps are done |
-| `after_completed` | A mistake only possible later in the procedure |
-| `value_out_of_range` | A parameter outside its valid range |
-| `repeat_count` | **Thrashing** — the same action N times without progress |
-| `on_task` | A mistake specific to one page |
-| `idle_seconds` | Combined with the above, "stuck *and* did this" |
+| Key                  | Detects                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| `unless_completed`   | **Out of order** — fires only if none of these steps are done |
+| `after_completed`    | A mistake only possible later in the procedure                |
+| `value_out_of_range` | A parameter outside its valid range                           |
+| `repeat_count`       | **Thrashing** — the same action N times without progress      |
+| `on_task`            | A mistake specific to one page                                |
+| `idle_seconds`       | Combined with the above, "stuck _and_ did this"               |
 
 **`severity` is a pedagogical judgement, so you make it, not the model.**
 
@@ -158,8 +162,8 @@ This is the part students actually read.
 
 - Say what is wrong **and** why it matters, in one or two sentences.
 - Address them directly. "Pick an image first", not "An image must be selected".
-- Explain the mechanism, not just the rule. *"the LEDs will not respond however you set A and B"*
-  teaches something; *"connect the supply first"* does not.
+- Explain the mechanism, not just the rule. _"the LEDs will not respond however you set A and B"_
+  teaches something; _"connect the supply first"_ does not.
 - No blame, no exclamation marks, no "Oops!".
 
 ## 4. Theory chunks
@@ -199,9 +203,7 @@ error pattern is supposed to catch. The Studio runs the same rules engine that s
 what you see is what they would get.
 
 ```json
-[
-  { "action": "click", "selector": "#protonopiaBtn", "frame": "sim", "task": "Simulation" }
-]
+[{ "action": "click", "selector": "#protonopiaBtn", "frame": "sim", "task": "Simulation" }]
 ```
 
 Check both directions:

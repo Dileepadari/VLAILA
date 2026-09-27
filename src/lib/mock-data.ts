@@ -10,7 +10,11 @@ export const BROAD_AREAS = [
   { slug: "electrical-engineering", name: "Electrical Engineering", labs: 30 },
   { slug: "mechanical-engineering", name: "Mechanical Engineering", labs: 24 },
   { slug: "chemical-engineering", name: "Chemical Engineering", labs: 12 },
-  { slug: "biotechnology-and-biomedical-engineering", name: "Biotechnology and Biomedical Engineering", labs: 21 },
+  {
+    slug: "biotechnology-and-biomedical-engineering",
+    name: "Biotechnology and Biomedical Engineering",
+    labs: 21,
+  },
   { slug: "civil-engineering", name: "Civil Engineering", labs: 17 },
   { slug: "physical-sciences", name: "Physical Sciences", labs: 25 },
   { slug: "chemical-sciences", name: "Chemical Sciences", labs: 15 },
@@ -86,8 +90,10 @@ export const LABS = [
     area: "computer-science-and-engineering",
     institute: "IIIT HYDERABAD",
     name: "Psychological Process and Application in Everyday Life",
-    intro: "An interdisciplinary lab exploring perception, cognition and behavior through interactive experiments.",
-    objective: "To enable learners to understand foundational psychological processes through hands-on virtual experiments.",
+    intro:
+      "An interdisciplinary lab exploring perception, cognition and behavior through interactive experiments.",
+    objective:
+      "To enable learners to understand foundational psychological processes through hands-on virtual experiments.",
     audience: "UG/PG students of Computer Science, Cognitive Science, and Psychology.",
     courseAlignment: "AICTE / UGC psychology and HCI electives.",
     experiments: [
@@ -96,7 +102,11 @@ export const LABS = [
       { id: "stroop-effect", name: "Stroop Effect - Stroop Colour and Word Test", rating: 5 },
       { id: "cueing-posner", name: "Cueing/Posner Task", rating: 5 },
       { id: "visual-search", name: "Visual Search - Singleton & Conjunctive", rating: 5 },
-      { id: "george-miller", name: "George Miller Experiment 1956: Capacity of Short-term Memory", rating: 5 },
+      {
+        id: "george-miller",
+        name: "George Miller Experiment 1956: Capacity of Short-term Memory",
+        rating: 5,
+      },
       { id: "nback", name: "Visual Memory - nBack Test", rating: 5 },
     ],
   },
@@ -162,14 +172,34 @@ This helps in coming up with designs that can be used by all, ensuring equal usa
     "Take the Posttest to verify your understanding.",
   ],
   pretest: [
-    { q: "Which type of color blindness affects red perception?", opts: ["Protanopia", "Deuteranopia", "Tritanopia", "Achromatopsia"], a: 0 },
-    { q: "What percentage of men globally are color-blind (approx)?", opts: ["1%", "8%", "20%", "0.5%"], a: 1 },
-    { q: "Color vision relies on which cells in the retina?", opts: ["Rods", "Cones", "Bipolar cells", "Ganglion cells"], a: 1 },
+    {
+      q: "Which type of color blindness affects red perception?",
+      opts: ["Protanopia", "Deuteranopia", "Tritanopia", "Achromatopsia"],
+      a: 0,
+    },
+    {
+      q: "What percentage of men globally are color-blind (approx)?",
+      opts: ["1%", "8%", "20%", "0.5%"],
+      a: 1,
+    },
+    {
+      q: "Color vision relies on which cells in the retina?",
+      opts: ["Rods", "Cones", "Bipolar cells", "Ganglion cells"],
+      a: 1,
+    },
   ],
   posttest: [
-    { q: "The most common form of color blindness is:", opts: ["Protanopia", "Deuteranopia", "Tritanopia", "Monochromacy"], a: 1 },
+    {
+      q: "The most common form of color blindness is:",
+      opts: ["Protanopia", "Deuteranopia", "Tritanopia", "Monochromacy"],
+      a: 1,
+    },
     { q: "Tritanopia affects perception of:", opts: ["Red", "Green", "Blue", "Yellow"], a: 2 },
-    { q: "Designing for color-blind users improves:", opts: ["Aesthetics only", "Universal accessibility", "Print quality", "Storage cost"], a: 1 },
+    {
+      q: "Designing for color-blind users improves:",
+      opts: ["Aesthetics only", "Universal accessibility", "Print quality", "Storage cost"],
+      a: 1,
+    },
   ],
   references: [
     "Sharpe, L. T., et al. (1999). Opsin genes, cone photopigments, color vision and color blindness.",
@@ -179,22 +209,73 @@ This helps in coming up with designs that can be used by all, ensuring equal usa
 };
 
 export const ASSIGNMENTS = [
-  { id: "a1", lab: "Psychological Process", experiment: "Colour Blindness", due: "2026-05-18", status: "assigned" },
-  { id: "a2", lab: "Psychological Process", experiment: "Stroop Effect", due: "2026-05-25", status: "in-progress" },
-  { id: "a3", lab: "Drone Technology Lab", experiment: "Flight Dynamics Simulation", due: "2026-05-12", status: "due-soon" },
-  { id: "a4", lab: "Psychological Process", experiment: "nBack Test", due: "2026-04-30", status: "completed" },
+  {
+    id: "a1",
+    lab: "Psychological Process",
+    experiment: "Colour Blindness",
+    due: "2026-05-18",
+    status: "assigned",
+  },
+  {
+    id: "a2",
+    lab: "Psychological Process",
+    experiment: "Stroop Effect",
+    due: "2026-05-25",
+    status: "in-progress",
+  },
+  {
+    id: "a3",
+    lab: "Drone Technology Lab",
+    experiment: "Flight Dynamics Simulation",
+    due: "2026-05-12",
+    status: "due-soon",
+  },
+  {
+    id: "a4",
+    lab: "Psychological Process",
+    experiment: "nBack Test",
+    due: "2026-04-30",
+    status: "completed",
+  },
 ];
 
 export const NOTIFICATIONS = [
-  { id: "n1", text: "Dr. Aruna Sharma assigned 'Colour Blindness' — due May 18.", time: "2h ago", unread: true },
-  { id: "n2", text: "Lab Buddy has a new tip for the Stroop Effect experiment.", time: "5h ago", unread: true },
-  { id: "n3", text: "VLAILA: You completed nBack Test with 92% accuracy. Great job!", time: "Yesterday", unread: false },
+  {
+    id: "n1",
+    text: "Dr. Aruna Sharma assigned 'Colour Blindness' — due May 18.",
+    time: "2h ago",
+    unread: true,
+  },
+  {
+    id: "n2",
+    text: "Lab Buddy has a new tip for the Stroop Effect experiment.",
+    time: "5h ago",
+    unread: true,
+  },
+  {
+    id: "n3",
+    text: "VLAILA: You completed nBack Test with 92% accuracy. Great job!",
+    time: "Yesterday",
+    unread: false,
+  },
 ];
 
 export const STUDENTS = [
-  { roll: "CS21B001", name: "Aarav Sharma", batch: "B.Tech CSE 3rd yr", completed: 12, assigned: 15 },
+  {
+    roll: "CS21B001",
+    name: "Aarav Sharma",
+    batch: "B.Tech CSE 3rd yr",
+    completed: 12,
+    assigned: 15,
+  },
   { roll: "CS21B002", name: "Diya Patel", batch: "B.Tech CSE 3rd yr", completed: 14, assigned: 15 },
-  { roll: "CS21B003", name: "Ishaan Kumar", batch: "B.Tech CSE 3rd yr", completed: 9, assigned: 15 },
+  {
+    roll: "CS21B003",
+    name: "Ishaan Kumar",
+    batch: "B.Tech CSE 3rd yr",
+    completed: 9,
+    assigned: 15,
+  },
   { roll: "CS21B004", name: "Meera Iyer", batch: "B.Tech CSE 3rd yr", completed: 15, assigned: 15 },
   { roll: "CS21B005", name: "Rohan Das", batch: "B.Tech CSE 3rd yr", completed: 7, assigned: 15 },
   { roll: "CS21B006", name: "Sara Khan", batch: "B.Tech CSE 3rd yr", completed: 11, assigned: 15 },

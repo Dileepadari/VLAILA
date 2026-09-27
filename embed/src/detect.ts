@@ -37,7 +37,7 @@ interface DataLayerEntry {
 
 function meta(name: string): string | undefined {
   const el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-  const value = el?.getAttribute('content')?.trim();
+  const value = el?.getAttribute("content")?.trim();
   return value || undefined;
 }
 
@@ -52,9 +52,9 @@ function dataLayerEntry(): DataLayerEntry {
 /** Derive a lab slug from the subdomain: `pp-iiith.vlabs.ac.in` -> `pp-iiith`. */
 function labFromHost(): string | undefined {
   const host = location.hostname;
-  if (!host.endsWith('vlabs.ac.in')) return undefined;
-  const sub = host.split('.')[0];
-  return sub && sub !== 'www' ? sub : undefined;
+  if (!host.endsWith("vlabs.ac.in")) return undefined;
+  const sub = host.split(".")[0];
+  return sub && sub !== "www" ? sub : undefined;
 }
 
 /** `/exp/<slug>/simulation.html` -> `<slug>` */
@@ -73,19 +73,19 @@ function experimentFromPath(): string | undefined {
  * rather than hard-coding a list.
  */
 export function currentTask(): string | undefined {
-  const fromMeta = meta('task-name');
+  const fromMeta = meta("task-name");
   if (fromMeta) return fromMeta;
 
-  const file = location.pathname.split('/').pop()?.replace('.html', '').toLowerCase();
+  const file = location.pathname.split("/").pop()?.replace(".html", "").toLowerCase();
   const map: Record<string, string> = {
-    index: 'Aim',
-    theory: 'Theory',
-    pretest: 'Pretest',
-    procedure: 'Procedure',
-    simulation: 'Simulation',
-    posttest: 'Posttest',
-    references: 'References',
-    feedback: 'Feedback',
+    index: "Aim",
+    theory: "Theory",
+    pretest: "Pretest",
+    procedure: "Procedure",
+    simulation: "Simulation",
+    posttest: "Posttest",
+    references: "References",
+    feedback: "Feedback",
   };
   return file ? map[file] : undefined;
 }
@@ -93,8 +93,7 @@ export function currentTask(): string | undefined {
 /** Explicit overrides, for a lab that needs to correct the auto-detection. */
 function scriptOverrides(): Partial<ExperimentRef> & { api?: string } {
   const script =
-    document.currentScript ??
-    document.querySelector<HTMLScriptElement>('script[src*="vlaila"]');
+    document.currentScript ?? document.querySelector<HTMLScriptElement>('script[src*="vlaila"]');
   if (!script) return {};
   const d = (script as HTMLScriptElement).dataset;
   return {
@@ -112,7 +111,7 @@ export function detect(): { ref: ExperimentRef | null; apiOverride?: string } {
 
   const experimentId =
     overrides.experimentId ||
-    meta('experiment-short-name') ||
+    meta("experiment-short-name") ||
     dl.expShortName ||
     experimentFromPath();
 
@@ -120,8 +119,8 @@ export function detect(): { ref: ExperimentRef | null; apiOverride?: string } {
 
   const title =
     dl.expName ||
-    meta('learning-unit') ||
-    document.querySelector('.vlabs-page-content h2')?.textContent?.trim() ||
+    meta("learning-unit") ||
+    document.querySelector(".vlabs-page-content h2")?.textContent?.trim() ||
     document.title;
 
   return {
@@ -130,7 +129,7 @@ export function detect(): { ref: ExperimentRef | null; apiOverride?: string } {
       labId: overrides.labId || labFromHost(),
       origin: location.origin,
       discipline: overrides.discipline || dl.discipline,
-      institute: overrides.institute || dl.college || meta('developer-institute'),
+      institute: overrides.institute || dl.college || meta("developer-institute"),
       experimentTitle: title || undefined,
       task: currentTask(),
     },
@@ -154,7 +153,7 @@ export function simulatorFrames(): { name: string; doc: Document }[] {
 
   const walk = (root: Document, prefix: string, depth: number) => {
     if (depth > 3) return;
-    const frames = Array.from(root.querySelectorAll('iframe'));
+    const frames = Array.from(root.querySelectorAll("iframe"));
     for (const frame of frames) {
       let doc: Document | null = null;
       try {
@@ -165,12 +164,12 @@ export function simulatorFrames(): { name: string; doc: Document }[] {
         continue;
       }
       if (!doc || seen.has(doc) || !doc.body) continue;
-      const src = frame.getAttribute('src') || '';
+      const src = frame.getAttribute("src") || "";
       if (/googletagmanager|doubleclick|analytics/.test(src)) continue;
 
       seen.add(doc);
-      const leaf = src.split('/').pop()?.replace('.html', '') || `frame${found.length}`;
-      const name = depth === 0 ? 'sim' : `${prefix}:${leaf}`;
+      const leaf = src.split("/").pop()?.replace(".html", "") || `frame${found.length}`;
+      const name = depth === 0 ? "sim" : `${prefix}:${leaf}`;
       found.push({ name, doc });
       // Several labs nest a chooser page inside the simulator frame -- the
       // half-adder lab is sim -> Simulator.html -> half_adder.html -- so the
@@ -179,6 +178,6 @@ export function simulatorFrames(): { name: string; doc: Document }[] {
     }
   };
 
-  walk(document, 'sim', 0);
+  walk(document, "sim", 0);
   return found;
 }

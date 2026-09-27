@@ -54,7 +54,11 @@ function Carousel() {
     <div id="myCarousel" className="carousel slide">
       <ol className="carousel-indicators">
         {SLIDES.map((src, i) => (
-          <li key={src} className={i === index ? "active" : undefined} onClick={() => setIndex(i)} />
+          <li
+            key={src}
+            className={i === index ? "active" : undefined}
+            onClick={() => setIndex(i)}
+          />
         ))}
       </ol>
       <div className="carousel-inner">
@@ -136,15 +140,15 @@ function ObjectiveTabs() {
                       Science and Engineering.{" "}
                     </p>
                     <p>
-                      2. To enthuse students to conduct experiments by arousing their curiosity. This
-                      would help them in learning basic and advanced concepts through remote
+                      2. To enthuse students to conduct experiments by arousing their curiosity.
+                      This would help them in learning basic and advanced concepts through remote
                       experimentation.
                     </p>
                     <p>
                       3. To provide a complete Learning Management System around the Virtual Labs
                       where the students/ teachers can avail the various tools for learning,
-                      including additional web-resources, video-lectures, animated demonstrations and
-                      self-evaluation.
+                      including additional web-resources, video-lectures, animated demonstrations
+                      and self-evaluation.
                     </p>
                   </div>
                 </div>
@@ -191,8 +195,8 @@ function ObjectiveTabs() {
                       </li>
                     </ul>
                     <p>
-                      Virtual labs are any place, any pace, any-time, any-type labs. It is a paradigm
-                      shift in student-centric, online education.
+                      Virtual labs are any place, any pace, any-time, any-type labs. It is a
+                      paradigm shift in student-centric, online education.
                     </p>
                   </div>
                 </div>
@@ -367,7 +371,11 @@ function Testimonials() {
                 </div>
               </div>
               {i === 2 && !expanded && (
-                <span className="text-blue show_more" id="show_more" onClick={() => setExpanded(true)}>
+                <span
+                  className="text-blue show_more"
+                  id="show_more"
+                  onClick={() => setExpanded(true)}
+                >
                   more <img src="/vl/images/down.jpg" width="14" style={{ marginTop: -2 }} alt="" />
                 </span>
               )}

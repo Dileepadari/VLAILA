@@ -26,12 +26,12 @@ from metadata every Virtual Labs page already publishes.
 (`pp-iiith.vlabs.ac.in`, `de-iitr.vlabs.ac.in`, …) and are generated from one shared static
 template. Every experiment page on every lab exposes the same markers:
 
-| Signal | Where |
-|---|---|
-| Lab, discipline, institute, experiment name | `window.dataLayer[0]` |
-| Experiment slug | `<meta name="experiment-short-name">` |
-| **Current step** | `<meta name="task-name">` |
-| **Simulator DOM** | `iframe#fraDisabled` — same-origin, fully readable |
+| Signal                                      | Where                                              |
+| ------------------------------------------- | -------------------------------------------------- |
+| Lab, discipline, institute, experiment name | `window.dataLayer[0]`                              |
+| Experiment slug                             | `<meta name="experiment-short-name">`              |
+| **Current step**                            | `<meta name="task-name">`                          |
+| **Simulator DOM**                           | `iframe#fraDisabled` — same-origin, fully readable |
 
 Verified against labs in three different disciplines from three different institutes. Because the
 template is shared, adding the script tag upstream covers every lab on the platform in a single
@@ -82,14 +82,14 @@ For a fully on-premise deployment where no session data leaves the network, use
 Every observed interaction walks down a four-tier ladder and stops at the first tier that can
 answer confidently.
 
-| Tier | Runs | Latency | Handles |
-|---|---|---|---|
-| 0 · Detector | Browser | ~0 ms | Which experiment, which step, what was touched |
-| 1 · Rules engine | Browser **and** server | <5 ms | Prerequisite violations, out-of-order steps, out-of-range values |
-| 2 · Small model | Ollama / self-hosted | ~300 ms | Ambiguous classification |
-| 3 · Frontier model | Claude API | ~1.2 s | Conceptual Q&A, summaries, quizzes, NL→SQL |
+| Tier               | Runs                   | Latency | Handles                                                          |
+| ------------------ | ---------------------- | ------- | ---------------------------------------------------------------- |
+| 0 · Detector       | Browser                | ~0 ms   | Which experiment, which step, what was touched                   |
+| 1 · Rules engine   | Browser **and** server | <5 ms   | Prerequisite violations, out-of-order steps, out-of-range values |
+| 2 · Small model    | Ollama / self-hosted   | ~300 ms | Ambiguous classification                                         |
+| 3 · Frontier model | Claude API             | ~1.2 s  | Conceptual Q&A, summaries, quizzes, NL→SQL                       |
 
-Most interventions never leave Tier 1. Detecting that a student clicked *Run* before setting the
+Most interventions never leave Tier 1. Detecting that a student clicked _Run_ before setting the
 voltage is a deterministic problem: the knowledge base already encodes the correct order and the
 valid ranges. Spending a model call to rediscover that costs money and puts a second of latency
 into the exact moment learning flow matters most.
