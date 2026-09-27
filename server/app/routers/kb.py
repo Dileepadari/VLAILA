@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
+from ..auth import require_staff
 from ..kb import get_kb
 from ..agent.rules import Observation, SessionState, evaluate
 
@@ -41,7 +42,9 @@ def get_entry(experiment_id: str) -> dict[str, Any]:
     return entry.raw
 
 
-@router.post("/reload")
+# Re-reading every entry from disk on an unauthenticated POST is both an
+# author-only action and a free way to make the API do work on demand.
+@router.post("/reload", dependencies=[Depends(require_staff)])
 def reload_kb() -> dict[str, Any]:
     """Re-read the entries from disk. Used by the Author Studio after an edit."""
     kb = get_kb()

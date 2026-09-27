@@ -61,6 +61,15 @@ class Settings(BaseSettings):
     rate_limit_events_per_minute: int = 60
     rate_limit_chat_per_minute: int = 20
 
+    # --- staff access ------------------------------------------------------
+    # The instructor and admin surfaces read per-student behavioural data and
+    # can rewrite the hints students see, so they need a credential. Sent as
+    # X-API-Key. See app/auth.py.
+    staff_api_key: str | None = None
+    # Escape hatch for local development and the test suite. Named to be
+    # awkward to leave on by accident.
+    allow_unauthenticated_staff: bool = False
+
     # --- privacy -----------------------------------------------------------
     # When true, chat text is scrubbed of email/phone/roll-number patterns
     # before it is sent to any external model.

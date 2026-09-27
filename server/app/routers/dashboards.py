@@ -7,6 +7,7 @@ from fastapi.responses import Response
 from sqlalchemy.orm import Session as DbSession
 
 from ..agent import prompts
+from ..auth import require_staff
 from ..analytics import aggregates, export, nl_query
 from ..db import CustomHintRow, get_db
 from ..kb import get_kb
@@ -21,7 +22,9 @@ from ..schemas import (
     OrgStats,
 )
 
-router = APIRouter(tags=["dashboards"])
+# The dependency sits on the router, not on each route: a new endpoint added
+# here is gated by default rather than by remembering.
+router = APIRouter(tags=["dashboards"], dependencies=[Depends(require_staff)])
 
 
 # ---------------------------------------------------------------------------

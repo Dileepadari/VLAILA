@@ -13,6 +13,9 @@ sys.path.insert(0, str(SERVER_ROOT))
 # deterministic and needs no API key.
 os.environ.setdefault("VLAILA_LLM_PROVIDER", "offline")
 os.environ.setdefault("VLAILA_DATABASE_URL", "sqlite:///:memory:")
+# Most of the suite exercises the staff routes without caring about the
+# credential; test_staff_auth.py overrides this to check the gate itself.
+os.environ.setdefault("VLAILA_ALLOW_UNAUTHENTICATED_STAFF", "true")
 
 
 @pytest.fixture(scope="session")

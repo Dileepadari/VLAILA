@@ -22,10 +22,48 @@ export class ApiError extends Error {
   }
 }
 
+const STAFF_KEY_STORAGE = "vlaila_staff_key";
+
+/**
+ * The credential for the instructor and admin endpoints.
+ *
+ * Read at call time from localStorage (or an injected global), deliberately
+ * NOT from a VITE_ variable: anything with that prefix is inlined into the
+ * built bundle, so the "secret" would be readable by anyone who loads the
+ * page. The console has no authentication of its own - this key is the whole
+ * boundary - so it is supplied per browser instead.
+ */
+export function getStaffKey(): string | null {
+  if (typeof window === "undefined") return null;
+  const injected = (window as any).__VLAILA_STAFF_KEY__;
+  if (typeof injected === "string" && injected) return injected;
+  try {
+    return window.localStorage.getItem(STAFF_KEY_STORAGE);
+  } catch {
+    // Private mode, blocked site data.
+    return null;
+  }
+}
+
+export function setStaffKey(key: string | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (key) window.localStorage.setItem(STAFF_KEY_STORAGE, key);
+    else window.localStorage.removeItem(STAFF_KEY_STORAGE);
+  } catch {
+    /* ignore */
+  }
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const staffKey = getStaffKey();
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
-    headers: { "content-type": "application/json", ...(init?.headers ?? {}) },
+    headers: {
+      "content-type": "application/json",
+      ...(staffKey ? { "X-API-Key": staffKey } : {}),
+      ...(init?.headers ?? {}),
+    },
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => res.statusText);

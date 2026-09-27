@@ -11,7 +11,10 @@ const STEPS = [
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({ meta: [{ title: "Welcome — Virtual Labs" }] }),
-  component: () => {
+  component: Onboarding,
+});
+
+function Onboarding() {
     const [step, setStep] = useState(0);
     const [picks, setPicks] = useState<number[]>([]);
     const cur = STEPS[step];
@@ -41,5 +44,4 @@ export const Route = createFileRoute("/onboarding")({
         </div>
       </PageLayout>
     );
-  },
-});
+  }
