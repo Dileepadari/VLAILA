@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  server:
+    name: API
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: pip install -r server/requirements.txt pytest
+
+      # The suite runs entirely offline: SQLite, the offline LLM adapter, no
+      # network. That is a property worth keeping.
+      - name: Tests
+        run: python -m pytest server/tests -v
+        env:
+          VLAILA_LLM_PROVIDER: offline
+
+      # The instructor and admin surfaces serve per-student behavioural data.
+      # This asserts they refuse an anonymous caller.
+      - name: Staff gate
+        run: python -m pytest server/tests/test_staff_auth.py -v
+
+  web:
+    name: Console and embed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+  kb:
+    name: Knowledge base
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r server/requirements.txt
+      # Authoring is the bottleneck on this product, so a malformed entry
+      # should fail here rather than at runtime in front of a student.
+      - name: Validate every entry against the schema
+        run: python kb/validate.py
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=high
+
+  hygiene:
+    name: Hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ops/hygiene.sh

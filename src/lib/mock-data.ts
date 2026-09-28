@@ -242,7 +242,7 @@ export const ASSIGNMENTS = [
 export const NOTIFICATIONS = [
   {
     id: "n1",
-    text: "Dr. Aruna Sharma assigned 'Colour Blindness' — due May 18.",
+    text: "Dr. Aruna Sharma assigned 'Colour Blindness' - due May 18.",
     time: "2h ago",
     unread: true,
   },

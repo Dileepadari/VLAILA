@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageLayout } from "@/components/vlabs/PageLayout";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Sign up — Virtual Labs" }] }),
+  head: () => ({ meta: [{ title: "Sign up - Virtual Labs" }] }),
   component: () => (
     <PageLayout>
       <div className="max-w-md mx-auto my-12 bg-white border rounded-xl p-8 shadow-sm">

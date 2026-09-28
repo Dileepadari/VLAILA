@@ -1,5 +1,5 @@
 /**
- * VLAILA — Virtual Labs AI Lab Assistant.
+ * VLAILA - Virtual Labs AI Lab Assistant.
  *
  * Drop-in integration, no configuration:
  *
@@ -259,7 +259,7 @@ class Vlaila {
 
     if (!matches.length) {
       this.ui.pushAgentMessage(
-        `I could not find that on this page. Try a subject — “circuits”, “titration”, “sorting” — or go to the [home page](/) and I will search the whole catalogue from there.`,
+        `I could not find that on this page. Try a subject - “circuits”, “titration”, “sorting” - or go to the [home page](/) and I will search the whole catalogue from there.`,
       );
       this.ui.finishChat([]);
       return;

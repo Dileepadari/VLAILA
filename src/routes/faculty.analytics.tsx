@@ -107,7 +107,7 @@ function ClassAnalyticsPage() {
           {a.behaviour && a.behaviour.sessions_reporting > 0 && (
             <Panel title="How the class found it">
               <p className="text-xs text-muted-foreground -mt-1 mb-3">
-                Read from how students worked — pauses, retries and time away — across{" "}
+                Read from how students worked - pauses, retries and time away - across{" "}
                 {a.behaviour.sessions_reporting}{" "}
                 {a.behaviour.sessions_reporting === 1 ? "session" : "sessions"}. This is about the
                 shape of the effort, not about who was trying hardest.
@@ -155,7 +155,7 @@ function ClassAnalyticsPage() {
                 </ul>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  No friction patterns stood out — the class worked through this one cleanly.
+                  No friction patterns stood out - the class worked through this one cleanly.
                 </p>
               )}
             </Panel>
@@ -218,7 +218,7 @@ function ClassAnalyticsPage() {
                       <td className="py-2 text-right tabular-nums">{s.attempts}</td>
                       <td className="py-2 text-right tabular-nums">{s.confusion}</td>
                       <td className="py-2 text-right tabular-nums">
-                        {s.dropoff > 0 ? <span className="text-vlabs-rose">{s.dropoff}</span> : "—"}
+                        {s.dropoff > 0 ? <span className="text-vlabs-rose">{s.dropoff}</span> : "-"}
                       </td>
                     </tr>
                   ))}

@@ -11,7 +11,7 @@ function DashboardLayout() {
   const loc = useLocation();
   const isRoot = loc.pathname === "/dashboard";
 
-  // Faculty/Admin redirect at the visual level — show a different left nav
+  // Faculty/Admin redirect at the visual level - show a different left nav
   const navs: Record<string, [string, string][]> = {
     student: [
       ["/dashboard", "Overview"],
@@ -89,7 +89,7 @@ function StudentOverview() {
             params={{ labId: "psychological-process", expId: "colour-blindness" }}
             className="vlabs-link block"
           >
-            Colour Blindness — Psychological Process
+            Colour Blindness - Psychological Process
           </Link>
           <Link to="/labs/$labId" params={{ labId: "drone-tech" }} className="vlabs-link block">
             Drone Technology Lab

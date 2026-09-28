@@ -24,11 +24,11 @@ export const Route = createFileRoute("/dashboard/progress")({
         <h3 className="font-semibold mb-2">VLAILA Insights</h3>
         <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
           <li>
-            Your fastest experiment was <strong>Stroop Effect</strong> — 7m 12s.
+            Your fastest experiment was <strong>Stroop Effect</strong> - 7m 12s.
           </li>
           <li>You used 14 hints across 12 experiments. Hint acceptance: 82%.</li>
           <li>
-            Suggested next experiment: <strong>Visual Search — Singleton & Conjunctive</strong>.
+            Suggested next experiment: <strong>Visual Search - Singleton & Conjunctive</strong>.
           </li>
         </ul>
       </div>

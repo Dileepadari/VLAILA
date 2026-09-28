@@ -13,7 +13,7 @@ const STEPS = [
   },
   {
     q: "How much time can you usually spend per session?",
-    opts: ["< 15 min", "15–30 min", "30–60 min", "1+ hour"],
+    opts: ["< 15 min", "15-30 min", "30-60 min", "1+ hour"],
   },
   {
     q: "Would you like Lab Buddy to greet you with hints?",
@@ -22,7 +22,7 @@ const STEPS = [
 ];
 
 export const Route = createFileRoute("/onboarding")({
-  head: () => ({ meta: [{ title: "Welcome — Virtual Labs" }] }),
+  head: () => ({ meta: [{ title: "Welcome - Virtual Labs" }] }),
   component: Onboarding,
 });
 
@@ -34,7 +34,7 @@ function Onboarding() {
     return (
       <PageLayout>
         <div className="max-w-lg mx-auto my-16 text-center bg-white border rounded-xl p-8">
-          <div className="text-5xl mb-3">🧪</div>
+          <div className="text-5xl mb-3"></div>
           <h1 className="text-2xl font-bold text-vlabs-blue">You're all set!</h1>
           <p className="text-sm text-muted-foreground mt-2">
             Lab Buddy will be there if you need help.

@@ -76,13 +76,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "VLAILA — Virtual Labs AI Lab Assistant" },
+      { title: "VLAILA - Virtual Labs AI Lab Assistant" },
       {
         name: "description",
         content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India.",
       },
       { name: "author", content: "Virtual Labs" },
-      { property: "og:title", content: "VLAILA — Virtual Labs AI Lab Assistant" },
+      { property: "og:title", content: "VLAILA - Virtual Labs AI Lab Assistant" },
       {
         property: "og:description",
         content: "Proactive, experiment-grounded AI lab assistant for Virtual Labs India.",

@@ -32,11 +32,11 @@ from three different labs, three different institutes and three different discip
 
 | Marker                                 | `pp-iiith` (Design)              | `de-iitr` (Electronics)            | `ds1-iiith` (CSE)              |
 | -------------------------------------- | -------------------------------- | ---------------------------------- | ------------------------------ |
-| `window.dataLayer[0]`                  | ✅ Psychological Process / IIITH | ✅ Digital Electronics IITR / IITR | ✅ Data Structures - 1 / IIITH |
+| `window.dataLayer[0]`                  |  Psychological Process / IIITH |  Digital Electronics IITR / IITR |  Data Structures - 1 / IIITH |
 | `<meta name="experiment-short-name">`  | `colour-blindness`               | `half-full-adder`                  | `bubble-sort`                  |
 | `<meta name="task-name">`              | `Simulation`                     | `Simulation`                       | `Demo`                         |
 | `<meta name="developer-institute">`    | `IIITH`                          | `IITR`                             | `IIITH`                        |
-| `iframe#fraDisabled.responsive-iframe` | ✅ `simulation/index.html`       | ✅ `simulation/index.html`         | ✅ `simulation/bsdemo.html`    |
+| `iframe#fraDisabled.responsive-iframe` |  `simulation/index.html`       |  `simulation/index.html`         |  `simulation/bsdemo.html`    |
 | Task nav (`.nav-menu a`)               | 8 pages                          | 8 pages                            | learning units                 |
 
 **Three consequences.**
@@ -55,7 +55,7 @@ from three different labs, three different institutes and three different discip
 
 ## 3. Simulator heterogeneity
 
-The outer template is uniform. The simulators inside it are not — this is where the real
+The outer template is uniform. The simulators inside it are not - this is where the real
 engineering variance lives.
 
 | Lab                               | Simulator technology          | Selectors                                          | Observation                                    |
@@ -77,7 +77,7 @@ From working through 10+ experiments as a student would:
 
 | Gap                            | Observed                                                                  | Consequence                                                        |
 | ------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| No step validation             | Clicking a CVD filter with no image loaded does nothing at all — silently | Reads as a broken simulator, not a missed step                     |
+| No step validation             | Clicking a CVD filter with no image loaded does nothing at all - silently | Reads as a broken simulator, not a missed step                     |
 | No ordering enforcement        | Every task page is reachable directly; a student can open Posttest first  | Assessment before the observation it tests                         |
 | Uniform static instructions    | Same text regardless of what the student has done                         | Students who are stuck get the text they already didn't understand |
 | No completion signal           | Nothing distinguishes "clicked through" from "understood"                 | Instructors cannot tell engagement from attendance                 |
@@ -89,14 +89,14 @@ From working through 10+ experiments as a student would:
 | Capability                                  | Khanmigo     | Carnegie Learning MATHia | Duolingo Max | **VLAILA**                           |
 | ------------------------------------------- | ------------ | ------------------------ | ------------ | ------------------------------------ |
 | Domain                                      | K-12 general | Mathematics              | Language     | **Lab simulations, all disciplines** |
-| Proactive without being asked               | Partial      | ✅                       | ✗            | ✅                                   |
-| Observes the actual UI the student is using | ✗            | ✅ (own UI)              | ✗            | ✅ **(a UI it does not own)**        |
-| Works on third-party pages                  | ✗            | ✗                        | ✗            | ✅ one script tag                    |
-| Grounded in per-task ground truth           | Partial      | ✅                       | ✗            | ✅ per-experiment KB                 |
-| Functions with no model available           | ✗            | ✅ (rule-based)          | ✗            | ✅ rules engine                      |
-| Instructor step-level analytics             | Partial      | ✅                       | ✗            | ✅                                   |
-| Authoring tool for domain experts           | ✗            | Internal                 | ✗            | ✅ Author Studio                     |
-| Deployable on-premise                       | ✗            | ✗                        | ✗            | ✅ Ollama                            |
+| Proactive without being asked               | Partial      |                        |             |                                    |
+| Observes the actual UI the student is using |             |  (own UI)              |             |  **(a UI it does not own)**        |
+| Works on third-party pages                  |             |                         |             |  one script tag                    |
+| Grounded in per-task ground truth           | Partial      |                        |             |  per-experiment KB                 |
+| Functions with no model available           |             |  (rule-based)          |             |  rules engine                      |
+| Instructor step-level analytics             | Partial      |                        |             |                                    |
+| Authoring tool for domain experts           |             | Internal                 |             |  Author Studio                     |
+| Deployable on-premise                       |             |                         |             |  Ollama                            |
 | Cost per intervention                       | Model call   | ~0                       | Model call   | **~0 for the majority**              |
 
 MATHia is the closest prior art and the most instructive: its cognitive tutor is rule-based, not

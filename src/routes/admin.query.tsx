@@ -45,7 +45,7 @@ function NLQuery() {
       <div>
         <h1 className="text-xl font-bold text-vlabs-blue">Ask the data</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Plain-English questions about platform usage. Generated SQL is validated before it runs —
+          Plain-English questions about platform usage. Generated SQL is validated before it runs -
           read-only, single statement, and never a column that could identify an individual student.
         </p>
       </div>
@@ -157,7 +157,7 @@ function NLQuery() {
                     <tr key={i} className="border-t">
                       {row.map((cell, j) => (
                         <td key={j} className="px-3 py-2 tabular-nums whitespace-nowrap">
-                          {cell === null ? "—" : String(cell)}
+                          {cell === null ? "-" : String(cell)}
                         </td>
                       ))}
                     </tr>

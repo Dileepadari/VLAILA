@@ -3,7 +3,7 @@ import { InnerPage, ContactRail } from "@/components/vlabs/InnerPage";
 import { INSTITUTES } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/partners")({
-  head: () => ({ meta: [{ title: "Participating Institutes — Virtual Labs" }] }),
+  head: () => ({ meta: [{ title: "Participating Institutes - Virtual Labs" }] }),
   component: Partners,
 });
 

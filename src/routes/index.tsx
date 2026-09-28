@@ -1,5 +1,5 @@
 /**
- * Home — a reproduction of www.vlab.co.in, element for element.
+ * Home - a reproduction of www.vlab.co.in, element for element.
  *
  * Class names, grid columns, inline styles and copy come from the live page
  * source; the stylesheets that lay them out are the platform's own, served
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Virtual Labs — an initiative of the Ministry of Education under the National Mission on Education through ICT. Free browser-based simulation labs from IITs, IIITs and NITs.",
+          "Virtual Labs - an initiative of the Ministry of Education under the National Mission on Education through ICT. Free browser-based simulation labs from IITs, IIITs and NITs.",
       },
     ],
   }),

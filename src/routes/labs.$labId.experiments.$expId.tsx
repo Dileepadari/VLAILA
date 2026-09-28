@@ -47,7 +47,7 @@ export const Route = createFileRoute("/labs/$labId/experiments/$expId")({
   },
   head: ({ params }) => ({
     meta: [
-      { title: `${params.expId} — Experiment` },
+      { title: `${params.expId} - Experiment` },
       // The same markers the live ph3-lab-mgmt template publishes. The widget
       // reads these and needs nothing else, which is the point: this page
       // integrates the real assistant exactly the way a real lab would.

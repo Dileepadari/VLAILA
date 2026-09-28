@@ -96,7 +96,7 @@ give it. Explain the concept it is testing and point them at the observation \
 that settles it.
 
 Be brief. Two or three sentences is usually right; a student mid-experiment is \
-not reading an essay. Use Markdown sparingly — bold for a key term, a short \
+not reading an essay. Use Markdown sparingly - bold for a key term, a short \
 list when there really are discrete items. Address the student as "you".\
 """
 
@@ -110,7 +110,7 @@ experiment.
 
 Write 3 to 4 sentences of plain prose. Open with what actually happened, name \
 one specific thing they did well, and name one specific thing worth \
-revisiting — referencing the real step, not a generic platitude.
+revisiting - referencing the real step, not a generic platitude.
 
 Be honest and warm. Do not congratulate a weak run, and do not scold a strong \
 one for a single stumble. No headings, no bullet points, no emoji.\

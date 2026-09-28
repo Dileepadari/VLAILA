@@ -61,7 +61,7 @@ function FacultyOverview() {
         ))}
       </div>
       <div className="bg-white border rounded p-4">
-        <h3 className="font-semibold mb-3">Confusion heatmap — Colour Blindness</h3>
+        <h3 className="font-semibold mb-3">Confusion heatmap - Colour Blindness</h3>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={CLASS_ANALYTICS.steps}>
             <XAxis

@@ -49,7 +49,7 @@
       "expected_dwell_seconds": 90,
       "milestone": true,
       "hints": {
-        "nudge": "Read Theory first — indicator choice is the one decision in this experiment that can silently ruin the result.",
+        "nudge": "Read Theory first - indicator choice is the one decision in this experiment that can silently ruin the result.",
         "specific": "Theory covers the conditions a reaction must satisfy to serve as a titration, the difference between end point and equivalence point, and how indicators signal completion."
       },
       "concept_ref": "end-vs-equivalence"
@@ -68,7 +68,7 @@
       "stuck_after_seconds": 40,
       "hints": {
         "nudge": "Start by picking your titrant from the dropdown.",
-        "specific": "The titrant is the solution of known normality delivered from the burette. Select it first — the indicator you need later depends on this choice.",
+        "specific": "The titrant is the solution of known normality delivered from the burette. Select it first - the indicator you need later depends on this choice.",
         "interactive": {
           "highlight": "#titrateLabel",
           "frame": "sim",
@@ -89,7 +89,7 @@
         "frame": "sim"
       },
       "hints": {
-        "nudge": "Now select the solution being analysed — the titrate.",
+        "nudge": "Now select the solution being analysed - the titrate.",
         "specific": "The titrate is the solution in the conical flask whose concentration you are determining. Its acid/base strength together with the titrant's fixes the equivalence-point pH.",
         "interactive": {
           "highlight": "#selectCathode",
@@ -114,7 +114,7 @@
       },
       "hints": {
         "nudge": "Set the normality using the slider.",
-        "specific": "Normality is in gram-equivalents per litre and the slider spans 0.1 to 2 N. Note the value — you will need it in N1V1 = N2V2."
+        "specific": "Normality is in gram-equivalents per litre and the slider spans 0.1 to 2 N. Note the value - you will need it in N1V1 = N2V2."
       }
     },
     {
@@ -138,7 +138,7 @@
       "detect": { "action": "change", "selector": "md-select", "frame": "sim", "count": 3 },
       "milestone": true,
       "hints": {
-        "nudge": "Pick your indicator — this is the choice that decides whether your end point is meaningful.",
+        "nudge": "Pick your indicator - this is the choice that decides whether your end point is meaningful.",
         "specific": "Match the indicator's transition range to the equivalence-point pH. Phenolphthalein (8.3-10.0) suits strong base titrations; methyl orange (3.1-4.4) suits strong acid ones.",
         "interactive": { "highlight": "md-select", "frame": "sim", "text": "Indicator selection." }
       },
@@ -153,7 +153,7 @@
       "requires": ["select-indicator"],
       "detect": { "action": "click", "selector": "#startExp", "frame": "sim" },
       "hints": {
-        "nudge": "Everything is set — start the titration.",
+        "nudge": "Everything is set - start the titration.",
         "specific": "Titrant now flows from the burette. Watch the flask: the colour change marks the end point, and the burette reading at that instant is your titre.",
         "interactive": { "highlight": "#startExp", "frame": "sim", "text": "Start the titration." }
       }
@@ -168,7 +168,7 @@
       "expected_dwell_seconds": 10,
       "milestone": true,
       "hints": {
-        "nudge": "Watch for the first permanent colour change — that is your end point.",
+        "nudge": "Watch for the first permanent colour change - that is your end point.",
         "specific": "The end point is the first colour change that persists on swirling. Read the burette there. A fleeting flash that fades is not the end point."
       },
       "concept": "Near the equivalence point pH swings by several units for a single drop, which is why the colour flips so abruptly. That steepness is what makes the technique precise at all.",
@@ -196,7 +196,7 @@
       "optional": true,
       "detect": { "action": "click", "selector": "#reset", "frame": "sim" },
       "hints": {
-        "nudge": "One titration is a data point, not a result — repeat it.",
+        "nudge": "One titration is a data point, not a result - repeat it.",
         "specific": "Real practice takes readings until two agree within 0.1 mL. A single titre carries no estimate of its own uncertainty."
       }
     }
@@ -225,7 +225,7 @@
         "frame": "sim",
         "unless_completed": ["choose-titrate"]
       },
-      "message": "You have not chosen a titrate yet — there is nothing in the flask to titrate against.",
+      "message": "You have not chosen a titrate yet - there is nothing in the flask to titrate against.",
       "correction_step": "choose-titrate"
     },
     {
@@ -263,7 +263,7 @@
         "on_task": "Simulation",
         "unless_completed": ["read-theory"]
       },
-      "message": "Heads up — you have skipped Theory, and indicator selection is about to matter. Choosing the wrong indicator gives a confident-looking but wrong answer.",
+      "message": "Heads up - you have skipped Theory, and indicator selection is about to matter. Choosing the wrong indicator gives a confident-looking but wrong answer.",
       "correction_step": "read-theory",
       "confidence": 0.85
     }
@@ -273,7 +273,7 @@
     {
       "id": "end-vs-equivalence",
       "name": "End point vs equivalence point",
-      "summary": "The equivalence point is where titrant added is stoichiometrically equal to analyte present — a thermodynamic fact. The end point is where the indicator visibly changes — an experimental observation, usually a slight excess past equivalence. Good indicator choice makes the gap fall inside experimental error."
+      "summary": "The equivalence point is where titrant added is stoichiometrically equal to analyte present - a thermodynamic fact. The end point is where the indicator visibly changes - an experimental observation, usually a slight excess past equivalence. Good indicator choice makes the gap fall inside experimental error."
     },
     {
       "id": "indicator-choice",
@@ -308,7 +308,7 @@
     },
     {
       "belief": "Normality and molarity are interchangeable.",
-      "correction": "Normality = molarity x n, where n is equivalents per mole. For H2SO4, 1 M is 2 N — ignoring this halves your answer."
+      "correction": "Normality = molarity x n, where n is equivalents per mole. For H2SO4, 1 M is 2 N - ignoring this halves your answer."
     }
   ],
 

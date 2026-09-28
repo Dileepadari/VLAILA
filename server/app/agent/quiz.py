@@ -85,5 +85,5 @@ def grade(quiz: list[dict], answers: dict[str, int]) -> tuple[int, dict[str, boo
             right = q["options"][q["answer_index"]]
             # Bold, not single-asterisk italics: the widget renders a small
             # Markdown subset and single asterisks would show up literally.
-            feedback[qid] = f"Not quite — the answer is **{right}**. {q['explanation']}"
+            feedback[qid] = f"Not quite - the answer is **{right}**. {q['explanation']}"
     return score, per_question, feedback

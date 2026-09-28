@@ -54,7 +54,7 @@
       "expected_dwell_seconds": 120,
       "milestone": true,
       "hints": {
-        "nudge": "Read Theory first — the whole experiment is a way of measuring one slope, and Theory tells you which slope.",
+        "nudge": "Read Theory first - the whole experiment is a way of measuring one slope, and Theory tells you which slope.",
         "specific": "Is = A T^(3/2) exp(-Eg/kT). Taking log10 and treating log T as roughly constant over a small temperature range gives log10(Is) = constant - 5.04 Eg x 10^3 / T. Plotting log10(Is) against 10^3/T therefore yields a straight line of slope -5.04 Eg."
       },
       "concept_ref": "saturation-current"
@@ -91,7 +91,7 @@
       },
       "hints": {
         "nudge": "Place each instrument on the board before wiring anything.",
-        "specific": "Click Place Container then the drawing box, then Battery, Ammeter and Voltmeter in turn — each is a two-click action: select the component, then click where it goes."
+        "specific": "Click Place Container then the drawing box, then Battery, Ammeter and Voltmeter in turn - each is a two-click action: select the component, then click where it goes."
       }
     },
     {
@@ -103,7 +103,7 @@
       "detect": { "action": "click", "selector": "#img_therma, [id*='pn']", "frame": "sim" },
       "hints": {
         "nudge": "The diode goes inside the container, not on the open board.",
-        "specific": "Click the PN Junction button, then click on the liquid inside the container. The bath is what sets and holds the junction temperature — that is the independent variable of the whole experiment.",
+        "specific": "Click the PN Junction button, then click on the liquid inside the container. The bath is what sets and holds the junction temperature - that is the independent variable of the whole experiment.",
         "interactive": {
           "highlight": "#img_therma",
           "frame": "sim",
@@ -140,7 +140,7 @@
       "detect": { "action": "select", "selector": "select", "frame": "sim" },
       "hints": {
         "nudge": "Choose your bias voltage from the dropdown.",
-        "specific": "Pick a reverse bias from the dropdown, then press the Click button to apply it. Keep the same voltage for every temperature — it must not vary across the run."
+        "specific": "Pick a reverse bias from the dropdown, then press the Click button to apply it. Keep the same voltage for every temperature - it must not vary across the run."
       }
     },
     {
@@ -152,7 +152,7 @@
       "detect": { "action": "change", "selector": "input[type='range']", "frame": "sim" },
       "hints": {
         "nudge": "Drag the slider to set your first temperature.",
-        "specific": "Set a temperature and allow the reading to settle. You need several well-spaced temperatures to define the line — clustered points give a slope with a large uncertainty."
+        "specific": "Set a temperature and allow the reading to settle. You need several well-spaced temperatures to define the line - clustered points give a slope with a large uncertainty."
       },
       "concept_ref": "temperature-dependence"
     },
@@ -182,7 +182,7 @@
       },
       "milestone": true,
       "hints": {
-        "nudge": "Keep going — a slope from three points is not a measurement.",
+        "nudge": "Keep going - a slope from three points is not a measurement.",
         "specific": "Repeat set-temperature then read-current until the observation table is filled. Spread the temperatures across the available range so the fitted line is well conditioned."
       },
       "concept": "The linearisation assumes log T is roughly constant over the range sampled. Too narrow a range makes the slope noisy; too wide and that assumption starts to break."
@@ -222,7 +222,7 @@
       "detect": { "action": "input", "selector": "#eg_value, #ip1", "frame": "sim" },
       "milestone": true,
       "hints": {
-        "nudge": "Enter your slope and calculate — then sanity-check the answer.",
+        "nudge": "Enter your slope and calculate - then sanity-check the answer.",
         "specific": "Eg = |slope| / 5.04. Germanium should land near 0.7 eV and silicon near 1.1 eV. An answer far outside 0.5-1.5 eV usually means the slope was read off the wrong axes."
       },
       "concept": "The sanity check is part of the measurement. Knowing that Ge is 0.7 eV and Si is 1.1 eV lets you catch an axis or unit error immediately, rather than reporting a confident wrong number.",
@@ -264,7 +264,7 @@
         "frame": "sim",
         "unless_completed": ["fill-observation-table"]
       },
-      "message": "You have only a few points so far. A slope fitted to two or three readings carries enormous uncertainty — collect more temperatures first.",
+      "message": "You have only a few points so far. A slope fitted to two or three readings carries enormous uncertainty - collect more temperatures first.",
       "correction_step": "fill-observation-table",
       "confidence": 0.85
     },
@@ -301,7 +301,7 @@
         "on_task": "Simulation",
         "unless_completed": ["read-theory"]
       },
-      "message": "This one really needs the Theory first — without the linearised equation, the graph at the end is just a line with no interpretation.",
+      "message": "This one really needs the Theory first - without the linearised equation, the graph at the end is just a line with no interpretation.",
       "correction_step": "read-theory",
       "confidence": 0.9
     }
@@ -431,7 +431,7 @@
       "question": "Your fitted line has a slope of magnitude 3.5. What is Eg?",
       "options": ["0.69 eV", "1.76 eV", "3.5 eV", "17.6 eV"],
       "answer_index": 0,
-      "explanation": "Eg = |slope| / 5.04 = 3.5 / 5.04 = 0.69 eV — consistent with germanium.",
+      "explanation": "Eg = |slope| / 5.04 = 3.5 / 5.04 = 0.69 eV - consistent with germanium.",
       "concept_ref": "linearisation",
       "difficulty": "intermediate"
     },

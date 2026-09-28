@@ -16,7 +16,7 @@ import { BROAD_AREAS, LABS } from "@/lib/mock-data";
 export const Route = createFileRoute("/broad-areas/$area")({
   head: ({ params }) => {
     const a = BROAD_AREAS.find((x) => x.slug === params.area);
-    return { meta: [{ title: `${a?.name ?? "Broad Area"} — Virtual Labs` }] };
+    return { meta: [{ title: `${a?.name ?? "Broad Area"} - Virtual Labs` }] };
   },
   component: AreaPage,
 });

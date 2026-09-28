@@ -4,9 +4,9 @@ export const Route = createFileRoute("/faculty/classes")({
     <div className="space-y-3">
       <h1 className="text-xl font-bold text-vlabs-blue">My Classes</h1>
       {[
-        ["B.Tech CSE — 3rd yr — Section A", 32],
-        ["B.Tech CSE — 3rd yr — Section B", 30],
-        ["M.Tech CSE — 1st yr", 24],
+        ["B.Tech CSE - 3rd yr - Section A", 32],
+        ["B.Tech CSE - 3rd yr - Section B", 30],
+        ["M.Tech CSE - 1st yr", 24],
       ].map(([n, c]) => (
         <div
           key={n as string}

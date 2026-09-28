@@ -60,7 +60,7 @@ function CustomHints() {
         <h1 className="text-xl font-bold text-vlabs-blue">Custom hints</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Wording you write here is served to your students ahead of the default hint for that step.
-          It applies to <strong>{INSTITUTION}</strong> only — nothing you write reaches another
+          It applies to <strong>{INSTITUTION}</strong> only - nothing you write reaches another
           college's students.
         </p>
       </div>

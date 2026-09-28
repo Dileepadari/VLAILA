@@ -49,7 +49,7 @@
       "expected_dwell_seconds": 90,
       "milestone": true,
       "hints": {
-        "nudge": "Start with Theory — the K-map derivation is what makes the gate layout make sense.",
+        "nudge": "Start with Theory - the K-map derivation is what makes the gate layout make sense.",
         "specific": "Theory derives Sum = A'B + AB' (an XOR) and Carry = AB (an AND) from the half-adder truth table, then shows why a third input is needed to chain adders."
       },
       "concept_ref": "half-adder"
@@ -62,7 +62,7 @@
       "requires": ["read-theory"],
       "detect": { "action": "click", "selector": "a[href*='Simulator']", "frame": "sim" },
       "hints": {
-        "nudge": "Pick 'Half Adder' to start — build up to the full adder afterwards.",
+        "nudge": "Pick 'Half Adder' to start - build up to the full adder afterwards.",
         "specific": "The Simulation tab offers Half Adder and Full Adder. Start with Half Adder; the full adder is two half adders plus an OR gate, so the order matters."
       }
     },
@@ -76,7 +76,7 @@
       "detect": { "action": "click", "selector": "#Supply", "frame": "sim:half_adder" },
       "stuck_after_seconds": 30,
       "hints": {
-        "nudge": "The circuit has no power yet — connect the +5V supply first.",
+        "nudge": "The circuit has no power yet - connect the +5V supply first.",
         "specific": "Click the supply switch to connect +5V. Until you do, toggling the input switches will not change the LEDs, and the circuit will look broken.",
         "interactive": {
           "highlight": "#Supply",
@@ -112,7 +112,7 @@
       "detect": { "action": "click", "selector": "#A, #B", "frame": "sim:half_adder", "count": 1 },
       "hints": {
         "nudge": "Toggle switches A and B to choose the input combination you want to test.",
-        "specific": "Click switch A and/or switch B to set the combination. Watch the Sum and Carry LEDs change as you do — that is the circuit responding in real time.",
+        "specific": "Click switch A and/or switch B to set the combination. Watch the Sum and Carry LEDs change as you do - that is the circuit responding in real time.",
         "interactive": {
           "highlight": "#A",
           "frame": "sim:half_adder",
@@ -169,7 +169,7 @@
       "detect": { "action": "click", "selector": "a[href*='Simulator1']", "frame": "sim" },
       "milestone": true,
       "hints": {
-        "nudge": "Now try the full adder — same method, one extra input.",
+        "nudge": "Now try the full adder - same method, one extra input.",
         "specific": "The full adder adds Cin, so there are eight combinations instead of four. Same procedure: supply, ADD baseline, set inputs, ADD.",
         "interactive": {
           "highlight": "a[href*='Simulator1']",
@@ -204,7 +204,7 @@
         "frame": "sim:half_adder",
         "unless_completed": ["connect-supply"]
       },
-      "message": "You are logging a row from an unpowered circuit — the outputs recorded will be meaningless. Connect +5V, then start the table again.",
+      "message": "You are logging a row from an unpowered circuit - the outputs recorded will be meaningless. Connect +5V, then start the table again.",
       "correction_step": "connect-supply"
     },
     {
@@ -229,7 +229,7 @@
         "frame": "sim",
         "unless_completed": ["complete-truth-table"]
       },
-      "message": "Jumping to the full adder before finishing the half adder makes the extra carry input harder to interpret — the full adder is literally built from two half adders.",
+      "message": "Jumping to the full adder before finishing the half adder makes the extra carry input harder to interpret - the full adder is literally built from two half adders.",
       "correction_step": "complete-truth-table",
       "confidence": 0.8
     },
@@ -342,7 +342,7 @@
       "question": "In the half adder truth table, for which input combination is Carry equal to 1?",
       "options": ["A=0, B=0", "A=0, B=1", "A=1, B=0", "A=1, B=1"],
       "answer_index": 3,
-      "explanation": "Carry = AB, so it is high only when both inputs are 1 — the one case where the result needs two bits.",
+      "explanation": "Carry = AB, so it is high only when both inputs are 1 - the one case where the result needs two bits.",
       "concept_ref": "half-adder",
       "difficulty": "beginner"
     },
@@ -374,7 +374,7 @@
       "question": "A full adder is built from two half adders plus which additional gate?",
       "options": ["AND", "OR", "XOR", "NOT"],
       "answer_index": 1,
-      "explanation": "The two half-adder carries are combined with an OR gate to form Cout — a carry from either stage produces a carry out.",
+      "explanation": "The two half-adder carries are combined with an OR gate to form Cout - a carry from either stage produces a carry out.",
       "concept_ref": "full-adder",
       "difficulty": "intermediate"
     },

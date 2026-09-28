@@ -6,7 +6,7 @@ import { useKbEntry, useKnowledgeBase, useScenarioRunner } from "@/lib/api";
 import { AlertTriangle, CheckCircle2, Info, Lightbulb, Play } from "lucide-react";
 
 export const Route = createFileRoute("/studio")({
-  head: () => ({ meta: [{ title: "Author Studio — VLAILA" }] }),
+  head: () => ({ meta: [{ title: "Author Studio - VLAILA" }] }),
   component: Studio,
 });
 
@@ -103,7 +103,7 @@ function Studio() {
           <h1 className="text-2xl font-bold text-vlabs-blue">Author Studio</h1>
           <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
             Inspect an experiment's knowledge base entry and replay student behaviour against it.
-            Whatever this page shows is exactly what a student would be told — the same rules engine
+            Whatever this page shows is exactly what a student would be told - the same rules engine
             answers both.
           </p>
         </header>
@@ -126,7 +126,7 @@ function Studio() {
                 >
                   {(kb.data ?? []).map((e) => (
                     <option key={e.experiment_id} value={e.experiment_id}>
-                      {e.discipline.split(" ")[0]} — {e.title.slice(0, 50)}
+                      {e.discipline.split(" ")[0]} - {e.title.slice(0, 50)}
                     </option>
                   ))}
                 </select>

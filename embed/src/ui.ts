@@ -271,7 +271,7 @@ export class Ui {
         type: "button",
         "aria-label": t(this.locale, "close"),
       },
-      "✕",
+      "",
     );
     close.addEventListener("click", () => this.setOpen(false));
     head.appendChild(close);
@@ -782,7 +782,7 @@ export class Ui {
         "aria-label": t(this.locale, "voice"),
         "data-active": "false",
       },
-      "🎙",
+      "",
     );
     const recognition = this.speechRecognition();
     if (!recognition) mic.style.display = "none";
@@ -808,7 +808,7 @@ export class Ui {
         type: "button",
         "aria-label": t(this.locale, "send"),
       },
-      "➤",
+      "",
     ) as HTMLButtonElement;
 
     const submit = () => {

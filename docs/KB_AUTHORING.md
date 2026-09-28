@@ -1,7 +1,7 @@
 # Authoring a Knowledge Base Entry
 
 Everything VLAILA knows about an experiment lives in one JSON file under `kb/experiments/`.
-Nothing about an experiment's procedure is inferred by a model — if it is not in the entry, the
+Nothing about an experiment's procedure is inferred by a model - if it is not in the entry, the
 assistant stays quiet about it.
 
 Authoring is the bottleneck on reaching all 1,500 experiments, which is why this guide exists and
@@ -47,7 +47,7 @@ student to a hint that does not exist.
 }
 ```
 
-`experiment_id` must match `<meta name="experiment-short-name">` on the live page — view source
+`experiment_id` must match `<meta name="experiment-short-name">` on the live page - view source
 and copy it, do not guess. `origin` plus `experiment_id` is the lookup key the widget resolves
 with, and it is what disambiguates two labs that happen to use the same slug.
 
@@ -66,7 +66,7 @@ One entry per thing a student does, in the order they should do it. Order define
   "detect": { "action": "click", "selector": ".image-thumbnail", "frame": "sim" },
   "hints": {
     "nudge": "Pick one of the images above to get started.",
-    "specific": "Click any thumbnail. The image loads onto the canvas showing normal colour vision — that is your reference before you apply any filter.",
+    "specific": "Click any thumbnail. The image loads onto the canvas showing normal colour vision - that is your reference before you apply any filter.",
     "interactive": {
       "highlight": ".thumbnail-row .image-thumbnail",
       "frame": "sim",
@@ -88,10 +88,10 @@ right-clicking the control and inspecting it.
 | `frame`          | Means                                                                         |
 | ---------------- | ----------------------------------------------------------------------------- |
 | `host`           | The experiment page itself                                                    |
-| `sim`            | Anywhere inside the simulator iframe — use this unless you need to be precise |
+| `sim`            | Anywhere inside the simulator iframe - use this unless you need to be precise |
 | `sim:half_adder` | A specific nested simulator frame                                             |
 
-If a control has no stable id, target its **visible label** instead — the observer reports it, and
+If a control has no stable id, target its **visible label** instead - the observer reports it, and
 `selector` matches against it:
 
 ```json
@@ -102,7 +102,7 @@ Use `"count": 4` when one control stands for repeated work (log four rows, take 
 rather than inventing four near-identical steps.
 
 **The three hint levels are three different jobs.** Level 1 asks, level 2 tells, level 3 shows.
-Writing the same sentence three times wastes the escalation — a student who did not act on the
+Writing the same sentence three times wastes the escalation - a student who did not act on the
 nudge needs new information, not the same information louder.
 
 **`milestone: true`** marks a good moment for a "why did that happen" prompt. Note that a
@@ -115,7 +115,7 @@ everything that `requires` it is blocked forever. The validator enforces this.
 
 ## 3. Errors
 
-The interesting part. Each entry is a pattern the rules engine matches exactly — no inference, so
+The interesting part. Each entry is a pattern the rules engine matches exactly - no inference, so
 it cannot fire spuriously.
 
 ```json
@@ -128,7 +128,7 @@ it cannot fire spuriously.
     "frame": "sim",
     "unless_completed": ["select-image"]
   },
-  "message": "Pick an image first — there is nothing on the canvas for the filter to transform yet.",
+  "message": "Pick an image first - there is nothing on the canvas for the filter to transform yet.",
   "correction_step": "select-image",
   "concept": "The filter is a per-pixel transform of whatever is on the canvas…"
 }
@@ -138,21 +138,21 @@ All present keys in `when` must hold. The useful ones:
 
 | Key                  | Detects                                                       |
 | -------------------- | ------------------------------------------------------------- |
-| `unless_completed`   | **Out of order** — fires only if none of these steps are done |
+| `unless_completed`   | **Out of order** - fires only if none of these steps are done |
 | `after_completed`    | A mistake only possible later in the procedure                |
 | `value_out_of_range` | A parameter outside its valid range                           |
-| `repeat_count`       | **Thrashing** — the same action N times without progress      |
+| `repeat_count`       | **Thrashing** - the same action N times without progress      |
 | `on_task`            | A mistake specific to one page                                |
 | `idle_seconds`       | Combined with the above, "stuck _and_ did this"               |
 
 **`severity` is a pedagogical judgement, so you make it, not the model.**
 
-- `fatal` — cannot obtain valid results without correcting. Powering nothing, no indicator, no
+- `fatal` - cannot obtain valid results without correcting. Powering nothing, no indicator, no
   data. Firm wording.
-- `recoverable` — can proceed, results may vary. Softer wording.
+- `recoverable` - can proceed, results may vary. Softer wording.
 
 **`confidence` below 0.9 turns a warning into a hint.** Use it deliberately. If you are inferring
-intent rather than observing a fact — "they are probably rushing" — set 0.7 and let it be
+intent rather than observing a fact - "they are probably rushing" - set 0.7 and let it be
 delivered as a nudge. It is the honest encoding of an uncertain rule, and it protects the
 false-positive budget.
 
@@ -181,7 +181,7 @@ answers stay grounded in the material the student is being assessed on.
 }
 ```
 
-One idea per chunk, 3–6 sentences. Five to eight chunks is usually enough — retrieval is scoped to
+One idea per chunk, 3-6 sentences. Five to eight chunks is usually enough - retrieval is scoped to
 a single experiment, so precision matters far more than volume. Include a chunk for the simulator
 controls themselves; "what does this button do" is one of the most common questions students ask.
 
@@ -191,7 +191,7 @@ Authored questions with **verified** answers. Never model-generated: a subtly wr
 tells a student their correct answer is wrong destroys trust in everything else the assistant says.
 
 Six items spanning beginner → advanced lets selection adapt to where the student actually
-struggled. Write the `explanation` to teach, not just to confirm — it is shown for right answers
+struggled. Write the `explanation` to teach, not just to confirm - it is shown for right answers
 too.
 
 ---
@@ -229,4 +229,4 @@ assistant.
 - [ ] Theory chunks cite their `source` URL
 - [ ] Quiz answers verified against the lab's own material
 - [ ] `python3 kb/validate.py` passes
-- [ ] Scenario replayed in Author Studio — mistake fires, correct path silent
+- [ ] Scenario replayed in Author Studio - mistake fires, correct path silent

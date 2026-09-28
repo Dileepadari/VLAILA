@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { InnerPage } from "@/components/vlabs/InnerPage";
 
 export const Route = createFileRoute("/nmeict")({
-  head: () => ({ meta: [{ title: "NMEICT — Virtual Labs" }] }),
+  head: () => ({ meta: [{ title: "NMEICT - Virtual Labs" }] }),
   component: Nmeict,
 });
 

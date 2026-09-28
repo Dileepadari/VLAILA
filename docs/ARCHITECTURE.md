@@ -20,7 +20,7 @@ A student clicks a control inside the simulator.
 7  Response                 ─┘  supersedes the local verdict; carries progress
 ```
 
-Steps 1–3 happen with no network. Steps 4–7 improve the answer and record it for the dashboards.
+Steps 1-3 happen with no network. Steps 4-7 improve the answer and record it for the dashboards.
 If the network is down, the student loses the model tier and keeps everything else.
 
 ---
@@ -38,7 +38,7 @@ four things that must agree:
 | `server/app/agent/quiz.py`  | quiz_bank                                               |
 
 `ExperimentKB.client_rules()` decides what the browser gets. It deliberately excludes
-`theory_chunks` (large) and `quiz_bank` — shipping the quiz answers to the client would let a
+`theory_chunks` (large) and `quiz_bank` - shipping the quiz answers to the client would let a
 student read them out of the network tab.
 
 ### Why Tier 1 is implemented twice
@@ -46,7 +46,7 @@ student read them out of the network tab.
 `rules.py` and `rules.ts` are line-for-line equivalents. Two implementations is a maintenance cost
 paid on purpose: it is what makes the browser able to validate steps with no connectivity, which
 is the difference between an assistant that works in a rural college computer lab and one that
-does not. The 20-case suite in `server/tests/test_agent_suite.py` is the shared contract — if the
+does not. The 20-case suite in `server/tests/test_agent_suite.py` is the shared contract - if the
 two ever disagree, that suite is where it should surface.
 
 ---
@@ -70,7 +70,7 @@ app/
     prompts.py     System prompts + the structured-output schema
   llm/
     base.py        Interface + PII scrubbing
-    offline.py     Composes answers from the KB — a real adapter, not a stub
+    offline.py     Composes answers from the KB - a real adapter, not a stub
     anthropic_client.py / openai_client.py / ollama_client.py
   analytics/
     aggregates.py  Instructor + admin roll-ups
@@ -82,8 +82,8 @@ app/
 ### Agent core invariants
 
 - **Session state is mutated in exactly one place** (`memory.py`). The "never repeats a hint"
-  guarantee is a property of that data structure — an error id in `shown_errors` cannot fire twice,
-  and `set_hint_level` is monotonic — rather than a behaviour a prompt asks for.
+  guarantee is a property of that data structure - an error id in `shown_errors` cannot fire twice,
+  and `set_hint_level` is monotonic - rather than a behaviour a prompt asks for.
 - **The confidence gate applies to authored rules too**, not just to model output. A KB author who
   marks a pattern below 0.9 is saying they are not certain, and an uncertain warning is exactly the
   false positive that costs a student's trust. It is delivered as a hint: same information, framing
@@ -126,7 +126,7 @@ Consequences of running inside pages we do not own:
   on every action, so anything bound to an element is gone after the first click.
 - **Capture phase, `passive: true`.** VLAILA must be unobservable to the experiment it watches.
 - **Duck-typed element checks.** `target instanceof Element` fails for elements inside the
-  simulator iframe — they belong to that frame's realm, not this window's. This was a real bug: it
+  simulator iframe - they belong to that frame's realm, not this window's. This was a real bug: it
   silently dropped every simulator interaction, which is the most important path in the product.
 - **A MutationObserver plus timed re-scans** find the simulator frame, which is often absent when
   the script first runs and is replaced when a student picks a sub-simulator.
@@ -150,7 +150,7 @@ sessions       one per student per experiment visit; carries denormalised state
                so resuming is a single read and analytics never replay the log
 events         every observed interaction, resolved to a step id where possible
 interventions  every time the agent spoke, with tier, latency, confidence
-               and the student's response — this is the false-positive ledger
+               and the student's response - this is the false-positive ledger
 chat_turns     questions and answers, PII-scrubbed
 custom_hints   instructor overrides, scoped to (experiment, step, institution)
 ```
@@ -163,7 +163,7 @@ last one is the loop that keeps the knowledge base honest as the platform's own 
 
 ## Privacy
 
-- Sessions are pseudonymous by default — a random UUID in `sessionStorage`, no cookie, no
+- Sessions are pseudonymous by default - a random UUID in `sessionStorage`, no cookie, no
   cross-site identifier, no login required to benefit.
 - `user_key` is set only when an institution has explicitly enrolled, and never appears in a model
   prompt or an NL query result.
@@ -171,3 +171,52 @@ last one is the loop that keeps the knowledge base honest as the platform's own 
   request.
 - Prompt payloads carry experiment ID, step ID, action, values and hint history. Nothing else.
 - `VLAILA_LLM_PROVIDER=ollama` makes the whole system on-premise with no code change.
+
+## What the overhaul pass changed
+
+**Every route was open.** The student-facing ones are open by design - the
+widget is embedded in ~200 independently hosted lab pages and has no identity to
+present, which is why they are rate limited instead. The instructor and admin
+ones were open by omission. `/instructor/students` returns per-student rows
+keyed by `user_key` with a behavioural "strained" flag on each,
+`/admin/query` runs natural-language queries over the session store and
+`/admin/export` dumps it. Anyone who could reach the host could read all of it.
+
+CORS was the only thing in front of them, and CORS is a browser policy: it does
+nothing about curl.
+
+`app/auth.py` adds a `require_staff` dependency, applied to the whole
+dashboards router rather than per route so a new endpoint is gated by default
+instead of by remembering. `/kb/reload` is gated too: re-reading every entry
+from disk on an unauthenticated POST is both an author-only action and a free
+way to make the API do work on demand. The gate fails closed - with no key
+configured it refuses everyone and says which variable to set, because
+defaulting open is how this was wrong in the first place.
+
+`server/tests/test_staff_auth.py` asserts each staff route refuses an anonymous
+caller, accepts the key, rejects a wrong one, and that the student-facing routes
+stay open. Nine of its nineteen tests fail if the dependency is removed.
+
+**The rate limiter's memory grew with total sessions, not concurrent ones.**
+`SlidingWindow` kept a deque per session id forever. It now drops empty windows
+as it notices them and sweeps stale ones periodically; `tracked_keys()` and
+`sweep_now()` exist so a test can prove it.
+
+**eslint was linting the Python virtualenv**, reporting prettier violations in
+pip's vendored urllib3. With `.venv`, `.pytest_cache`, `embed/dist` and the
+generated route tree ignored, and the project's own `npm run format` run once,
+lint went from 918 errors to 0 and can be a CI gate.
+
+**Two route components were inline arrows named `component`**, so the hooks
+lint rule could not tell they were components and flagged every hook inside
+them. Named now, which also helps stack traces.
+
+**A critical audit backlog.** High-severity advisories in undici, sharp,
+js-yaml, nanoid, fast-uri, wrangler and miniflare. All cleared; the audit job in
+CI is there so the next one is noticed.
+
+The remaining `@typescript-eslint/no-explicit-any` cases are a warning rather
+than an error. They are a raw knowledge base entry - an untyped JSON document
+whose real fix is generating types from `kb/schema/experiment.schema.json` - and
+DOM interop in the embed bundle. Both are genuine work rather than a lint fix,
+and neither should block a build in the meantime.

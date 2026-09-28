@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 REDIRECT = (
     "That one is outside what I know about this experiment. I can help with the "
-    "procedure, the controls in the simulator, or the theory behind **{title}** — "
+    "procedure, the controls in the simulator, or the theory behind **{title}** - "
     "what would be most useful?"
 )
 

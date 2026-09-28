@@ -118,7 +118,7 @@ export class Coach {
           title: lab ? "That control is not responding" : "That does not seem to be working",
           message: lab
             ? `You have hit ${target} several times in a row. Either the simulator is still busy with the last change, or this step needs something set before it will do anything. Want me to point at what comes first?`
-            : `${target} has been clicked a few times without moving. It may be a heading rather than a link — I can show you where this section actually leads.`,
+            : `${target} has been clicked a few times without moving. It may be a heading rather than a link - I can show you where this section actually leads.`,
           source: "behaviour",
           signal: signal.kind,
           selector: signal.selector,
@@ -168,7 +168,7 @@ export class Coach {
           kind: "HINT",
           title: lab ? "Still on this step?" : "Anything I can find for you?",
           message: lab
-            ? "Nothing has moved for a while. If the next step is not obvious, say the word and I will walk you through it — or I can explain why this step matters before you do it."
+            ? "Nothing has moved for a while. If the next step is not obvious, say the word and I will walk you through it - or I can explain why this step matters before you do it."
             : "You have been on this page a little while. I can search the labs by topic, or take you to where you left off.",
           source: "behaviour",
           signal: signal.kind,
@@ -183,7 +183,7 @@ export class Coach {
           kind: "HINT",
           title: "Looking for something specific?",
           message: lab
-            ? "You are scanning the page rather than working through it. Tell me what you are after — a control, a value, or the next step — and I will point at it."
+            ? "You are scanning the page rather than working through it. Tell me what you are after - a control, a value, or the next step - and I will point at it."
             : "There is a lot on this page. Tell me the subject or the experiment you want and I will jump you there instead.",
           source: "behaviour",
           signal: signal.kind,
@@ -213,7 +213,7 @@ export class Coach {
           kind: "CONCEPT",
           title: "Worth a second look",
           message:
-            "You moved through that page quickly. The simulator will still run, but the results are much easier to interpret with the theory behind them — I can give you the two ideas that actually matter in about a line each.",
+            "You moved through that page quickly. The simulator will still run, but the results are much easier to interpret with the theory behind them - I can give you the two ideas that actually matter in about a line each.",
           source: "behaviour",
           signal: signal.kind,
           actions: [
@@ -227,7 +227,7 @@ export class Coach {
           kind: "HINT",
           title: "Welcome back",
           message: lab
-            ? "You were away for a bit. I have kept your place — you were part-way through this step, and nothing was lost."
+            ? "You were away for a bit. I have kept your place - you were part-way through this step, and nothing was lost."
             : "You were away for a bit. Everything is where you left it.",
           source: "behaviour",
           signal: signal.kind,
@@ -239,7 +239,7 @@ export class Coach {
           kind: "CONCEPT",
           title: "This is going well",
           message: lab
-            ? `Steady work — ${snap.metrics.clicks} actions, nothing retried, and no steps out of order. I will keep out of your way unless something actually goes wrong.`
+            ? `Steady work - ${snap.metrics.clicks} actions, nothing retried, and no steps out of order. I will keep out of your way unless something actually goes wrong.`
             : "You are moving through this quickly. I will stay out of the way.",
           source: "behaviour",
           signal: signal.kind,

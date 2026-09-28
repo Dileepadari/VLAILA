@@ -115,7 +115,7 @@ export function greeting(ctx: PageContext): { title: string; message: string } {
       return {
         title: "Looking for a particular lab?",
         message:
-          "There are ten disciplines here and over 1500 experiments. Tell me a subject — “half adder”, “titration”, “pendulum” — and I will take you to the lab that covers it.",
+          "There are ten disciplines here and over 1500 experiments. Tell me a subject - “half adder”, “titration”, “pendulum” - and I will take you to the lab that covers it.",
       };
     case "broad-area":
       return {

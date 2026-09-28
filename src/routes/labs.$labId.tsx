@@ -34,7 +34,7 @@ const PAGE_LABELS: Record<LabPage, string> = {
 export const Route = createFileRoute("/labs/$labId")({
   head: ({ params }) => {
     const lab = LABS.find((l) => l.id === params.labId);
-    return { meta: [{ title: lab ? `${lab.name} — Virtual Labs` : "Virtual Labs" }] };
+    return { meta: [{ title: lab ? `${lab.name} - Virtual Labs` : "Virtual Labs" }] };
   },
   validateSearch: (search: Record<string, unknown>): { page?: LabPage } => {
     const page = search.page as LabPage | undefined;

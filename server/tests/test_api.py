@@ -217,7 +217,7 @@ def test_instructor_analytics_and_custom_hints(client):
             "step_id": "select-image",
             "institution": "IIIT Hyderabad",
             "author": "Dr. Sharma",
-            "text": "Use the Ishihara plate — it makes the effect unmistakable.",
+            "text": "Use the Ishihara plate - it makes the effect unmistakable.",
         },
     )
     assert created.status_code == 200

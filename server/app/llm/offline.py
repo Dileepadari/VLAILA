@@ -101,7 +101,7 @@ def _offline_answer(payload: dict[str, Any]) -> str:
     # Two sentences is enough to answer without turning into a wall of text.
     sentences = re.split(r"(?<=[.!?])\s+", body)
     excerpt = " ".join(sentences[:3]).strip()
-    prefix = f"On **{lead.get('heading', 'this experiment')}** — " if lead.get("heading") else ""
+    prefix = f"On **{lead.get('heading', 'this experiment')}** - " if lead.get("heading") else ""
     extra = ""
     if len(chunks) > 1 and chunks[1].get("heading"):
         extra = f"\n\nRelated: _{chunks[1]['heading']}_."
@@ -119,7 +119,7 @@ def _offline_summary(payload: dict[str, Any]) -> str:
     total = payload.get("steps_total", 0)
 
     if precision >= 90 and deviations == 0:
-        opening = f"Clean run — {done} of {total} steps, all correct first time."
+        opening = f"Clean run - {done} of {total} steps, all correct first time."
     elif precision >= 70:
         opening = f"Solid work: {done} of {total} steps, {precision}% right on the first try."
     else:
@@ -154,6 +154,6 @@ def _offline_teaching(payload: dict[str, Any]) -> str:
     return (
         f"The class is concentrating its errors on **{worst}** ({rate}% of sessions). "
         "Before the next lab, walk through that step on the projector and name the "
-        "prerequisite it depends on — most of these errors are the prerequisite not "
+        "prerequisite it depends on - most of these errors are the prerequisite not "
         "sticking rather than the step itself being hard."
     )

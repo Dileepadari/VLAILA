@@ -58,7 +58,7 @@ def simulate(experiment_id: str, payload: dict[str, Any]) -> dict[str, Any]:
 
     This is the Author Studio's core loop: an author writes an error pattern,
     describes the student behaviour that should trip it, and sees exactly what
-    VLAILA would say — before it ships to anybody's students.
+    VLAILA would say - before it ships to anybody's students.
     """
     entry = get_kb().resolve(experiment_id)
     if entry is None:

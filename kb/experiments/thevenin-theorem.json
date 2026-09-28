@@ -49,7 +49,7 @@
       "expected_dwell_seconds": 75,
       "milestone": true,
       "hints": {
-        "nudge": "Read Theory first — both theorems rest on the same linearity assumption, and that is the part worth understanding.",
+        "nudge": "Read Theory first - both theorems rest on the same linearity assumption, and that is the part worth understanding.",
         "specific": "Superposition: the response to several excitations equals the sum of responses to each individually. Thevenin: any linear bilateral circuit reduces to one voltage source in series with one impedance, as seen from a chosen pair of terminals."
       },
       "concept_ref": "linearity"
@@ -100,7 +100,7 @@
       "requires": ["set-r2"],
       "detect": { "action": "input", "selector": "#r3", "frame": "sim:thevenin", "value_min": 1 },
       "hints": {
-        "nudge": "R3 is the load branch — the part you will replace with the equivalent.",
+        "nudge": "R3 is the load branch - the part you will replace with the equivalent.",
         "specific": "R3 is the load across the terminals of interest. Thevenin's power is that you can swap it for any other value and reuse the same Vth and Rth."
       },
       "concept": "The Thevenin equivalent is defined relative to a specific terminal pair. Change which branch you call the load and both Vth and Rth change."
@@ -114,7 +114,7 @@
       "detect": { "action": "input", "selector": "#v1", "frame": "sim:thevenin" },
       "hints": {
         "nudge": "Set the first source voltage.",
-        "specific": "Enter V1 in volts. Sign matters — a negative value reverses the source polarity and changes the direction of its contribution."
+        "specific": "Enter V1 in volts. Sign matters - a negative value reverses the source polarity and changes the direction of its contribution."
       }
     },
     {
@@ -143,7 +143,7 @@
       },
       "milestone": true,
       "hints": {
-        "nudge": "Run it — then predict the answer yourself before you look.",
+        "nudge": "Run it - then predict the answer yourself before you look.",
         "specific": "Before reading the result, compute Vth by removing the load and finding the open-circuit voltage, then Rth by shorting the voltage sources and reducing. Verification means your prediction matching, not just the simulator producing a number."
       },
       "concept": "Verification is a comparison between two independent routes to the same quantity. Reading the simulator's output without predicting it first is observation, not verification.",
@@ -158,7 +158,7 @@
       "optional": true,
       "detect": { "action": "input", "selector": "#r3", "frame": "sim:thevenin", "count": 2 },
       "hints": {
-        "nudge": "Change only R3 and re-run — Vth and Rth should not move.",
+        "nudge": "Change only R3 and re-run - Vth and Rth should not move.",
         "specific": "This is the practical payoff of Thevenin: the equivalent is independent of the load. Vary R3 across several values and confirm Vth and Rth stay put while the load current changes."
       },
       "concept_ref": "thevenin"
@@ -207,7 +207,7 @@
         "frame": "sim:thevenin",
         "unless_completed": ["set-v2"]
       },
-      "message": "The network is not fully specified yet — fill in all three resistances and both source voltages before computing.",
+      "message": "The network is not fully specified yet - fill in all three resistances and both source voltages before computing.",
       "correction_step": "set-r1"
     },
     {
@@ -232,7 +232,7 @@
         "frame": "sim:thevenin",
         "repeat_count": 10
       },
-      "message": "You are changing values repeatedly without computing. Fix one set, predict the answer on paper, then run it — that is what makes this a verification.",
+      "message": "You are changing values repeatedly without computing. Fix one set, predict the answer on paper, then run it - that is what makes this a verification.",
       "correction_step": "compute-result",
       "confidence": 0.7
     },
@@ -259,7 +259,7 @@
     {
       "id": "superposition",
       "name": "Superposition theorem",
-      "summary": "In a linear circuit the response to several independent excitations equals the sum of the responses to each acting alone, with the others suppressed — voltage sources shorted, current sources opened."
+      "summary": "In a linear circuit the response to several independent excitations equals the sum of the responses to each acting alone, with the others suppressed - voltage sources shorted, current sources opened."
     },
     {
       "id": "linearity",
@@ -274,7 +274,7 @@
     {
       "id": "max-power",
       "name": "Why the equivalent is useful",
-      "summary": "With Vth and Rth known, any load response follows without re-solving the network — and maximum power transfer occurs at R_load = Rth, which is only obvious once the circuit is in Thevenin form."
+      "summary": "With Vth and Rth known, any load response follows without re-solving the network - and maximum power transfer occurs at R_load = Rth, which is only obvious once the circuit is in Thevenin form."
     }
   ],
 
@@ -318,7 +318,7 @@
     {
       "id": "tc-linearity",
       "heading": "The linearity requirement",
-      "text": "Both theorems apply only to linear, bilateral networks — those whose element relationships obey superposition and behave identically for current in either direction. Resistors, ideal sources, and linear inductors and capacitors qualify. Diodes, transistors outside a small-signal region, and saturating magnetic elements do not, and applying either theorem to them gives wrong answers.",
+      "text": "Both theorems apply only to linear, bilateral networks - those whose element relationships obey superposition and behave identically for current in either direction. Resistors, ideal sources, and linear inductors and capacitors qualify. Diodes, transistors outside a small-signal region, and saturating magnetic elements do not, and applying either theorem to them gives wrong answers.",
       "tags": ["linearity", "bilateral", "limitations", "assumptions"],
       "source": "https://bee-iitk.vlabs.ac.in/exp/thevenin-theorem/theory.html"
     },
