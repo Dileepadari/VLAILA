@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ApiDown, Empty, Loading, Panel, Stat } from "@/components/console/primitives";
 import { useClassAnalytics, useKnowledgeBase, useStudents, useTeachingSuggestion } from "@/lib/api";
 import { Lightbulb } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import {
   Bar,
   BarChart,
@@ -99,7 +100,12 @@ function ClassAnalyticsPage() {
               <Lightbulb className="w-4 h-4 text-vlabs-blue flex-none mt-0.5" />
               <div className="text-sm">
                 <div className="font-semibold mb-1">Teaching suggestion</div>
-                <p className="text-muted-foreground">{suggestion.data.suggestion}</p>
+                {/* The suggestion comes back as markdown; rendered as a plain string it
+                    showed the reader literal **asterisks**. A div rather than a p, because
+                    react-markdown emits its own paragraphs. */}
+                <div className="text-muted-foreground [&>p]:m-0 [&>p+p]:mt-2">
+                  <ReactMarkdown>{suggestion.data.suggestion}</ReactMarkdown>
+                </div>
               </div>
             </div>
           )}
