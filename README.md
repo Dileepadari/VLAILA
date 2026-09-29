@@ -20,12 +20,18 @@ from metadata every Virtual Labs page already publishes.
 
 ---
 
-| Class analytics | Trending labs | Author Studio |
+| The widget, on a real experiment page | Class analytics | Instructor overview |
 |:---:|:---:|:---:|
-| <img src="docs/screenshots/class-analytics.jpg" alt="Class analytics: completion rate, teaching suggestion and where students get stuck"/> | <img src="docs/screenshots/admin-trending.jpg" alt="Trending experiments ranked by sessions recorded"/> | <img src="docs/screenshots/author-studio.jpg" alt="Author Studio showing a procedure and its authored error patterns"/> |
+| <img src="docs/screenshots/experiment-widget.jpg" alt="The assistant open on a Virtual Labs experiment page, showing the Assist tab with actions taken, focused minutes and retries"/> | <img src="docs/screenshots/class-analytics.jpg" alt="Class analytics: completion rate, the teaching suggestion, and how the class found it read from pauses, retries and time away"/> | <img src="docs/screenshots/faculty-overview.jpg" alt="Instructor overview with classes, students, average completion and a confusion heatmap per step"/> |
+| **In the lab** <br> <sub>Assist, Ask and Summary, over whatever page the student is on.</sub> | **Where they struggle** <br> <sub>Step by step, with a suggestion for the next lab.</sub> | **The class at a glance** <br> <sub>A confusion heatmap across the procedure.</sub> |
 
-Captured against a local API seeded with 21 synthetic sessions, running on
-SQLite with the offline reasoning tier - no key, no network.
+| Students | Trending labs | Author Studio |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/students.jpg" alt="The student roster with roll number, batch and progress through the assigned experiments"/> | <img src="docs/screenshots/admin-trending.jpg" alt="Trending experiments ranked by sessions recorded"/> | <img src="docs/screenshots/author-studio.jpg" alt="Author Studio showing a procedure and its authored error patterns"/> |
+| **Who is where** <br> <sub>Progress per student, not just a class average.</sub> | **What is being used** <br> <sub>Ranked by sessions actually recorded.</sub> | **Authoring** <br> <sub>The procedure and its error patterns, written by a domain expert.</sub> |
+
+Captured against a local API on SQLite with the offline reasoning tier - no key,
+no network - driven by the sessions in `server/vlaila.db`.
 
 ## Why one line is enough
 
