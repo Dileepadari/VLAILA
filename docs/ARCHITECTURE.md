@@ -215,8 +215,24 @@ them. Named now, which also helps stack traces.
 js-yaml, nanoid, fast-uri, wrangler and miniflare. All cleared; the audit job in
 CI is there so the next one is noticed.
 
-The remaining `@typescript-eslint/no-explicit-any` cases are a warning rather
-than an error. They are a raw knowledge base entry - an untyped JSON document
-whose real fix is generating types from `kb/schema/experiment.schema.json` - and
-DOM interop in the embed bundle. Both are genuine work rather than a lint fix,
-and neither should block a build in the meantime.
+**`@typescript-eslint/no-explicit-any` is an error, and there are none left.**
+Seven of the nine were the same thing: a knowledge base entry typed as
+`Record<string, any>`, so the console read an authored document the compiler
+knew nothing about. The fix was to stop hand-keeping a shape and generate it:
+
+```sh
+npm run kb:types      # kb/schema/experiment.schema.json -> src/lib/kb.types.ts
+```
+
+`src/lib/api.ts` re-exports that as `KbEntry` and `KbStep`, and
+`embed/src/rules.ts` types an error's `when` clause as the generated
+`Condition` - which matters, because that clause is what decides whether a
+student made a mistake and it was previously outside the type checker
+altogether. The generated file is committed, and `ops/hygiene.sh` regenerates
+it and compares, so a schema change that skips the generator fails CI rather
+than drifting.
+
+The remaining two were DOM interop: the Web Speech API, which is not in
+TypeScript's DOM library and is declared in `embed/src/speech.d.ts`, and the
+page template's `dataLayer`, typed where it is written to match what
+`embed/src/detect.ts` reads back.

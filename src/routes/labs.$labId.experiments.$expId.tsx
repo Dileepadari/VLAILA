@@ -14,6 +14,16 @@ import { LabShell, type LabNavItem } from "@/components/vlabs/LabShell";
 import { BROAD_AREAS, LABS, EXPERIMENT } from "@/lib/mock-data";
 import ReactMarkdown from "react-markdown";
 
+/** The subset of the page template's dataLayer entry the widget reads. */
+interface DataLayerEntry {
+  labName?: string;
+  discipline?: string;
+  college?: string;
+  phase?: string;
+  expName?: string;
+  expShortName?: string;
+}
+
 const PAGES = [
   "aim",
   "objective",
@@ -76,7 +86,11 @@ function useVlailaWidget(experimentId: string, task: string) {
   }, [task]);
 
   useEffect(() => {
-    (window as any).dataLayer = [
+    // The same shape embed/src/detect.ts reads back: the Virtual Labs page
+    // template publishes lab metadata as the first dataLayer entry, and the
+    // widget auto-configures from it. Typed rather than cast to any, so a
+    // renamed key here is a compile error rather than a silently dead widget.
+    (window as unknown as { dataLayer?: DataLayerEntry[] }).dataLayer = [
       {
         labName: "Psychological Process",
         discipline: "Design Engineering",

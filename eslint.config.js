@@ -49,12 +49,13 @@ export default tseslint.config(
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
-      // A warning, not an error, so lint can gate CI on the things that are
-      // actually wrong. The remaining `any`s are a raw KB entry (an untyped
-      // JSON document whose real fix is generating types from kb/schema.json)
-      // and DOM interop in the embed bundle. Both are genuine work, not a
-      // lint fix, and neither should block a build in the meantime.
-      "@typescript-eslint/no-explicit-any": "warn",
+      // An error now that the nine `any`s are gone. Seven were a raw KB entry
+      // typed as Record<string, any>; the fix was generating the shape from
+      // kb/schema/experiment.schema.json (`npm run kb:types`) rather than
+      // hand-keeping a copy. The rest were Web Speech and dataLayer interop,
+      // now declared in embed/src/speech.d.ts and beside their use. Left as a
+      // warning it would simply grow back.
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
   eslintPluginPrettier,

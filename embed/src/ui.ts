@@ -9,6 +9,7 @@
 import { CSS } from "./styles";
 import { CHARACTER_SVG, POSES, type Avatar, type Pose } from "./character";
 import { t } from "./i18n";
+import type { SpeechCapableWindow, SpeechRecognitionLike } from "./speech";
 
 export type OrbState = "idle" | "ok" | "hint" | "warn";
 
@@ -794,7 +795,7 @@ export class Ui {
       }
       mic.setAttribute("data-active", "true");
       recognition.lang = this.locale === "hi" ? "hi-IN" : "en-IN";
-      recognition.onresult = (e: any) => {
+      recognition.onresult = (e) => {
         input.value = e.results[0][0].transcript;
       };
       recognition.onend = () => mic.setAttribute("data-active", "false");
@@ -901,8 +902,8 @@ export class Ui {
     });
   }
 
-  private speechRecognition(): any {
-    const w = window as any;
+  private speechRecognition(): SpeechRecognitionLike | null {
+    const w = window as unknown as SpeechCapableWindow;
     const Ctor = w.SpeechRecognition || w.webkitSpeechRecognition;
     return Ctor ? new Ctor() : null;
   }

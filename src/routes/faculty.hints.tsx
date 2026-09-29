@@ -8,6 +8,7 @@ import {
   useKbEntry,
   useKnowledgeBase,
 } from "@/lib/api";
+import type { KbStep } from "@/lib/api";
 import { Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/faculty/hints")({ component: CustomHints });
@@ -29,12 +30,10 @@ function CustomHints() {
   const [text, setText] = useState("");
   const [level, setLevel] = useState<"nudge" | "specific">("nudge");
 
-  const steps: { id: string; title: string; task: string }[] = entry.data?.steps ?? [];
+  const steps: KbStep[] = entry.data?.steps ?? [];
   const activeStep = stepId || steps[0]?.id || "";
   const kbStep = steps.find((s) => s.id === activeStep);
-  const defaultHint = (entry.data?.steps ?? []).find((s: any) => s.id === activeStep)?.hints?.[
-    level
-  ];
+  const defaultHint = kbStep?.hints?.[level];
 
   if (kb.isError) return <ApiDown error={kb.error} />;
   if (kb.isLoading) return <Loading />;

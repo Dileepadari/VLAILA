@@ -112,6 +112,32 @@ readme_images_resolve() {
     [ "$missing" -eq 0 ]
 }
 
+# src/lib/kb.types.ts is generated from kb/schema/experiment.schema.json. A
+# generated file that is committed and never re-checked is the same trap as a
+# stale schema snapshot: the schema gains a field, the types do not, and the
+# console reads a property that is no longer there. Regenerate into a temporary
+# file and compare.
+kb_types_are_current() {
+    command -v npx >/dev/null 2>&1 || { echo "  npx not available, cannot verify"; return 1; }
+    [ -f src/lib/kb.types.ts ] || { echo "  src/lib/kb.types.ts is missing"; return 1; }
+    local committed rc=0
+    committed="$(mktemp)"
+    cp src/lib/kb.types.ts "$committed"
+    if ! npm run --silent kb:types >/dev/null 2>&1; then
+        echo "  npm run kb:types failed"
+        rc=1
+    elif ! diff -q "$committed" src/lib/kb.types.ts >/dev/null; then
+        echo "  src/lib/kb.types.ts is out of date with kb/schema/experiment.schema.json"
+        echo "  run: npm run kb:types"
+        rc=1
+    fi
+    # Always put the committed copy back: a check must not edit the tree it is
+    # checking, or a failing run leaves a diff nobody asked for.
+    cp "$committed" src/lib/kb.types.ts
+    rm -f "$committed"
+    return "$rc"
+}
+
 check "instructor and admin routers are gated"   staff_routers_are_gated
 check "the staff gate fails closed"              staff_gate_fails_closed
 check "student-facing routes stay open"          student_routes_stay_open
@@ -122,6 +148,7 @@ check "no build artefacts committed"             no_build_artefacts_committed
 check "no empty source files"                    no_empty_source_files
 check "no em dashes, en dashes or emoji"         no_decorative_glyphs
 check "README images all resolve"                readme_images_resolve
+check "generated KB types match the schema"      kb_types_are_current
 
 echo
 if [ "$FAILURES" -eq 0 ]; then

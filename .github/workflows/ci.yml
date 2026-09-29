@@ -91,4 +91,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Node and the dependencies are here for one check: the generated KB
+      # types are regenerated and compared against the committed file, which
+      # needs json-schema-to-typescript. Without this the check would fail on a
+      # missing generator rather than on a stale file.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
       - run: ops/hygiene.sh

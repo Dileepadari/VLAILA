@@ -7,6 +7,7 @@
  */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { VLAILAExperimentKnowledgeBaseEntry } from "./kb.types";
 
 /**
  * Globals a host page may inject before the console script runs, so a
@@ -236,10 +237,22 @@ export function useKnowledgeBase() {
   });
 }
 
+/**
+ * One authored knowledge base entry, exactly as `GET /kb/:id` returns it.
+ *
+ * The shape is generated from `kb/schema/experiment.schema.json` by
+ * `npm run kb:types` rather than written here, because the schema is what the
+ * server validates against - a hand-kept copy drifts the moment an author adds
+ * a field.
+ */
+export type KbEntry = VLAILAExperimentKnowledgeBaseEntry;
+/** One step of the authored procedure. */
+export type KbStep = KbEntry["steps"][number];
+
 export function useKbEntry(experimentId: string | undefined) {
   return useQuery({
     queryKey: ["kb", experimentId],
-    queryFn: () => request<Record<string, any>>(`/kb/${experimentId}`),
+    queryFn: () => request<KbEntry>(`/kb/${experimentId}`),
     enabled: Boolean(experimentId),
   });
 }
