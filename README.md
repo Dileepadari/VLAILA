@@ -1,4 +1,33 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/adk_dev_logo_light.png">
+  <img src="./docs/assets/adk_dev_logo_dark.png" width="150" alt="ADK DEV" loading="lazy">
+</picture>
+
 # VLAILA - Virtual Labs AI Lab Assistant
+
+**A proactive, experiment-grounded lab assistant for Virtual Labs: it watches a student work, speaks once when it is worth interrupting for, answers from that experiment's own material, and tells the instructor where the class actually struggled.**
+
+<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" loading="lazy">
+<img alt="React" src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" loading="lazy">
+<img alt="TanStack Start" src="https://img.shields.io/badge/TanStack_Start-EF4444?style=for-the-badge&logo=reactquery&logoColor=white" loading="lazy">
+<br>
+<img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" loading="lazy">
+<img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" loading="lazy">
+<img alt="SQLite or Postgres" src="https://img.shields.io/badge/SQLite_or_Postgres-003B57?style=for-the-badge&logo=sqlite&logoColor=white" loading="lazy">
+<br>
+<img alt="pytest" src="https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white" loading="lazy">
+<img alt="Offline first" src="https://img.shields.io/badge/no_API_key_needed-6E9F18?style=for-the-badge" loading="lazy">
+<img alt="MIT License" src="https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge" loading="lazy">
+
+<br><br>
+
+**[Architecture](./docs/ARCHITECTURE.md)** &middot; [Screenshots](#screenshots) &middot; [Run it](#run-it) &middot; [How it decides](#how-it-decides) &middot; [Tests](#tests)
+
+</div>
+
+---
 
 A proactive, experiment-grounded lab assistant for [Virtual Labs](https://www.vlab.co.in) - the
 Ministry of Education initiative that gives students across India free, browser-based simulation
@@ -19,6 +48,8 @@ No configuration. The widget reads the lab, experiment, discipline, institute an
 from metadata every Virtual Labs page already publishes.
 
 ---
+
+## Screenshots
 
 | The widget, on a real experiment page | Class analytics | Instructor overview |
 |:---:|:---:|:---:|
