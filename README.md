@@ -185,7 +185,7 @@ ship to every visitor.
 ## Tests
 
 ```bash
-.venv/bin/python -m pytest server/tests -q     # 53 tests
+.venv/bin/python -m pytest server/tests -q     # 82 tests
 .venv/bin/python kb/validate.py                # knowledge base integrity
 cd embed && npx tsc --noEmit                   # widget typecheck
 ```
