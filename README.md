@@ -149,7 +149,7 @@ semantics, so the browser keeps validating steps with no network at all.
 docs/      Plan, architecture, platform audit, KB authoring guide, deliverables map
 kb/        JSON Schema + 6 authored experiments across 5 disciplines + validator
 server/    FastAPI: agent core, rules, session memory, RAG, analytics, NL→SQL, exports
-embed/     The widget → dist/vlaila.js (Shadow DOM, ~20 kB gzipped, offline-capable)
+embed/     The widget → dist/vlaila.js (Shadow DOM, 29 kB gzipped, offline-capable)
 src/       VLAILA Console - instructor/admin dashboards, Author Studio
 ```
 

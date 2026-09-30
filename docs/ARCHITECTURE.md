@@ -139,7 +139,7 @@ not control: the labs style bare `button`, `h1` and `.btn` globally, and without
 the widget would look different on every lab. Theme follows the _host page's_ background rather
 than the OS, because a dark panel over a white lab page reads as a stray browser extension.
 
-Bundle: IIFE, ES2019, ~20 kB gzipped, no webfont, no external request.
+Bundle: IIFE, ES2019, 29 kB gzipped, no webfont, no external request.
 
 ---
 
