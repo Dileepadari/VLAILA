@@ -19,7 +19,7 @@
 <br>
 <img alt="pytest" src="https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white" loading="lazy">
 <img alt="Offline first" src="https://img.shields.io/badge/no_API_key_needed-6E9F18?style=for-the-badge" loading="lazy">
-<img alt="MIT License" src="https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge" loading="lazy">
+<img alt="AGPL-3.0 License" src="https://img.shields.io/badge/License-AGPL--3.0-3DA639?style=for-the-badge" loading="lazy">
 
 <br><br>
 
@@ -207,4 +207,6 @@ impossible to trust something that also fires on students doing everything right
 6. **Explain, don't answer.** It will teach the concept behind a posttest question. It will not
    hand over the answer.
 
-Licensed AGPL-3.0 / CC BY-NC-SA 4.0, matching the Virtual Labs platform.
+The code is licensed AGPL-3.0, see [LICENSE](./LICENSE). The authored knowledge base in
+`kb/` is CC BY-NC-SA 4.0. Both match the Virtual Labs platform, which is what this is meant
+to be embedded in.
